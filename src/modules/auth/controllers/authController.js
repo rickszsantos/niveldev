@@ -1,15 +1,13 @@
-const app = require('../../app');
-const authController = require('../controller/authController');
+const authService = require('../services/authService');
 
 
 
 const login = async (req, res) => {
     try {
-
         const { email, password } = req.body;
         const token = await authService.login(email, password);
         
-        res.json({ token });
+        res.status(200).json({ token });
 
     } catch (error) {
 
@@ -21,4 +19,4 @@ const login = async (req, res) => {
 
 
 
-module.exports = authController;
+module.exports = { login };
