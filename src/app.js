@@ -1,8 +1,9 @@
 const Express = require('express');
 const app = Express();
+const authRoute = require('./modules/auth/routes/authRoute');
 
 app.use(Express.json());
-//app.use("/auth", autRoutes);    
+app.use("/auth", authRoute);    
 //app.use("/courses", coursesRoutes);    
 //app.use("/enrollments", enrollmentsRoutes);    
 //app.use("/exams", examsRoutes);    
