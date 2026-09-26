@@ -1,14 +1,15 @@
 const express = require('express');
 const authController = require('../controllers/authController');
+const minddware = require('../../../shared/minddware/minddware');
 const router = express.Router();
 
 
 router.post('/login', authController.login);
 
 
-//router.get('/home', minddware, (req, res) => {
-//    res.status(200).json({ message: 'Bem-vindo à página inicial!' });
-//});
+router.get('/home', minddware, (req, res) => {
+    res.status(200).json({ message: 'Bem-vindo à página inicial!' });
+});
 
 
 
