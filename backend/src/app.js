@@ -2,6 +2,17 @@ const Express = require('express');
 const app = Express();
 const authRoute = require('./modules/auth/routes/authRoute');
 
+const path = require('path');
+
+app.use(Express.static(path.join(__dirname, '../../frontend')));
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../frontend/pages/index.html'));
+});
+
+
+
+
+
 app.use(Express.json());
 app.use("/auth", authRoute);    
 //app.use("/courses", coursesRoutes);    
