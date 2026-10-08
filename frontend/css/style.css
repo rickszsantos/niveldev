@@ -73,7 +73,7 @@ img {
 }
 
 .section-alt {
-  background: #e2eaff;
+  background: #eef3ff;
 }
 
 /* ---------- Título de seção ---------- */
@@ -273,7 +273,7 @@ img {
 
 /* seção de cursos: fundo cinza claro para se destacar do restante */
 .section-cursos {
-  background: #f1f2f4;
+  background: #eef3ff;
   border-block: 1px solid #e3e5e9;
 }
 
@@ -378,7 +378,7 @@ img {
   font-size: 12px;
   font-weight: 600;
   color: var(--brand-deep);
-  background: #e2eaff;
+  background: #eef3ff;/*lllllllll*/
   padding: 3px 10px;
   border-radius: 6px;
 }
