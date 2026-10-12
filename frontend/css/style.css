@@ -188,7 +188,7 @@ img {
   overflow: hidden;
   color: var(--paper);
   background-color: var(--brand-deep); /* cor de reserva enquanto a imagem carrega */
-
+}
   /* Duas camadas: a de cima é o degradê azul, a de baixo é a foto.
      Quase opaco à esquerda (texto) e mais transparente à direita (foto). */
   background-image:
