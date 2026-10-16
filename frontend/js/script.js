@@ -1,7 +1,7 @@
 /* ============================================================
    NívelDev — script inicial
    1) Lista de cursos (a grade da home é montada a partir dela)
-   2) Botões de Entrar / Inscreva-se (placeholders por enquanto)
+   2) Botão Entrar (placeholder até a tela de login existir)
    ============================================================ */
 
 /* ---------- 1) CURSOS ----------
@@ -96,9 +96,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // TODO: trocar por navegação para as páginas de login e cadastro
   // (ou por um fetch() para a API do back-end, quando existir)
   const avisos = [
-    ['btn-login', 'Página de login ainda não implementada.'],
-    ['btn-inscrever', 'Página de cadastro ainda não implementada.'],
-    ['cta-cadastro-btn', 'Página de cadastro ainda não implementada.']
+    ['btn-login', 'Página de login ainda não implementada.']
+    // Inscreva-se e Criar minha conta grátis já abrem o cadastro.html
   ];
 
   avisos.forEach(([id, mensagem]) => {

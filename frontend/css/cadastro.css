@@ -1,0 +1,461 @@
+/* ==========================================================
+   NívelDev — Telas de autenticação (Cadastro e, depois, Login)
+   Arquivo independente: não depende do style.css da Home.
+   As cores são as mesmas da marca (--cd-brand-deep e --cd-brand).
+
+   Sumário
+   1. Variáveis
+   2. Base
+   3. Layout em duas colunas
+   4. Lado da marca (azul)
+   5. Cartão e cabeçalho do formulário
+   6. Campos
+   7. Senha: mostrar/ocultar, força e regras
+   8. Botão principal e spinner
+   9. Alertas
+   10. Responsividade
+   11. Movimento reduzido
+   ========================================================== */
+
+/* ========== 1. Variáveis ========== */
+:root {
+  --cd-brand-deep: var(--brand-deep, #0c1c4d);
+  --cd-brand: var(--brand, #1547d6);
+  --cd-brand-bright: #3b82f6;
+  --cd-brand-soft: #e8efff;
+
+  --cd-ink: #0f1b33;
+  --cd-ink-muted: #56637a;
+  --cd-line: #d6deeb;
+  --cd-paper: #ffffff;
+  --cd-bg: #f4f7fc;
+
+  --cd-success: #12a150;
+  --cd-warning: #e8a317;
+  --cd-danger: #d92d20;
+
+  --cd-font-title: "Space Grotesk", system-ui, sans-serif;
+  --cd-font-base: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --cd-font-code: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+
+  --cd-radius-sm: 10px;
+  --cd-radius-md: 14px;
+  --cd-radius-lg: 20px;
+  --cd-shadow-card: 0 20px 48px rgba(12, 28, 77, 0.10);
+  --cd-transition: 0.2s ease;
+}
+
+/* ========== 2. Base ========== */
+.auth-layout *,
+.auth-layout *::before,
+.auth-layout *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body.auth-page {
+  font-family: var(--cd-font-base);
+  color: var(--cd-ink);
+  background: var(--cd-bg);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* :where() deixa a especificidade zero, para não brigar com as classes abaixo */
+:where(.auth-layout) img { display: block; max-width: 100%; }
+:where(.auth-layout) a { color: var(--cd-brand); }
+:where(.auth-layout) :is(button, input, select) { font-family: inherit; font-size: inherit; }
+.auth-layout [hidden] { display: none !important; }
+
+.auth-layout :focus-visible {
+  outline: 3px solid var(--cd-brand-bright);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  z-index: 100;
+  padding: 12px 20px;
+  background: var(--cd-brand);
+  color: #fff;
+  font-weight: 600;
+  border-radius: var(--cd-radius-sm);
+  text-decoration: none;
+}
+.skip-link:focus { top: 16px; }
+
+/* O cabeçalho do style.css tem 3 colunas (logo | menu | botões).
+   No cadastro não há menu, então o botão vai para a 3ª coluna. */
+.auth-page .header-actions { grid-column: 3; }
+
+/* ========== 3. Layout em duas colunas ========== */
+.auth-layout {
+  display: grid;
+  grid-template-columns: minmax(360px, 5fr) 7fr;
+  min-height: calc(100vh - 68px); /* desconta a altura do cabeçalho */
+}
+
+/* ========== 4. Lado da marca (azul) ========== */
+.auth-brand {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 48px;
+  color: #fff;
+  background: linear-gradient(150deg, var(--cd-brand-deep) 0%, var(--cd-brand) 70%, var(--cd-brand-bright) 100%);
+}
+
+/* Símbolos de código ao fundo, como no hero da Home */
+.auth-brand-pattern {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.08;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cg fill='%23fff' font-family='monospace' font-size='18'%3E%3Ctext x='10' y='30'%3E%26lt;/%26gt;%3C/text%3E%3Ctext x='80' y='80'%3E%7B %7D%3C/text%3E%3Ctext x='20' y='120'%3E( )%3C/text%3E%3C/g%3E%3C/svg%3E");
+}
+
+.auth-brand > *:not(.auth-brand-pattern) { position: relative; }
+
+.auth-brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  text-decoration: none;
+  font-family: var(--cd-font-title);
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+.auth-brand-logo {
+  align-self: center; /* centraliza a logo e o nome no painel azul */
+}
+
+.auth-brand-logo img {
+  width: auto;
+  height: 52px;
+}
+
+.auth-brand-copy h2 {
+  font-family: var(--cd-font-title);
+  font-size: clamp(2rem, 3.4vw, 2.9rem);
+  line-height: 1.08;
+  margin-bottom: 16px;
+}
+.auth-brand-copy > p {
+  max-width: 400px;
+  font-size: 1.05rem;
+  opacity: 0.88;
+  margin-bottom: 32px;
+}
+
+.auth-benefits {
+  list-style: none;
+  display: grid;
+  gap: 14px;
+}
+.auth-benefits li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-weight: 500;
+}
+.benefit-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--cd-radius-sm);
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  font-family: var(--cd-font-code);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.auth-brand-foot {
+  font-size: 0.85rem;
+  opacity: 0.65;
+}
+
+/* ========== 5. Cartão e cabeçalho do formulário ========== */
+.auth-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+}
+
+.auth-back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-bottom: 8px;
+  color: var(--cd-ink-muted);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color var(--cd-transition);
+}
+.auth-back:hover { color: var(--cd-brand); }
+
+.auth-mobile-logo { display: none; }
+
+.auth-header { margin-bottom: 28px; }
+.auth-header h1 {
+  font-family: var(--cd-font-title);
+  font-size: 2rem;
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+.auth-header p { color: var(--cd-ink-muted); }
+
+/* ========== 6. Campos ========== */
+.auth-form {
+  display: grid;
+  gap: 18px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="password"],
+.field select {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  background: var(--cd-paper);
+  color: var(--cd-ink);
+  border: 1.5px solid var(--cd-line);
+  border-radius: var(--cd-radius-sm);
+  transition: border-color var(--cd-transition), box-shadow var(--cd-transition);
+}
+
+.field select {
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2356637a' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+}
+
+.field input::placeholder { color: #9aa6ba; }
+
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--cd-brand);
+  box-shadow: 0 0 0 4px var(--cd-brand-soft);
+}
+
+/* Estados de validação (classes colocadas pelo auth.js) */
+.field.is-invalid input,
+.field.is-invalid select {
+  border-color: var(--cd-danger);
+}
+.field.is-invalid input:focus,
+.field.is-invalid select:focus {
+  box-shadow: 0 0 0 4px rgba(217, 45, 32, 0.12);
+}
+.field.is-valid input,
+.field.is-valid select {
+  border-color: var(--cd-success);
+}
+
+.field-error {
+  min-height: 0;
+  margin-top: 6px;
+  color: var(--cd-danger);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+.field-error:empty { display: none; }
+
+/* ========== 7. Senha ========== */
+.input-group { position: relative; }
+.input-group input { padding-right: 92px !important; }
+
+.toggle-senha {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  min-height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cd-brand);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--cd-transition);
+}
+.toggle-senha:hover { background: var(--cd-brand-soft); }
+
+/* Medidor de força: 4 barrinhas */
+.strength {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+.strength span {
+  height: 5px;
+  border-radius: 99px;
+  background: var(--cd-line);
+  transition: background var(--cd-transition);
+}
+.strength[data-nivel="1"] span:nth-child(-n+1) { background: var(--cd-danger); }
+.strength[data-nivel="2"] span:nth-child(-n+2) { background: var(--cd-warning); }
+.strength[data-nivel="3"] span:nth-child(-n+3) { background: var(--cd-brand-bright); }
+.strength[data-nivel="4"] span:nth-child(-n+4) { background: var(--cd-success); }
+
+.strength-label {
+  margin-top: 6px;
+  font-size: 0.82rem;
+  color: var(--cd-ink-muted);
+}
+.strength-label:empty { display: none; }
+
+.password-rules {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-top: 8px;
+  font-size: 0.82rem;
+  color: var(--cd-ink-muted);
+}
+.password-rules li::before {
+  content: "○ ";
+  font-family: var(--cd-font-code);
+}
+.password-rules li.ok { color: var(--cd-success); }
+.password-rules li.ok::before { content: "✓ "; }
+
+/* ========== 8. Botão principal e spinner ========== */
+.btn-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  margin-top: 6px;
+  border: 0;
+  border-radius: var(--cd-radius-sm);
+  background: var(--cd-brand);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(21, 71, 214, 0.28);
+  transition: background var(--cd-transition), transform var(--cd-transition), box-shadow var(--cd-transition);
+}
+.btn-primary:hover { background: var(--cd-brand-deep); transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled { opacity: 0.7; cursor: wait; transform: none; }
+
+.spinner {
+  display: none;
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: girar 0.7s linear infinite;
+}
+.btn-primary.is-loading .spinner { display: inline-block; }
+
+@keyframes girar { to { transform: rotate(360deg); } }
+
+.auth-switch {
+  margin-top: 24px;
+  text-align: center;
+  color: var(--cd-ink-muted);
+}
+.auth-switch a {
+  font-weight: 600;
+  text-decoration: none;
+}
+.auth-switch a:hover { text-decoration: underline; }
+
+/* ========== 9. Alertas ========== */
+.form-alert {
+  margin-bottom: 20px;
+  padding: 14px 16px;
+  border-radius: var(--cd-radius-sm);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+.form-alert.is-error {
+  background: #fdecea;
+  color: #a1251a;
+  border: 1px solid #f6c7c2;
+}
+.form-alert.is-success {
+  background: #e7f6ee;
+  color: #0b6b36;
+  border: 1px solid #b8e3c9;
+}
+
+/* ========== 10. Responsividade ========== */
+@media (max-width: 960px) {
+  .auth-page .header-actions { grid-column: 2; }
+  .auth-layout { grid-template-columns: 1fr; }
+  .auth-brand { display: none; }
+
+  .auth-panel {
+    align-items: flex-start;
+    padding: 24px 16px 40px;
+  }
+
+  .auth-mobile-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    font-family: var(--cd-font-title);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--cd-brand-deep);
+  }
+  .auth-mobile-logo img {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+
+  .auth-header h1 { font-size: 1.7rem; }
+}
+
+/* ========== 11. Movimento reduzido ========== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
