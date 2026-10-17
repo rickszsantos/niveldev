@@ -83,6 +83,7 @@
 /* ========== Formulário no centro (sem o painel azul) ========== */
 .auth-layout.auth-centro {
   grid-template-columns: 1fr;          /* uma coluna só: o formulário ocupa o meio */
+  min-height: 100vh;                   /* sem cabeçalho: o fundo ocupa a tela inteira */
 
   /* Mesmo fundo do cabeçalho: azul escuro por cima da foto, meio transparente.
      Se a imagem do seu cabeçalho tiver outro nome, troque "hero-bg.jpg" abaixo. */
@@ -148,9 +149,79 @@
     background-position: center, 70% center;
   }
 }
- /* Cadastro: exigências da senha uma embaixo da outra */
+
+/* Cadastro: exigências da senha uma embaixo da outra */
 .password-rules {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+/* ==========================================================
+   Cadastro compacto: todos os campos cabem na tela sem rolar
+   ========================================================== */
+.auth-centro .auth-card--cadastro {
+  max-width: 640px;                    /* mais largo para caber 2 campos por linha */
+  padding: 24px 32px;
+}
+
+.auth-centro .auth-panel:has(.auth-card--cadastro) {
+  padding-block: 24px;
+}
+
+.auth-card--cadastro .auth-back {
+  min-height: 32px;
+  margin-bottom: 0;
+}
+
+.auth-card--cadastro .auth-logo {
+  margin: 0 0 10px;
+}
+.auth-card--cadastro .auth-logo img {
+  height: 40px;
+}
+
+.auth-card--cadastro .auth-header {
+  margin-bottom: 16px;
+}
+.auth-card--cadastro .auth-header h1 {
+  font-size: 1.6rem;
+  margin-bottom: 2px;
+}
+
+.auth-card--cadastro .auth-form {
+  gap: 12px;
+}
+
+.auth-card--cadastro .field label {
+  margin-bottom: 4px;
+}
+
+.auth-card--cadastro .field input[type="text"],
+.auth-card--cadastro .field input[type="email"],
+.auth-card--cadastro .field input[type="password"] {
+  min-height: 44px;
+  padding: 10px 14px;
+}
+
+/* Dois campos por linha */
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
+  align-items: start;
+}
+
+.auth-card--cadastro .auth-switch {
+  margin-top: 12px;
+}
+
+/* Celular: volta a um campo por linha */
+@media (max-width: 600px) {
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+  .auth-centro .auth-card--cadastro {
+    padding: 20px;
+  }
 }

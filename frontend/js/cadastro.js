@@ -90,8 +90,10 @@ const validadores = {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return "Digite um e-mail válido, como voce@email.com.";
     return "";
   },
-  nivel(v) {
-    return v ? "" : "Escolha uma opção.";
+ cpf(v) {
+    if (!v.trim()) return "Informe seu CPF.";
+    if (!cpfValido(v)) return "CPF inválido. Confira os números.";
+    return "";
   },
   senha(v) {
     if (!v) return "Crie uma senha.";
@@ -195,7 +197,7 @@ if (form) {
     const dados = {
       nome: form.nome.value.trim(),
       email: form.email.value.trim().toLowerCase(),
-      nivel: form.nivel.value,
+      cpf: form.cpf.value.replace(/\D/g, ""),
       senha: form.senha.value,
     };
 
@@ -223,5 +225,29 @@ if (form) {
     } finally {
       carregando(false);
     }
+  });
+}
+/* ==========================================================
+   CPF: máscara 000.000.000-00 e conferência dos dígitos
+   ========================================================== */
+function cpfValido(cpf) {
+  const d = cpf.replace(/\D/g, "");
+  if (d.length !== 11 || /^(\d)\1{10}$/.test(d)) return false; // ex.: 111.111.111-11
+  for (let t = 9; t < 11; t++) {
+    let soma = 0;
+    for (let i = 0; i < t; i++) soma += Number(d[i]) * (t + 1 - i);
+    if (((soma * 10) % 11) % 10 !== Number(d[t])) return false;
+  }
+  return true;
+}
+
+const campoCpf = document.getElementById("cpf");
+if (campoCpf) {
+  campoCpf.addEventListener("input", () => {
+    const d = campoCpf.value.replace(/\D/g, "").slice(0, 11);
+    campoCpf.value = d
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
   });
 }
