@@ -1,0 +1,156 @@
+/* =====================================================================
+   NívelDev — login.css
+   Carregado DEPOIS do style.css e do cadastro.css.
+   O painel azul, os campos e o botão vêm do cadastro.css;
+   aqui fica só o que é exclusivo da tela de login.
+   ===================================================================== */
+
+/* ========== Linha "Lembrar de mim" + "Esqueci minha senha" ========== */
+.login-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: -4px;
+}
+
+.login-remember {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px; /* área de toque confortável (Lei de Fitts) */
+  color: var(--cd-ink-muted, #56637a);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.login-remember input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--cd-brand, #1547d6);
+  cursor: pointer;
+}
+
+.login-forgot {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--cd-brand, #1547d6);
+  text-decoration: none;
+}
+.login-forgot:hover { text-decoration: underline; }
+
+/* ========== Alerta geral do formulário ========== */
+.login-alert {
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1.5px solid;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.login-alert.is-error {
+  color: #b42318;
+  background: #fef3f2;
+  border-color: #fda29b;
+}
+
+.login-alert.is-success {
+  color: #067647;
+  background: #ecfdf3;
+  border-color: #75e0a7;
+}
+
+.login-alert.is-info {
+  color: #1d3f9e;
+  background: #eef3ff;
+  border-color: #b3c7ff;
+}
+
+/* Sem o logo no cabeçalho, mantém o botão "Inscreva-se" à direita */
+.auth-page .header-actions { margin-left: auto; }
+
+/* Botão enquanto envia */
+#btn-entrar[disabled] {
+  opacity: 0.75;
+  cursor: wait;
+}
+
+/* ========== Formulário no centro (sem o painel azul) ========== */
+.auth-layout.auth-centro {
+  grid-template-columns: 1fr;          /* uma coluna só: o formulário ocupa o meio */
+
+  /* Mesmo fundo do cabeçalho: azul escuro por cima da foto, meio transparente.
+     Se a imagem do seu cabeçalho tiver outro nome, troque "hero-bg.jpg" abaixo. */
+  background-color: #0c1c4d;           /* cor de reserva enquanto a imagem carrega */
+  background-image:
+    /* Igual ao cabeçalho: azul forte à esquerda, mais transparente à direita,
+       onde aparece a pessoa no notebook */
+    linear-gradient(
+      90deg,
+      rgba(12, 28, 77, 0.95) 0%,
+      rgba(12, 28, 77, 0.85) 35%,
+      rgba(21, 71, 214, 0.55) 70%,
+      rgba(21, 71, 214, 0.35) 100%
+    ),
+    url("../img/hero-bg.jpg");
+  background-size: cover, cover;
+  background-position: center, right center;
+  background-repeat: no-repeat;
+}
+
+
+.auth-centro .auth-panel {
+  padding: 40px 16px;
+}
+
+.auth-centro .auth-card {
+  max-width: 440px;
+  padding: 36px 32px;
+  background: #fff;
+  border: 1px solid #e3e8f1;
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(4, 12, 40, 0.45); /* destaca o cartão no fundo azul */
+}
+
+/* Logo e nome NívelDev em cima do formulário */
+.auth-logo {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0 20px;
+}
+.auth-logo img {
+  display: block;
+  width: auto;
+  height: 52px;
+}
+
+.auth-centro .auth-header {
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .auth-centro .auth-card {
+    padding: 28px 20px;
+  }
+}
+
+/* Celular: o cartão ocupa quase toda a largura, então o azul fica uniforme */
+@media (max-width: 900px) {
+  .auth-layout.auth-centro {
+    background-image:
+      linear-gradient(rgba(12, 28, 77, 0.85), rgba(12, 28, 77, 0.85)),
+      url("../img/hero-bg.jpg");
+    background-position: center, 70% center;
+  }
+}
+ /* Cadastro: exigências da senha uma embaixo da outra */
+.password-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}

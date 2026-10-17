@@ -96,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // TODO: trocar por navegação para as páginas de login e cadastro
   // (ou por um fetch() para a API do back-end, quando existir)
   const avisos = [
-    ['btn-login', 'Página de login ainda não implementada.']
     // Inscreva-se e Criar minha conta grátis já abrem o cadastro.html
   ];
 

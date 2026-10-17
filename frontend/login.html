@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar — NívelDev</title>
+
+  <link rel="icon" href="img/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192.png">
+  <link rel="apple-touch-icon" href="img/favicon-192.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+
+  <!-- Mesma base do cadastro: style.css (cabeçalho) + cadastro.css (painel azul e campos) -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/cadastro.css">
+  <!-- Só o que é exclusivo do login (lembrar de mim, esqueci a senha, alerta) -->
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body class="auth-page">
+
+  <a class="skip-link" href="#form-login">Pular para o formulário</a>
+
+  <!-- ===================== CABEÇALHO (mesmo do cadastro) ===================== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-actions">
+        <a href="cadastro.html" class="btn btn-solid">Inscreva-se</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="auth-layout auth-centro">
+
+    <!-- ===================== FORMULÁRIO NO CENTRO ===================== -->
+    <section class="auth-panel">
+      <div class="auth-card">
+
+        <a class="auth-back" href="index.html">← Voltar para o início</a>
+
+        <!-- Logo e nome em cima do formulário -->
+        <a class="auth-logo" href="index.html" aria-label="NívelDev — voltar ao início">
+          <img src="img/logo-niveldev.png" alt="NívelDev">
+        </a>
+
+        <header class="auth-header">
+          <h1>Entrar na sua conta</h1>
+          <p>Use o e-mail e a senha do seu cadastro.</p>
+        </header>
+
+        <!-- Mensagem geral (e-mail ou senha incorretos, servidor fora do ar, sucesso) -->
+        <div class="login-alert" id="login-alert" role="alert" hidden></div>
+
+        <form id="form-login" class="auth-form" novalidate>
+
+          <div class="field">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" autocomplete="email"
+                   placeholder="voce@email.com" required
+                   aria-describedby="email-erro">
+            <p class="field-error" id="email-erro" aria-live="polite"></p>
+          </div>
+
+          <div class="field">
+            <label for="senha">Senha</label>
+            <div class="input-group">
+              <input type="password" id="senha" name="senha" autocomplete="current-password"
+                     placeholder="Sua senha" required
+                     aria-describedby="senha-erro">
+              <button type="button" class="toggle-senha" data-alvo="senha"
+                      aria-label="Mostrar senha" aria-pressed="false">Mostrar</button>
+            </div>
+            <p class="field-error" id="senha-erro" aria-live="polite"></p>
+          </div>
+
+          <div class="login-options">
+            <label class="login-remember" for="lembrar">
+              <input type="checkbox" id="lembrar" name="lembrar">
+              Lembrar de mim
+            </label>
+            <a class="login-forgot" href="#" id="link-esqueci">Esqueci minha senha</a>
+          </div>
+
+          <button type="submit" class="btn-primary" id="btn-entrar">
+            <span class="btn-text">Entrar</span>
+          </button>
+        </form>
+
+        <p class="auth-switch">
+          Ainda não tem uma conta? <a href="cadastro.html">Crie grátis</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/login.js"></script>
+</body>
+</html>

@@ -13,56 +13,36 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
 
-  <!-- style.css primeiro (cabeçalho, botões), cadastro.css depois (formulário) -->
+  <!-- style.css (cabeçalho) + cadastro.css (campos) + login.css (fundo azul e cartão no centro, igual ao login) -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/cadastro.css">
+  <link rel="stylesheet" href="css/login.css">
 </head>
 <body class="auth-page">
 
   <a class="skip-link" href="#form-cadastro">Pular para o formulário</a>
 
-  <!-- ===================== CABEÇALHO (mesmo da Home, simplificado) ===================== -->
+  <!-- ===================== CABEÇALHO ===================== -->
   <header class="site-header">
     <div class="header-inner">
-      <a href="index.html" class="header-logo" aria-label="NívelDev — voltar ao início">
-        <img src="img/logo-niveldev.png" alt="NívelDev — Da aprendizagem à carreira">
-      </a>
-
       <div class="header-actions">
-        <a href="index.html#login" class="btn btn-outline">Entrar</a>
+        <a href="login.html" class="btn btn-solid">Entrar</a>
       </div>
     </div>
   </header>
 
-  <main class="auth-layout">
+  <main class="auth-layout auth-centro">
 
-    <!-- ===================== LADO ESQUERDO: MARCA ===================== -->
-    <aside class="auth-brand" aria-hidden="true">
-      <div class="auth-brand-pattern"></div>
-
-      <div class="auth-brand-logo">
-        <img src="img/logo-niveldev-branco.png" alt="">
-      </div>
-
-      <div class="auth-brand-copy">
-        <h2>Pronto para dar o próximo passo na sua carreira?</h2>
-        <p>Crie sua conta gratuita e comece pela trilha de Fundamentos de Programação hoje mesmo.</p>
-
-        <ul class="auth-benefits">
-          <li><span class="benefit-icon">{ }</span> Teoria estruturada, do básico ao avançado</li>
-          <li><span class="benefit-icon">&lt;/&gt;</span> Prática guiada com correção automática</li>
-          <li><span class="benefit-icon">XP</span> Acompanhamento de desempenho gradual</li>
-        </ul>
-      </div>
-
-      <p class="auth-brand-foot">Da aprendizagem à carreira.</p>
-    </aside>
-
-    <!-- ===================== LADO DIREITO: FORMULÁRIO ===================== -->
+    <!-- ===================== FORMULÁRIO NO CENTRO ===================== -->
     <section class="auth-panel">
       <div class="auth-card">
 
         <a class="auth-back" href="index.html">← Voltar para o início</a>
+
+        <!-- Logo e nome em cima do formulário -->
+        <a class="auth-logo" href="index.html" aria-label="NívelDev — voltar ao início">
+          <img src="img/logo-niveldev.png" alt="NívelDev">
+        </a>
 
         <header class="auth-header">
           <h1>Crie sua conta grátis</h1>
@@ -145,7 +125,7 @@
         </form>
 
         <p class="auth-switch">
-          Já tem uma conta? <a href="index.html#login">Entrar</a>
+          Já tem uma conta? <a href="login.html">Entrar</a>
         </p>
       </div>
     </section>

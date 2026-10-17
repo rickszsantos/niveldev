@@ -458,4 +458,5 @@ body.auth-page {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
   }
+  .auth-page .header-actions { margin-left: auto; }
 }

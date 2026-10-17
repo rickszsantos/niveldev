@@ -209,7 +209,7 @@ if (form) {
         atualizarForca();
         form.querySelectorAll(".field").forEach((f) => f.classList.remove("is-valid"));
         // Troque por "login.html" quando a tela de Login existir
-        setTimeout(() => (window.location.href = "index.html"), 1500);
+        setTimeout(() => (window.location.href = "login.html"), 1500);
       } else if (resposta.status === 409) {
         mostrarAlerta("error", "Este e-mail já está cadastrado. Tente entrar ou use outro e-mail.");
         validarCampo(form.email);
