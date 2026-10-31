@@ -150,7 +150,6 @@ img {
 .btn:focus-visible,
 .header-nav a:focus-visible,
 .header-logo:focus-visible,
-.banner-hit:focus-visible,
 .curso-card:focus-visible {
   outline: 3px solid var(--brand-bright);
   outline-offset: 3px;
@@ -228,6 +227,7 @@ img {
   justify-self: end;
   display: flex;
   gap: 10px;
+  align-items: center;
 }
 
 .header-actions .btn {
@@ -236,41 +236,114 @@ img {
 }
 
 /* ============================================================
-   BANNER (imagem inteira, sem cortes)
+   BANNER PRINCIPAL (largura total da tela, cantos retos)
    ============================================================ */
 
 .banner-section {
-  padding-top: 0; /* banner encostado no cabeçalho */
-}
-
-/* banner na largura inteira da tela: este container não limita a largura nem tem margem */
-.banner-section .container {
-  max-width: none;
-  padding-inline: 0;
+  position: relative;
+  overflow: hidden;
+  /* cores tiradas das bordas da imagem: nas telas largas as laterais continuam o mesmo tom azul claro */
+  background: linear-gradient(180deg, #cfe2fc 0%, #e6effe 32%, #e8f0fe 72%, #d7e7fd 100%);
 }
 
 .banner {
   position: relative;
-  aspect-ratio: 1600 / 639; /* proporção da imagem: banner slim */
-  border-radius: 0; /* sem cantos arredondados, de ponta a ponta */
-  overflow: hidden;
-  background: #eef3ff;
+  max-width: 1600px;
+  margin-inline: auto;
+  container-type: inline-size; /* permite dimensionar os botões em "cqw" (% da largura do banner) */
 }
 
 .banner img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  aspect-ratio: 1600 / 600;
 }
 
-/* área clicável sobre o botão "Começar a praticar" desenhado na imagem */
-.banner-hit {
+/* nas telas largas, as bordas da imagem se dissolvem na parte desfocada */
+@media (min-width: 1601px) {
+  .banner img {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  }
+}
+
+/* botões reais, posicionados abaixo do subtítulo desenhado na imagem */
+.banner-actions {
   position: absolute;
-  left: 5.5%;
-  top: 67.2%;
-  width: 17%;
-  height: 8.8%;
+  left: 7.5%;
+  top: 66%;
+  display: flex;
+  align-items: center;
+  gap: 1.4cqw;
+}
+
+.banner-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7cqw;
+  padding: 1.15cqw 2.5cqw;
   border-radius: 999px;
+  font-family: inherit;
+  font-size: clamp(13px, 1.45cqw, 22px);
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+.banner-btn svg {
+  width: 1.3em;
+  height: 1.3em;
+  transition: transform 0.18s ease;
+}
+
+.banner-btn-primary {
+  background: var(--brand);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(21, 71, 214, 0.32);
+}
+
+.banner-btn-primary:hover {
+  background: var(--brand-deep);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(21, 71, 214, 0.38);
+}
+
+.banner-btn-primary:hover svg { transform: translateX(4px); }
+
+.banner-btn-ghost {
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+}
+
+.banner-btn-ghost:hover {
+  background: var(--ink);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.banner-btn:active { transform: translateY(0); }
+
+.banner-btn:focus-visible {
+  outline: 3px solid var(--brand-bright);
+  outline-offset: 3px;
+}
+
+/* celular: a imagem fica pequena, então os botões saem de cima dela e vão para baixo, centralizados */
+@media (max-width: 700px) {
+  .banner-actions {
+    position: static;
+    justify-content: center;
+    gap: 12px;
+    padding: 6px 16px 24px;
+  }
+  /* a base da imagem se dissolve na barra dos botões */
+  .banner img {
+    -webkit-mask-image: linear-gradient(180deg, #000 82%, transparent);
+            mask-image: linear-gradient(180deg, #000 82%, transparent);
+  }
+  .banner-btn { padding: 12px 22px; font-size: 15px; }
 }
 
 /* ============================================================
@@ -434,57 +507,92 @@ img {
    TRILHAS
    ============================================================ */
 
-.trilhas-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 24px;
+/* carrossel de banners — largura do conteúdo, baixo (a imagem é cortada em cima e embaixo) */
+.trilhas-carousel {
+  position: relative;
 }
 
-.trilha-card {
+.trilhas-viewport {
   overflow: hidden;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 30px rgba(12, 28, 77, 0.14);
+  touch-action: pan-y; /* deixa a rolagem vertical da página livre e trata o arraste horizontal no JS */
 }
 
-.trilha-cover {
-  height: 96px;
+.trilhas-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.trilha-slide {
+  flex: 0 0 100%;
+  display: block;
+  aspect-ratio: 7 / 2; /* largo e baixo: o enquadramento mantém o centro da imagem, onde fica o texto */
+}
+
+.trilha-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 50%;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.trilhas-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--brand-deep);
+  box-shadow: 0 2px 10px rgba(12, 28, 77, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
-.trilha-cover svg {
-  width: 30px;
-  height: 30px;
-}
+.trilhas-btn:hover { background: #fff; color: var(--brand); }
+.trilhas-btn svg { width: 20px; height: 20px; }
+.trilhas-prev { left: -20px; }
+.trilhas-next { right: -20px; }
 
-.trilha-cover-1 { background: linear-gradient(135deg, var(--brand-deep), var(--brand-bright)); }
-.trilha-cover-2 { background: linear-gradient(135deg, #0f766e, #14b8a6); }
-.trilha-cover-3 { background: linear-gradient(135deg, #92400e, #f2a93b); }
-.trilha-cover-4 { background: linear-gradient(135deg, #4c1d95, #7c3aed); }
-
-.trilha-body {
-  padding: 20px;
+.trilhas-dots {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   gap: 8px;
+  margin-top: 16px;
 }
 
-.trilha-tag {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--ink-soft);
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
+.trilhas-dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: #b9c8ee;
+  cursor: pointer;
+  transition: width 0.25s ease, background 0.25s ease;
 }
 
-.trilha-body h3 {
-  font-size: 16px;
-  font-weight: 600;
+.trilhas-dot[aria-selected="true"] {
+  width: 28px;
+  background: var(--brand);
 }
 
-.trilha-body p {
-  font-size: 13.5px;
-  color: var(--ink-soft);
-  line-height: 1.5;
+.trilhas-btn:focus-visible,
+.trilhas-dot:focus-visible,
+.trilha-slide:focus-visible {
+  outline: 3px solid var(--brand-bright);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trilhas-track { transition: none; }
 }
 
 /* ============================================================
@@ -492,37 +600,46 @@ img {
    ============================================================ */
 
 .cta-box {
-  /* troque img/cta-bg.jpg pela sua imagem; o degradê escuro à esquerda mantém o texto legível */
-  background:
-    linear-gradient(90deg, rgba(12, 28, 77, 0.92) 0%, rgba(12, 28, 77, 0.72) 60%, rgba(12, 28, 77, 0.5) 100%),
-    url('../img/cta-bg.jpg') center / cover no-repeat;
-  background-color: var(--brand-deep);
-  border-radius: 20px;
-  padding: 56px 44px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 32px;
-  flex-wrap: wrap;
+  gap: 24px;
+  padding: 28px 36px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
 }
 
-.cta-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: 520px;
-}
-
-.cta-copy h2 {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--paper);
+.cta-text {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 22px;
+  font-weight: 600;
   letter-spacing: -0.01em;
+  color: var(--brand-deep);
 }
 
-.cta-copy p {
-  font-size: 16px;
-  color: #c9d5f5;
+.cta-link {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: var(--brand);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.cta-link svg { width: 18px; height: 18px; transition: transform 0.18s ease; }
+.cta-link:hover { background: var(--brand-deep); }
+.cta-link:hover svg { transform: translateX(4px); }
+
+.cta-link:focus-visible {
+  outline: 3px solid var(--brand-bright);
+  outline-offset: 3px;
 }
 
 /* ============================================================
@@ -623,7 +740,6 @@ img {
 
 @media (max-width: 960px) {
   .features-grid,
-  .trilhas-grid,
   .cursos-grid,
   .footer-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -649,19 +765,27 @@ img {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+@media (max-width: 700px) {
+  .trilha-slide { aspect-ratio: 2 / 1; } /* no celular, mostra a imagem inteira */
 
   .cta-box {
     flex-direction: column;
-    text-align: center;
+    align-items: flex-start;
+    padding: 24px;
   }
+  .cta-text { font-size: 19px; }
 }
 
 @media (max-width: 560px) {
   .features-grid,
-  .trilhas-grid,
   .cursos-grid {
     grid-template-columns: 1fr;
   }
+
+  /* no celular: sem setas (cobririam o texto do banner); vale arrastar ou usar as bolinhas */
+  .trilhas-btn { display: none; }
 
   .footer-copy { margin-left: 0; }
 
@@ -670,4 +794,21 @@ img {
   .header-actions .btn { padding: 7px 14px; font-size: 13.5px; }
   .header-nav { gap: 2px; }
   .header-nav a { padding: 6px 10px; font-size: 14.5px; white-space: nowrap; }
+}
+
+/* ---------- Cabeçalho: usuário logado (montado por js/script.js) ---------- */
+
+.header-user {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--brand-deep);
+  margin-right: 4px;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .header-user { display: none; }
 }

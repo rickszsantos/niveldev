@@ -16,7 +16,7 @@
   <!-- Mesma base do cadastro: style.css (cabeçalho) + cadastro.css (painel azul e campos) -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/cadastro.css">
-  <!-- Só o que é exclusivo do login (lembrar de mim, esqueci a senha, alerta) -->
+  <!-- Só o que é exclusivo do login (fundo com ondas, cartão branco, lembrar de mim, alerta) -->
   <link rel="stylesheet" href="css/login.css">
 </head>
 <body class="auth-page">
@@ -29,7 +29,6 @@
     <section class="auth-panel">
       <div class="auth-card">
 
-        <a class="auth-back" href="index.html">← Voltar para o início</a>
 
         <!-- Logo e nome em cima do formulário -->
         <a class="auth-logo" href="index.html" aria-label="NívelDev — voltar ao início">
@@ -38,7 +37,6 @@
 
         <header class="auth-header">
           <h1>Entrar na sua conta</h1>
-          <p>Use o e-mail e a senha do seu cadastro.</p>
         </header>
 
         <!-- Mensagem geral (e-mail ou senha incorretos, servidor fora do ar, sucesso) -->
@@ -49,7 +47,7 @@
           <div class="field">
             <label for="email">E-mail</label>
             <input type="email" id="email" name="email" autocomplete="email"
-                   placeholder="voce@email.com" required
+                   placeholder="voce@email.com" maxlength="255" required
                    aria-describedby="email-erro">
             <p class="field-error" id="email-erro" aria-live="polite"></p>
           </div>
@@ -58,7 +56,7 @@
             <label for="senha">Senha</label>
             <div class="input-group">
               <input type="password" id="senha" name="senha" autocomplete="current-password"
-                     placeholder="Sua senha" required
+                     placeholder="Sua senha" maxlength="72" required
                      aria-describedby="senha-erro">
               <button type="button" class="toggle-senha" data-alvo="senha"
                       aria-label="Mostrar senha" aria-pressed="false">Mostrar</button>
@@ -68,7 +66,7 @@
 
           <div class="login-options">
             <label class="login-remember" for="lembrar">
-              <input type="checkbox" id="lembrar" name="lembrar">
+              <input type="checkbox" id="lembrar" name="lembrar" checked>
               Lembrar de mim
             </label>
             <a class="login-forgot" href="#" id="link-esqueci">Esqueci minha senha</a>
@@ -76,6 +74,7 @@
 
           <button type="submit" class="btn-primary" id="btn-entrar">
             <span class="btn-text">Entrar</span>
+            <span class="spinner" aria-hidden="true"></span>
           </button>
         </form>
 
@@ -86,6 +85,6 @@
     </section>
   </main>
 
-  <script src="js/login.js"></script>
+  <script src="js/auth.js"></script>
 </body>
 </html>

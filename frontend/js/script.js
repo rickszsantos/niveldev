@@ -1,7 +1,7 @@
 /* ============================================================
    NívelDev — script inicial
    1) Lista de cursos (a grade da home é montada a partir dela)
-   2) Botão Entrar (placeholder até a tela de login existir)
+   2) Cabeçalho: Entrar / Inscreva-se (ou nome do usuário e Sair, se logado)
    ============================================================ */
 
 /* ---------- 1) CURSOS ----------
@@ -89,22 +89,136 @@ function montarCursos() {
   });
 }
 
-/* ---------- 2) BOTÕES ---------- */
+/* ---------- 2) CABEÇALHO (login / cadastro) ----------
+   Depende de js/auth.js (window.NivelDevAuth).
+   Deslogado: mostra "Entrar" e "Inscreva-se" (links para login.html / cadastro.html).
+   Logado:    mostra "Olá, <nome>" e o botão "Sair". */
+
+function mostrarCabecalhoLogado(usuario) {
+  const acoes = document.querySelector('.header-actions');
+  if (!acoes) return;
+
+  const saudacao = document.createElement('span');
+  saudacao.className = 'header-user';
+  saudacao.textContent = 'Olá, ' + (usuario.nome || '').split(' ')[0]; // textContent: sem risco de HTML injetado
+
+  const sair = document.createElement('button');
+  sair.type = 'button';
+  sair.className = 'btn btn-outline';
+  sair.id = 'btn-sair';
+  sair.textContent = 'Sair';
+  sair.addEventListener('click', () => {
+    NivelDevAuth.logout();
+    window.location.reload();
+  });
+
+  const painel = document.createElement('a');
+  painel.href = 'home.html';
+  painel.className = 'btn btn-solid';
+  painel.textContent = 'Meu painel';
+
+  acoes.replaceChildren(saudacao, painel, sair);
+
+  // quem já está logado: "Começar agora" leva direto aos cursos, em vez do login
+  const comecar = document.getElementById('banner-comecar');
+  if (comecar) comecar.setAttribute('href', '#cursos');
+
+  // quem já tem conta não precisa do convite de cadastro
+  const convite = document.getElementById('cadastro');
+  if (convite) convite.closest('.section').hidden = true;
+}
+
+async function iniciarCabecalho() {
+  if (!window.NivelDevAuth || !NivelDevAuth.getToken()) return;
+
+  // mostra na hora com o que está salvo...
+  const salvo = NivelDevAuth.getUser();
+  if (salvo) mostrarCabecalhoLogado(salvo);
+
+  // ...e confirma com o servidor se o token ainda vale (pode ter expirado)
+  try {
+    const { user } = await NivelDevAuth.api.me();
+    mostrarCabecalhoLogado(user);
+  } catch (erro) {
+    if (erro.status === 401) {
+      NivelDevAuth.logout();
+      window.location.reload();
+    }
+    // outros erros (servidor fora do ar etc.): mantém o que já está na tela
+  }
+}
+
+/* ---------- 3) CARROSSEL DE TRILHAS ----------
+   Troca sozinho a cada 5 s; pausa ao passar o mouse/focar e respeita
+   "reduzir movimento". Setas, bolinhas, teclado e arraste no celular. */
+
+function iniciarCarrosselTrilhas() {
+  const raiz = document.getElementById('trilhas-carousel');
+  if (!raiz) return;
+
+  const trilho = raiz.querySelector('.trilhas-track');
+  const slides = Array.from(raiz.querySelectorAll('.trilha-slide'));
+  const dots = raiz.querySelector('.trilhas-dots');
+  const total = slides.length;
+  const reduzMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let atual = 0;
+  let timer = null;
+
+  const bolinhas = slides.map((_, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'trilhas-dot';
+    b.setAttribute('role', 'tab');
+    b.setAttribute('aria-label', 'Ir para a trilha ' + (i + 1));
+    b.addEventListener('click', () => { ir(i); reiniciar(); });
+    dots.appendChild(b);
+    return b;
+  });
+
+  function ir(i) {
+    atual = (i + total) % total;
+    trilho.style.transform = 'translateX(' + (-atual * 100) + '%)';
+    slides.forEach((s, n) => { s.tabIndex = n === atual ? 0 : -1; s.setAttribute('aria-hidden', n === atual ? 'false' : 'true'); });
+    bolinhas.forEach((b, n) => b.setAttribute('aria-selected', n === atual ? 'true' : 'false'));
+  }
+
+  function parar() { clearInterval(timer); timer = null; }
+  function iniciar() { if (!reduzMovimento && !timer) timer = setInterval(() => ir(atual + 1), 5000); }
+  function reiniciar() { parar(); iniciar(); }
+
+  raiz.querySelector('.trilhas-prev').addEventListener('click', () => { ir(atual - 1); reiniciar(); });
+  raiz.querySelector('.trilhas-next').addEventListener('click', () => { ir(atual + 1); reiniciar(); });
+
+  raiz.addEventListener('mouseenter', parar);
+  raiz.addEventListener('mouseleave', iniciar);
+  raiz.addEventListener('focusin', parar);
+  raiz.addEventListener('focusout', iniciar);
+  raiz.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') { ir(atual - 1); reiniciar(); }
+    if (e.key === 'ArrowRight') { ir(atual + 1); reiniciar(); }
+  });
+
+  // arraste horizontal (celular)
+  let x0 = null;
+  raiz.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; parar(); }, { passive: true });
+  raiz.addEventListener('touchend', (e) => {
+    if (x0 !== null) {
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 40) ir(atual + (dx < 0 ? 1 : -1));
+    }
+    x0 = null;
+    iniciar();
+  });
+
+  // pausa quando a aba está em segundo plano
+  document.addEventListener('visibilitychange', () => (document.hidden ? parar() : iniciar()));
+
+  ir(0);
+  iniciar();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   montarCursos();
-
-  // TODO: trocar por navegação para as páginas de login e cadastro
-  // (ou por um fetch() para a API do back-end, quando existir)
-  const avisos = [
-    // Inscreva-se e Criar minha conta grátis já abrem o cadastro.html
-  ];
-
-  avisos.forEach(([id, mensagem]) => {
-    const botao = document.getElementById(id);
-    if (!botao) return;
-    botao.addEventListener('click', (evento) => {
-      evento.preventDefault();
-      alert(mensagem);
-    });
-  });
+  iniciarCarrosselTrilhas();
+  iniciarCabecalho();
 });

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Início — NívelDev</title>
+
+  <link rel="icon" href="img/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192.png">
+  <link rel="apple-touch-icon" href="img/favicon-192.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/home.css">
+</head>
+<body class="app-page">
+
+  <div class="app-shell">
+
+    <!-- ===================== MENU LATERAL ===================== -->
+    <aside class="app-sidebar" id="app-sidebar" aria-label="Menu principal">
+      <a href="#inicio" class="app-logo" aria-label="NívelDev — início">
+        <img src="img/logo-niveldev.png" alt="NívelDev">
+      </a>
+
+      <nav class="app-nav">
+        <a href="#inicio" class="app-nav-item" data-view="inicio">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1v-9z"/></svg>
+          Início
+        </a>
+        <a href="#cursos" class="app-nav-item" data-view="cursos">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5L2 9z"/><path d="M6 11.5V16c0 1.4 2.7 3 6 3s6-1.6 6-3v-4.5"/><path d="M22 9v6"/></svg>
+          Cursos
+        </a>
+        <a href="#exercicios" class="app-nav-item" data-view="exercicios">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8l-4 4 4 4"/><path d="M16 8l4 4-4 4"/><path d="M13.5 5l-3 14"/></svg>
+          Exercícios
+        </a>
+        <a href="#progresso" class="app-nav-item" data-view="progresso">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="13" width="4" height="7" rx="1.5"/><rect x="10" y="8" width="4" height="12" rx="1.5"/><rect x="17" y="3" width="4" height="17" rx="1.5"/></svg>
+          Meu Progresso
+        </a>
+
+        <hr class="app-nav-sep">
+
+        <a href="#perfil" class="app-nav-item" data-view="perfil">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+          Meu Perfil
+        </a>
+      </nav>
+    </aside>
+    <div class="app-backdrop" id="app-backdrop" hidden></div>
+
+    <!-- ===================== ÁREA PRINCIPAL ===================== -->
+    <div class="app-main">
+
+      <header class="app-topbar">
+        <button type="button" class="app-menu-btn" id="app-menu-btn" aria-label="Abrir menu" aria-controls="app-sidebar" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+
+        <div class="app-user">
+          <button type="button" class="app-user-btn" id="app-user-btn" aria-haspopup="true" aria-expanded="false" aria-label="Menu do usuário">
+            <span class="app-avatar" id="app-avatar">…</span>
+            <svg class="app-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="app-user-menu" id="app-user-menu" hidden>
+            <p class="app-user-nome" id="app-user-nome"></p>
+            <a href="#perfil" class="app-user-item">Meu Perfil</a>
+            <button type="button" class="app-user-item" id="btn-sair">Sair</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="app-content" id="app-content" tabindex="-1">
+
+        <!-- ---------- VIEW: INÍCIO ---------- -->
+        <section class="app-view" id="view-inicio" data-view="inicio">
+
+          <div class="app-hero">
+            <h1>Olá, <span id="hero-nome">aluno</span>!</h1>
+            <p>Pronto para aprender algo novo hoje?</p>
+            <span class="app-hero-traco" aria-hidden="true"></span>
+          </div>
+
+          <div class="app-stats">
+            <article class="app-card app-stat">
+              <div class="app-icon-box">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10.4 5.3 8 4.7 4 4.7v13.6c4 0 6.4.6 8 1.8 1.6-1.2 4-1.8 8-1.8V4.7c-4 0-6.4.6-8 1.8z" class="fill"/><path d="M12 6.5v13.6"/></svg>
+              </div>
+              <div>
+                <strong><span id="stat-cursos">0</span> <span id="stat-cursos-rotulo">Curso em andamento</span></strong>
+                <span>Continue de onde parou</span>
+              </div>
+            </article>
+
+            <article class="app-card app-stat">
+              <div class="app-icon-box">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+              </div>
+              <div>
+                <strong><span id="stat-exercicios">0</span> <span id="stat-exercicios-rotulo">Exercícios concluídos</span></strong>
+                <span>Você já está indo bem!</span>
+              </div>
+            </article>
+          </div>
+
+          <h2 class="app-titulo-secao">Continue aprendendo</h2>
+          <article class="app-card app-curso">
+            <img class="app-curso-capa" id="curso-capa" src="img/cursos/logica.jpg" alt="" width="640" height="256">
+            <div class="app-curso-info">
+              <span class="app-tag">Em andamento</span>
+              <h3 id="curso-titulo">Lógica de Programação</h3>
+              <p id="curso-desc">Aprenda os fundamentos da lógica e programe com confiança.</p>
+              <div class="app-progresso">
+                <div class="app-barra" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progresso do curso" id="curso-barra">
+                  <span id="curso-barra-fill"></span>
+                </div>
+                <span class="app-progresso-txt"><span id="curso-pct">0</span>% concluído</span>
+              </div>
+            </div>
+            <a href="#cursos" class="app-btn">
+              Continuar curso
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </article>
+
+          <h2 class="app-titulo-secao">Pratique seus conhecimentos</h2>
+          <article class="app-card app-pratica">
+            <div class="app-icon-box app-icon-box-lg">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8l-4 4 4 4"/><path d="M16 8l4 4-4 4"/><path d="M13.5 5l-3 14"/></svg>
+            </div>
+            <div class="app-pratica-info">
+              <h3>Desafios de Programação</h3>
+              <p>Coloque seus conhecimentos em prática resolvendo exercícios.</p>
+            </div>
+            <a href="#exercicios" class="app-link">
+              Ver exercícios
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </article>
+        </section>
+
+        <!-- ---------- VIEW: EM DESENVOLVIMENTO (Cursos, Exercícios, Progresso, Perfil) ---------- -->
+        <section class="app-view app-dev" id="view-dev" hidden>
+          <div class="app-dev-icone">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 00-5.4 5.1L3.5 17.2a1.9 1.9 0 002.7 2.7l5.8-5.8a4 4 0 005.1-5.4l-2.6 2.6-2.4-.5-.5-2.4 2.6-2.6z"/></svg>
+          </div>
+          <h1 id="dev-titulo">Em desenvolvimento</h1>
+          <p>Esta área ainda está sendo construída e estará disponível em breve.</p>
+          <a href="#inicio" class="app-btn">Voltar ao início</a>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/home.js"></script>
+</body>
+</html>

@@ -80,73 +80,82 @@
   cursor: wait;
 }
 
-/* ========== Formulário no centro (sem o painel azul) ========== */
-.auth-layout.auth-centro {
-  grid-template-columns: 1fr;          /* uma coluna só: o formulário ocupa o meio */
-  min-height: 100vh;                   /* sem cabeçalho: o fundo ocupa a tela inteira */
+/* ========== Fundo branco com ondas azuis (login e cadastro) ========== */
+/* Usa o arquivo img/fundo-ondas.svg (fundo branco, só as ondas coloridas) */
+body.auth-page {
+  background: #ffffff;
+}
 
-  /* Mesmo fundo do cabeçalho: azul escuro por cima da foto, meio transparente.
-     Se a imagem do seu cabeçalho tiver outro nome, troque "hero-bg.jpg" abaixo. */
-  background-color: #0c1c4d;           /* cor de reserva enquanto a imagem carrega */
-  background-image:
-    /* Igual ao cabeçalho: azul forte à esquerda, mais transparente à direita,
-       onde aparece a pessoa no notebook */
-    linear-gradient(
-      90deg,
-      rgba(12, 28, 77, 0.95) 0%,
-      rgba(12, 28, 77, 0.85) 35%,
-      rgba(21, 71, 214, 0.55) 70%,
-      rgba(21, 71, 214, 0.35) 100%
-    ),
-    url("../img/hero-bg.jpg");
-  background-size: cover, cover;
-  background-position: center, right center;
+.auth-layout.auth-centro {
+  grid-template-columns: 1fr;
+  min-height: 100vh;
+  background-color: #ffffff;
+  background-image: url("../img/fundo-ondas.svg");
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
 }
 
-
+/* Centraliza o cartão na tela, na horizontal e na vertical */
 .auth-centro .auth-panel {
-  padding: 40px 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);   /* coluna com a largura toda: o cartão não encolhe ao conteúdo */
+  justify-items: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 24px 16px;
 }
 
+/* Cartão branco sólido, destacado do fundo só pela sombra */
 .auth-centro .auth-card {
-  max-width: 440px;
-  padding: 36px 32px;
-  background: #fff;
-  border: 1px solid #e3e8f1;
-  border-radius: 16px;
-  box-shadow: 0 24px 60px rgba(4, 12, 40, 0.45); /* destaca o cartão no fundo azul */
+  width: 100%;
+  max-width: 600px;                    /* mesma largura no login e no cadastro */
+  padding: 24px 32px;
+  /* mesma altura mínima nas duas telas, para o cartão não "pular" de uma para outra */
+  min-height: min(640px, calc(100vh - 48px));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #ffffff;
+  border: none;
+  border-radius: 20px;
+  box-shadow:
+    0 2px 4px rgba(6, 31, 94, 0.06),
+    0 12px 24px rgba(6, 31, 94, 0.12),
+    0 32px 64px rgba(6, 31, 94, 0.18);
 }
+
+/* Link "Voltar" não estica a largura toda do cartão */
+.auth-centro .auth-back { align-self: flex-start; }
 
 /* Logo e nome NívelDev em cima do formulário */
 .auth-logo {
   display: flex;
   justify-content: center;
-  margin: 8px 0 20px;
+  margin: 4px 0 12px;
 }
 .auth-logo img {
   display: block;
   width: auto;
-  height: 52px;
+  height: 44px;
 }
 
 .auth-centro .auth-header {
   text-align: center;
+  margin-bottom: 16px;
 }
+.auth-centro .auth-header h1 {
+  font-size: 1.65rem;
+  margin-bottom: 4px;
+}
+
+/* Login: campos mais juntos para o cartão caber na tela sem rolar */
+.auth-centro .auth-form { gap: 14px; }
 
 @media (max-width: 480px) {
   .auth-centro .auth-card {
-    padding: 28px 20px;
-  }
-}
-
-/* Celular: o cartão ocupa quase toda a largura, então o azul fica uniforme */
-@media (max-width: 900px) {
-  .auth-layout.auth-centro {
-    background-image:
-      linear-gradient(rgba(12, 28, 77, 0.85), rgba(12, 28, 77, 0.85)),
-      url("../img/hero-bg.jpg");
-    background-position: center, 70% center;
+    min-height: 0;
+    padding: 24px 18px 20px;
   }
 }
 
@@ -161,7 +170,7 @@
    Cadastro compacto: todos os campos cabem na tela sem rolar
    ========================================================== */
 .auth-centro .auth-card--cadastro {
-  max-width: 640px;                    /* mais largo para caber 2 campos por linha */
+  max-width: 600px;                    /* igual ao login */
   padding: 24px 32px;
 }
 

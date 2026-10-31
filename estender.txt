@@ -1,0 +1,299 @@
+==============================================================
+ NÍVELDEV — GUIA DO BANCO DE DADOS E DO DOCKER
+ (PostgreSQL + DBeaver + comandos do dia a dia)
+==============================================================
+
+Tudo aqui parte do projeto "niveldev v02". Os comandos de terminal
+devem ser rodados NA PASTA RAIZ do projeto, aquela que contém:
+  frontend/  backend/  docker-compose.yml  Dockerfile  .env
+
+Windows: use PowerShell para os comandos "docker ...". Os comandos
+com "find/chmod" só funcionam no WSL ou Git Bash.
+
+
+--------------------------------------------------------------
+ 0. O QUE VOCÊ PRECISA TER INSTALADO
+--------------------------------------------------------------
+ - Docker Desktop (aberto e rodando, ícone da baleia sem erro)
+ - DBeaver Community (https://dbeaver.io/download/) — o programa
+   visual para ver tabelas e rodar SELECT / INSERT
+
+
+--------------------------------------------------------------
+ 1. PRIMEIRA CONFIGURAÇÃO (só uma vez)
+--------------------------------------------------------------
+1.1  Na raiz do projeto, crie o arquivo ".env" a partir do exemplo:
+
+       Windows (PowerShell):   copy .env.example .env
+       Linux / Mac / WSL:      cp .env.example .env
+
+1.2  Abra o ".env" e preencha:
+
+       APP_PORT=5050
+       JWT_SECRET=<uma chave longa e aleatória>
+       DB_USER=niveldev
+       DB_PASSWORD=<sua senha>      (NÃO use o caractere $)
+       DB_NAME=niveldev
+
+     Para gerar a JWT_SECRET (precisa do Node instalado):
+       node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
+     Se não tiver Node, qualquer texto longo e aleatório serve.
+
+1.3  IMPORTANTE: o Postgres lê DB_USER / DB_PASSWORD / DB_NAME
+     apenas na PRIMEIRA vez que cria o banco. Se mudar a senha no
+     .env depois, o banco antigo continua com a senha antiga
+     (veja a seção 8, "Problemas comuns").
+
+
+--------------------------------------------------------------
+ 2. SUBIR O PROJETO (site + banco)
+--------------------------------------------------------------
+       docker compose up -d --build
+
+ - "up"      sobe os contêineres (db = banco, app = site + API)
+ - "-d"      roda em segundo plano (o terminal fica livre)
+ - "--build" reconstrói a imagem do site com o código atual
+
+ O que acontece: o banco sobe, espera ficar saudável, o app sobe,
+ e o app cria a tabela "users" sozinho (backend/database/schema.sql).
+
+ Abrir o site:  http://localhost:5050
+ Ver se está tudo certo:   docker compose ps
+   -> os dois serviços devem aparecer como "running"/"healthy".
+ Testar o banco pela API:  http://localhost:5050/health
+   -> deve mostrar {"status":"ok"}
+
+
+--------------------------------------------------------------
+ 3. DERRUBAR SEM PERDER OS DADOS
+--------------------------------------------------------------
+ Os dados do banco ficam num "volume" (niveldev-db) que fica
+ FORA do contêiner. Então:
+
+   PARAR e remover os contêineres (DADOS PRESERVADOS):
+       docker compose down
+
+   Só pausar, sem remover:
+       docker compose stop
+   (e para voltar:  docker compose start)
+
+   Subir de novo depois:
+       docker compose up -d
+
+ >>> CUIDADO — ISTO APAGA TODOS OS DADOS DO BANCO: <<<
+       docker compose down -v
+ O "-v" apaga o volume. Só use se quiser um banco zerado de propósito.
+
+
+--------------------------------------------------------------
+ 4. ATUALIZAR PARA APARECER UMA MODIFICAÇÃO
+--------------------------------------------------------------
+ O código do site e da API é COPIADO para dentro da imagem na hora
+ do build. Mexeu em HTML, CSS, JS, imagens ou backend? Precisa
+ reconstruir:
+
+       docker compose up -d --build
+
+ Não precisa derrubar antes: o compose recria só o que mudou, e o
+ banco (com seus dados) continua intacto.
+
+ Depois de subir, atualize o navegador com CTRL + F5 (ou
+ CTRL + SHIFT + R) para ignorar o cache do navegador.
+
+ Atalhos úteis:
+   Reconstruir só o site, sem mexer no banco:
+       docker compose up -d --build app
+
+   Reiniciar sem reconstruir (raramente útil, não pega código novo):
+       docker compose restart app
+
+   Ver os logs do site (útil para achar erros, CTRL+C para sair):
+       docker compose logs -f app
+
+   Ver os logs do banco:
+       docker compose logs -f db
+
+ ERRO 500 EM IMAGEM NOVA: confira as permissões antes de subir:
+       ls -l frontend/img        (tudo deve começar com -rw-r--r--)
+ Se alguma estiver "-rw-------", rode (WSL/Git Bash/Linux/Mac):
+       find frontend -type d -exec chmod 755 {} + && find frontend -type f -exec chmod 644 {} +
+ e reconstrua com --build.
+
+
+--------------------------------------------------------------
+ 5. CONECTAR O DBEAVER AO BANCO
+--------------------------------------------------------------
+ O banco precisa estar de pé (docker compose ps mostrando "db").
+ O compose já expõe o Postgres só para o SEU computador, na
+ porta 5432 (127.0.0.1:5432).
+
+ No DBeaver:
+ 1. Menu  Banco de Dados > Nova Conexão  (ou o ícone de tomada com +)
+ 2. Escolha  PostgreSQL  e clique em Avançar
+ 3. Preencha (use os MESMOS valores do seu .env):
+
+       Host:             localhost
+       Porta:            5432
+       Banco de dados:   niveldev          (= DB_NAME)
+       Nome de usuário:  niveldev          (= DB_USER)
+       Senha:            <sua DB_PASSWORD>
+
+    Marque "Salvar senha" se quiser.
+ 4. Clique em "Testar conexão".
+    - Na primeira vez o DBeaver pede para baixar o driver do
+      PostgreSQL: clique em "Baixar".
+ 5. Finalizar.
+
+ Para ver as tabelas, no painel da esquerda abra:
+    niveldev > Bancos de dados > niveldev > Esquemas > public > Tabelas
+ Clique duas vezes em "users" e vá na aba "Dados" para ver os
+ registros.
+
+ Se a conexão falhar com a porta 5432 já ocupada (você tem outro
+ Postgres instalado no PC): no docker-compose.yml troque
+       "127.0.0.1:5432:5432"   por   "127.0.0.1:5433:5432"
+ rode  docker compose up -d  e use a porta 5433 no DBeaver.
+
+
+--------------------------------------------------------------
+ 6. RODAR COMANDOS SQL (SELECT, INSERT, UPDATE, DELETE)
+--------------------------------------------------------------
+ 6.1 No DBeaver:
+   - Clique na conexão "niveldev" e aperte  CTRL + ]  (ou menu
+     Editor SQL > Novo script SQL).
+   - Digite o comando e execute com  CTRL + ENTER  (roda a
+     instrução onde o cursor está) ou  ALT + X  (roda o script todo).
+   - Por padrão o DBeaver está em "Auto-commit": cada comando é
+     salvo na hora. Se estiver em modo manual, clique em "Commit"
+     na barra de ferramentas para gravar.
+
+ 6.2 Pelo terminal, sem DBeaver (abre o psql dentro do contêiner):
+
+       docker compose exec db psql -U niveldev -d niveldev
+
+   (troque niveldev pelos seus DB_USER / DB_NAME, se diferentes)
+   Dentro do psql:
+       \dt            lista as tabelas
+       \d users       mostra a estrutura da tabela users
+       \q             sai
+   Todo comando SQL termina com ponto e vírgula ( ; ).
+
+ 6.3 Exemplos (tabela atual: users)
+
+   Ver todos os usuários (sem mostrar o hash da senha):
+       SELECT id, nome, email, criado_em FROM users;
+
+   Buscar por e-mail:
+       SELECT id, nome, email FROM users WHERE LOWER(email) = 'joao@email.com';
+
+   Contar usuários:
+       SELECT COUNT(*) FROM users;
+
+   Mais recentes primeiro:
+       SELECT id, nome, email, criado_em FROM users ORDER BY criado_em DESC LIMIT 10;
+
+   Corrigir o nome de um usuário:
+       UPDATE users SET nome = 'João Silva' WHERE id = 1;
+
+   Apagar um usuário:
+       DELETE FROM users WHERE id = 1;
+
+   !!! SEMPRE use WHERE em UPDATE e DELETE. Sem WHERE, o comando
+   afeta TODAS as linhas da tabela.
+
+   INSERT manual (atenção, leia abaixo):
+       INSERT INTO users (nome, email, senha_hash)
+       VALUES ('Teste', 'teste@email.com', 'hash_aqui');
+
+   A coluna senha_hash NÃO é a senha: é um hash gerado pelo sistema
+   (bcrypt/similar). Um usuário inserido "na mão" com texto qualquer
+   NÃO conseguirá fazer login. Para criar usuários de teste que
+   realmente entram no site, use a tela de cadastro
+   (http://localhost:5050/cadastro.html).
+   O e-mail é único sem diferenciar maiúsculas/minúsculas; repetir
+   um e-mail gera erro de "violação de unicidade" (isso é esperado).
+
+ 6.4 Criar uma tabela nova
+   Pelo DBeaver você pode testar com CREATE TABLE, mas para o
+   projeto ela deve ser registrada em:
+       backend/database/schema.sql
+   usando "CREATE TABLE IF NOT EXISTS ...". O servidor roda esse
+   arquivo toda vez que inicia, então a tabela passa a existir em
+   qualquer computador. Depois de editar, rode:
+       docker compose up -d --build
+   (o schema.sql também é copiado para a imagem).
+   Para ALTERAR uma tabela que já existe (nova coluna), use:
+       ALTER TABLE users ADD COLUMN IF NOT EXISTS telefone VARCHAR(20);
+   também dentro do schema.sql, para ficar versionado.
+
+
+--------------------------------------------------------------
+ 7. BACKUP E RESTAURAÇÃO
+--------------------------------------------------------------
+ Fazer backup (cria o arquivo backup.sql na pasta atual):
+       docker compose exec -T db pg_dump -U niveldev -d niveldev > backup.sql
+
+ Restaurar um backup (banco rodando):
+       docker compose exec -T db psql -U niveldev -d niveldev < backup.sql
+
+ Dica: faça backup antes de qualquer "docker compose down -v" ou
+ de mexer em tabelas com muitos dados.
+ (No PowerShell, o redirecionamento ">" pode gravar em UTF-16. Se
+ for restaurar depois, prefira fazer o backup pelo Git Bash/WSL ou
+ pelo DBeaver: botão direito no banco > Ferramentas > Backup.)
+
+
+--------------------------------------------------------------
+ 8. PROBLEMAS COMUNS
+--------------------------------------------------------------
+ "Cannot connect to the Docker daemon" / "docker: error during connect"
+   -> O Docker Desktop não está aberto. Abra e espere iniciar.
+
+ "port is already allocated" (porta 5050 ou 5432 em uso)
+   -> 5050: mude APP_PORT no .env (ex.: 5051) e suba de novo.
+   -> 5432: veja a dica do porto 5433 na seção 5.
+
+ "Defina DB_USER no arquivo .env" (ou JWT_SECRET etc.)
+   -> O .env não existe na RAIZ do projeto ou está com variável
+      vazia. Revise a seção 1.
+
+ DBeaver: "password authentication failed"
+   -> Usuário/senha diferentes dos do banco JÁ criado. Lembre: mudar
+      o .env depois não muda a senha do banco existente. Duas saídas:
+      a) Use no DBeaver a senha que estava no .env na primeira vez.
+      b) Se não tem dados importantes: docker compose down -v
+         (apaga o banco) e docker compose up -d --build (recria com
+         a senha atual do .env).
+
+ Site abre mas cadastro/login dá erro
+   -> docker compose logs -f app   (leia a mensagem de erro)
+   -> http://localhost:5050/health  deve dar status ok.
+
+ Imagem nova não aparece / aparece a antiga
+   -> Faltou --build (seção 4) ou cache do navegador (CTRL + F5).
+
+ Imagem com erro 500
+   -> Permissão do arquivo (final da seção 4).
+
+ Ver o que está rodando:
+       docker compose ps
+ Ver todos os contêineres do PC:
+       docker ps -a
+
+
+--------------------------------------------------------------
+ 9. RESUMO RÁPIDO (cola)
+--------------------------------------------------------------
+ Subir / atualizar tudo ........ docker compose up -d --build
+ Parar sem apagar nada ......... docker compose down
+ Pausar ........................ docker compose stop
+ Voltar de pausa ............... docker compose start
+ Ver estado .................... docker compose ps
+ Logs do site .................. docker compose logs -f app
+ Abrir SQL no terminal ......... docker compose exec db psql -U niveldev -d niveldev
+ Backup ........................ docker compose exec -T db pg_dump -U niveldev -d niveldev > backup.sql
+ APAGAR TUDO (cuidado!) ........ docker compose down -v
+
+ Site ........ http://localhost:5050
+ DBeaver ..... host localhost | porta 5432 | banco/usuário do .env
+==============================================================
