@@ -1,0 +1,290 @@
+/* ============================================================
+   NívelDev — lista de exercícios (categoria.html)
+   A barra lateral, o topo e as cores vêm de style.css + home.css.
+   Todas as classes começam com "cat-" para não colidir.
+   ============================================================ */
+
+/* ---------- Voltar para categorias ---------- */
+
+.cat-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  color: var(--brand);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.cat-voltar svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .15s;
+}
+
+.cat-voltar:hover svg {
+  transform: translateX(-3px);
+}
+
+.cat-voltar:focus-visible {
+  outline: 3px solid var(--brand-bright);
+  outline-offset: 3px;
+}
+
+/* ---------- Cabeçalho da página ---------- */
+
+.cat-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.cat-filtros {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.cat-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 300px;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: 0 6px 20px rgba(21, 71, 214, .06);
+  transition: border-color .15s;
+}
+
+.cat-search:focus-within {
+  border-color: var(--brand);
+}
+
+.cat-search svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  fill: none;
+  stroke: var(--brand);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cat-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font: 400 15px 'IBM Plex Sans', system-ui, sans-serif;
+  color: var(--ink);
+}
+
+.cat-search input::placeholder {
+  color: var(--ink-soft);
+}
+
+/* ---------- Tabela (lista que rola para baixo) ---------- */
+
+.cat-tabela {
+  margin-top: 36px;
+  overflow: clip; /* mantém os cantos arredondados sem quebrar o cabeçalho fixo */
+}
+
+/* mesmas colunas no cabeçalho e nas linhas */
+.cat-cabecalho,
+.cat-linha {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 190px 150px;
+  align-items: center;
+  gap: 20px;
+  padding-inline: 24px;
+}
+
+/* o cabeçalho fica grudado embaixo do topo enquanto a lista rola */
+.cat-cabecalho {
+  position: sticky;
+  top: 68px; /* altura do .app-topbar */
+  z-index: 5;
+  padding-block: 16px;
+  background: #f7f9ff;
+  border-bottom: 1px solid var(--line);
+  font: 600 15px 'Space Grotesk', system-ui, sans-serif;
+  color: var(--brand-deep);
+}
+
+.cat-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cat-linha {
+  padding-block: 18px;
+  border-bottom: 1px solid var(--line);
+  transition: background .15s;
+}
+
+.cat-lista li:last-child .cat-linha {
+  border-bottom: 0;
+}
+
+.cat-linha:hover {
+  background: #f7f9ff;
+}
+
+.cat-linha h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--brand-deep);
+  line-height: 1.3;
+}
+
+.cat-linha p {
+  margin-top: 2px;
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+
+/* ---------- Dificuldade (4 barrinhas + nota) ---------- */
+
+.cat-dif {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.cat-barras {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.cat-barra {
+  position: relative;
+  width: 14px;
+  border-radius: 3px;
+  background: #e3ecff;
+  overflow: hidden;
+}
+
+/* barrinhas em "escada", como um sinal de dificuldade */
+.cat-barra:nth-child(1) { height: 10px; }
+.cat-barra:nth-child(2) { height: 13px; }
+.cat-barra:nth-child(3) { height: 16px; }
+.cat-barra:nth-child(4) { height: 19px; }
+
+.cat-barra span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--brand);
+}
+
+.cat-nota {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+/* ---------- Botão Resolver ---------- */
+
+.cat-resolver {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1.5px solid var(--brand);
+  color: var(--brand);
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background .15s, color .15s;
+}
+
+.cat-resolver svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .15s;
+}
+
+.cat-resolver:hover {
+  background: var(--brand);
+  color: #fff;
+}
+
+.cat-resolver:hover svg {
+  transform: translateX(3px);
+}
+
+.cat-resolver:focus-visible {
+  outline: 3px solid var(--brand-bright);
+  outline-offset: 2px;
+}
+
+.cat-vazio {
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+.cat-contador {
+  margin-top: 20px;
+  text-align: right;
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+
+/* ---------- Responsivo ---------- */
+
+@media (max-width: 760px) {
+  .cat-filtros,
+  .cat-search {
+    width: 100%;
+  }
+
+  .cat-cabecalho {
+    display: none;
+  }
+
+  /* no celular: título em cima, dificuldade e botão embaixo */
+  .cat-linha {
+    grid-template-columns: 1fr auto;
+    padding-inline: 18px;
+    gap: 12px 16px;
+  }
+
+  .cat-linha > div:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .cat-contador {
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cat-linha,
+  .cat-resolver,
+  .cat-resolver svg {
+    transition: none;
+  }
+}
