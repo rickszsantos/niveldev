@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const pool = require('./pool');
+const seedAdmin = require('../seed/seedAdmin');
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -24,6 +25,7 @@ async function migrate() {
     await waitForDatabase();
     const sql = fs.readFileSync(path.join(__dirname, '../../../database/schema.sql'), 'utf8');
     await pool.query(sql);
+    await seedAdmin();
     console.log('Banco de dados pronto.');
 }
 

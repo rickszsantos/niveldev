@@ -3,6 +3,8 @@ const Express = require('express');
 const pool = require('./shared/database/pool');
 const errorHandler = require('./shared/minddware/errorHandler');
 const authRoute = require('./modules/auth/routes/authRoute');
+const userRoute = require('./modules/users/routes/userRoute');
+const logRoute = require('./modules/logs/routes/logRoute');
 
 const app = Express();
 
@@ -27,6 +29,8 @@ app.get('/health', async (req, res) => {
 });
 
 app.use('/auth', authRoute);
+app.use('/users', userRoute);
+app.use('/logs', logRoute);
 //app.use("/courses", coursesRoutes);
 //app.use("/enrollments", enrollmentsRoutes);
 //app.use("/exams", examsRoutes);
@@ -34,7 +38,6 @@ app.use('/auth', authRoute);
 //app.use("/progress", progressRoutes);
 //app.use("/reviews", reviewsRoutes);
 //app.use("/submissions", submissionsRoutes);
-//app.use("/users", usersRoutes);
 
 // ---------- Frontend (arquivos estáticos; "/" serve o index.html) ----------
 app.use(Express.static(path.join(__dirname, '../../frontend')));

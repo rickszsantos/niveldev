@@ -5,19 +5,29 @@ const authService = require('../services/authService');
 
 const register = async (req, res) => {
     const { nome, email, password } = req.body;
-    const resultado = await authService.register({ nome, email, password });
+    const resultado = await authService.register({ nome, email, password }, { ip: req.ip });
     res.status(201).json(resultado);
 };
 
+
+
+
+
 const login = async (req, res) => {
     const { email, password } = req.body;
-    const resultado = await authService.login(email, password);
+    const resultado = await authService.login(email, password, { ip: req.ip });
     res.status(200).json(resultado);
 };
+
+
+
+
 
 const me = async (req, res) => {
     const user = await authService.getProfile(req.user.id);
     res.status(200).json({ user });
 };
+
+
 
 module.exports = { register, login, me };

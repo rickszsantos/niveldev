@@ -4,6 +4,11 @@ const authController = require('../controllers/authController');
 const minddware = require('../../../shared/minddware/minddware');
 const router = express.Router();
 
+
+
+
+
+
 // Limita tentativas por IP para dificultar força bruta e criação em massa de contas.
 const limiteLogin = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -14,6 +19,9 @@ const limiteLogin = rateLimit({
     message: { error: 'Muitas tentativas de login. Tente novamente em alguns minutos.' },
 });
 
+
+
+
 const limiteCadastro = rateLimit({
     windowMs: 60 * 60 * 1000,
     limit: 10,
@@ -21,6 +29,9 @@ const limiteCadastro = rateLimit({
     legacyHeaders: false,
     message: { error: 'Muitos cadastros a partir deste endereço. Tente novamente mais tarde.' },
 });
+
+
+
 
 router.post('/register', limiteCadastro, authController.register);
 router.post('/login', limiteLogin, authController.login);

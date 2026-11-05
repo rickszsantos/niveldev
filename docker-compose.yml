@@ -36,6 +36,10 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
+      # Primeiro administrador (opcional; só é criado se ainda não existir nenhum admin)
+      ADMIN_NOME: ${ADMIN_NOME:-Administrador}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
     ports:
       - "${APP_PORT:-5050}:5050"
 
