@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carregando — NívelDev</title>
+
+  <link rel="icon" href="img/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192.png">
+  <link rel="apple-touch-icon" href="img/favicon-192.png">
+
+  <link rel="stylesheet" href="css/carregando.css">
+</head>
+<body class="carregando-page">
+
+  <!-- Tela exibida somente entre o login e a home -->
+  <main class="carregando" id="carregando" role="status" aria-live="polite">
+    <div class="carregando-marca">
+      <span class="carregando-halo" aria-hidden="true"></span>
+      <img class="carregando-logo logo-claro"  src="img/logo-niveldev.png"        alt="NívelDev" width="280">
+      <img class="carregando-logo logo-escuro" src="img/logo-niveldev-branco.png" alt="" aria-hidden="true" width="280">
+    </div>
+
+    <div class="carregando-barra" aria-hidden="true"><span></span></div>
+    <p class="carregando-texto">Preparando seu ambiente…</p>
+  </main>
+
+  <noscript>
+    <meta http-equiv="refresh" content="0; url=home.html">
+  </noscript>
+
+  <script src="js/auth.js"></script>
+  <script src="js/carregando.js"></script>
+</body>
+</html>

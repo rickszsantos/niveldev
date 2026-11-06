@@ -1,0 +1,119 @@
+/* ============================================================
+   NívelDev — tela de carregamento (carregando.html)
+   Aparece só entre o login e a home. Sempre no visual claro
+   (não segue o tema dos Ajustes).
+   ============================================================ */
+
+:root {
+  --brand: #1547d6;
+  --brand-bright: #3b6bff;
+  --ink: #12131a;
+  --ink-soft: #55554f;
+  --paper: #f4f4f2;
+  --line: #e4e4e0;
+}
+
+.logo-escuro { display: none; }
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body.carregando-page {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+}
+
+.carregando {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 24px;
+  opacity: 1;
+  transition: opacity .25s ease;
+}
+
+.carregando.is-saindo { opacity: 0; }
+
+/* logo com um brilho suave pulsando atrás */
+.carregando-marca {
+  position: relative;
+  display: grid;
+  place-items: center;
+  animation: entrar .6s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.carregando-logo {
+  position: relative;
+  width: 280px;
+  max-width: 78vw;
+  height: auto;
+  animation: flutuar 2.4s ease-in-out infinite;
+}
+
+.carregando-halo {
+  position: absolute;
+  inset: -18px -26px;
+  border-radius: 36px;
+  background: radial-gradient(closest-side, rgba(21, 71, 214, .16), transparent 80%);
+  animation: pulsar 2.4s ease-in-out infinite;
+}
+
+/* barra de progresso que enche enquanto prepara a home */
+.carregando-barra {
+  width: 220px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--line);
+  overflow: hidden;
+  animation: entrar .6s .2s ease both;
+}
+
+.carregando-barra span {
+  display: block;
+  height: 100%;
+  width: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--brand), var(--brand-bright));
+  transform-origin: left;
+  transform: scaleX(0);
+  animation: encher 1.35s cubic-bezier(.35, .1, .2, 1) forwards;
+}
+
+.carregando-texto {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  letter-spacing: .01em;
+  animation: entrar .6s .28s ease both;
+}
+
+@keyframes entrar {
+  from { opacity: 0; transform: translateY(10px) scale(.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes flutuar {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-5px); }
+}
+
+@keyframes pulsar {
+  0%, 100% { transform: scale(.94); opacity: .6; }
+  50%      { transform: scale(1.06); opacity: 1; }
+}
+
+@keyframes encher {
+  to { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carregando-marca, .carregando-logo, .carregando-barra, .carregando-texto,
+  .carregando-halo { animation: none; }
+  .carregando-barra span { animation-duration: 1.35s; }
+}

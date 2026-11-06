@@ -13,67 +13,21 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 
+  <script src="js/preferencias.js"></script>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/app-base.css">
   <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/conta.css">
 </head>
-<body class="app-page">
+<body class="app-page" data-pagina="home">
 
   <div class="app-shell">
 
-    <!-- ===================== MENU LATERAL ===================== -->
-    <aside class="app-sidebar" id="app-sidebar" aria-label="Menu principal">
-      <a href="#inicio" class="app-logo" aria-label="NívelDev — início">
-        <img src="img/logo-niveldev.png" alt="NívelDev">
-      </a>
+    <!-- menu lateral e topo são montados por js/layout.js -->
+    <div data-layout="menu"></div>
 
-      <nav class="app-nav">
-        <a href="#inicio" class="app-nav-item" data-view="inicio">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1v-9z"/></svg>
-          Início
-        </a>
-        <a href="#cursos" class="app-nav-item" data-view="cursos">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5L2 9z"/><path d="M6 11.5V16c0 1.4 2.7 3 6 3s6-1.6 6-3v-4.5"/><path d="M22 9v6"/></svg>
-          Cursos
-        </a>
-        <a href="exercicios.html" class="app-nav-item">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8l-4 4 4 4"/><path d="M16 8l4 4-4 4"/><path d="M13.5 5l-3 14"/></svg>
-          Exercícios
-        </a>
-        <a href="#progresso" class="app-nav-item" data-view="progresso">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="13" width="4" height="7" rx="1.5"/><rect x="10" y="8" width="4" height="12" rx="1.5"/><rect x="17" y="3" width="4" height="17" rx="1.5"/></svg>
-          Meu Progresso
-        </a>
-
-        <hr class="app-nav-sep">
-
-        <a href="#perfil" class="app-nav-item" data-view="perfil">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-          Meu Perfil
-        </a>
-      </nav>
-    </aside>
-    <div class="app-backdrop" id="app-backdrop" hidden></div>
-
-    <!-- ===================== ÁREA PRINCIPAL ===================== -->
     <div class="app-main">
-
-      <header class="app-topbar">
-        <button type="button" class="app-menu-btn" id="app-menu-btn" aria-label="Abrir menu" aria-controls="app-sidebar" aria-expanded="false">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-        </button>
-
-        <div class="app-user">
-          <button type="button" class="app-user-btn" id="app-user-btn" aria-haspopup="true" aria-expanded="false" aria-label="Menu do usuário">
-            <span class="app-avatar" id="app-avatar">…</span>
-            <svg class="app-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
-          <div class="app-user-menu" id="app-user-menu" hidden>
-            <p class="app-user-nome" id="app-user-nome"></p>
-            <a href="#perfil" class="app-user-item">Meu Perfil</a>
-            <button type="button" class="app-user-item" id="btn-sair">Sair</button>
-          </div>
-        </div>
-      </header>
+      <div data-layout="topo"></div>
 
       <main class="app-content" id="app-content" tabindex="-1">
 
@@ -84,6 +38,42 @@
             <h1>Olá, <span id="hero-nome">aluno</span>!</h1>
             <p>Pronto para aprender algo novo hoje?</p>
             <span class="app-hero-traco" aria-hidden="true"></span>
+          </div>
+
+          <!-- Nível e sequência (gamificação) -->
+          <div class="app-topo-grid">
+            <article class="app-card nivel-card">
+              <div class="nivel-anel" role="img" aria-label="Nível atual">
+                <svg viewBox="0 0 72 72" aria-hidden="true">
+                  <circle class="nivel-anel-fundo" cx="36" cy="36" r="31"/>
+                  <circle class="nivel-anel-fill" id="nivel-anel" cx="36" cy="36" r="31" pathLength="100"/>
+                </svg>
+                <span id="nivel-numero">1</span>
+              </div>
+              <div class="nivel-info">
+                <span class="nivel-rotulo">Nível <span id="nivel-numero-txt">1</span></span>
+                <h3 id="nivel-titulo">Iniciante</h3>
+                <div class="app-progresso">
+                  <div class="app-barra" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progresso de XP" id="xp-barra">
+                    <span id="xp-barra-fill"></span>
+                  </div>
+                </div>
+                <p class="nivel-xp"><strong><span id="xp-atual">0</span> XP</strong> de <span id="xp-total">0</span> · faltam <span id="xp-falta">0</span> para o nível <span id="nivel-proximo">2</span></p>
+              </div>
+            </article>
+
+            <article class="app-card sequencia-card">
+              <div class="sequencia-topo">
+                <span class="sequencia-chama" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M12 2.5c.6 3.2 4.5 5.4 4.5 10a4.5 4.5 0 01-9 0c0-1.7.8-2.8 1.7-3.7.3 1.2.9 1.9 1.6 2.2C10.4 8.2 10.6 5 12 2.5z"/></svg>
+                </span>
+                <div>
+                  <strong><span id="seq-dias">0</span> dias seguidos</strong>
+                  <span>Estude hoje para manter a sequência</span>
+                </div>
+              </div>
+              <ol class="sequencia-semana" id="seq-semana" aria-label="Dias da semana"></ol>
+            </article>
           </div>
 
           <div class="app-stats">
@@ -142,9 +132,207 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
           </article>
+
+          <h2 class="app-titulo-secao">Conquistas</h2>
+          <div class="conquistas" id="conquistas"></div>
         </section>
 
-        <!-- ---------- VIEW: EM DESENVOLVIMENTO (Cursos, Exercícios, Progresso, Perfil) ---------- -->
+        <!-- ---------- VIEW: MEU PERFIL ---------- -->
+        <section class="app-view" id="view-perfil" data-view="perfil" hidden>
+          <div class="app-hero">
+            <h1>Meu Perfil</h1>
+            <p>Suas informações pessoais e como você aparece na plataforma.</p>
+            <span class="app-hero-traco" aria-hidden="true"></span>
+          </div>
+
+          <article class="app-card perfil-card">
+            <div class="perfil-avatar" id="perfil-avatar" aria-hidden="true"></div>
+            <div class="perfil-dados">
+              <h2 id="perfil-nome">Aluno</h2>
+              <p class="perfil-user">@<span id="perfil-username">aluno</span></p>
+              <p class="perfil-bio" id="perfil-bio"></p>
+              <dl class="perfil-meta">
+                <div><dt>E-mail</dt><dd id="perfil-email">—</dd></div>
+                <div><dt>Membro desde</dt><dd id="perfil-desde">—</dd></div>
+                <div><dt>Perfil</dt><dd id="perfil-visib">Público</dd></div>
+              </dl>
+            </div>
+            <button type="button" class="app-btn" id="btn-editar-perfil">
+              Editar perfil
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 00-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>
+            </button>
+          </article>
+
+          <h2 class="app-titulo-secao">Resumo</h2>
+          <div class="perfil-resumo">
+            <article class="app-card resumo-card">
+              <h3>Cursos concluídos <span class="resumo-n" id="perfil-n-cursos">0</span></h3>
+              <ul class="resumo-lista" id="perfil-cursos"></ul>
+            </article>
+            <article class="app-card resumo-card">
+              <h3>Conquistas desbloqueadas <span class="resumo-n" id="perfil-n-conq">0</span></h3>
+              <ul class="resumo-lista" id="perfil-conquistas"></ul>
+            </article>
+          </div>
+        </section>
+
+        <!-- ---------- VIEW: MEU PROGRESSO ---------- -->
+        <section class="app-view" id="view-progresso" data-view="progresso" hidden>
+          <div class="app-hero">
+            <h1>Meu Progresso</h1>
+            <p>Acompanhe como você está evoluindo na plataforma.</p>
+            <span class="app-hero-traco" aria-hidden="true"></span>
+          </div>
+
+          <div class="prog-numeros">
+            <article class="app-card prog-num"><span class="prog-num-valor" id="prog-exercicios">0</span><span>Exercícios resolvidos</span></article>
+            <article class="app-card prog-num"><span class="prog-num-valor" id="prog-concluidos">0</span><span>Cursos concluídos</span></article>
+            <article class="app-card prog-num"><span class="prog-num-valor" id="prog-andamento">0</span><span>Cursos em andamento</span></article>
+            <article class="app-card prog-num"><span class="prog-num-valor" id="prog-skills">0</span><span>Habilidades desenvolvidas</span></article>
+          </div>
+
+          <h2 class="app-titulo-secao">Evolução</h2>
+          <article class="app-card grafico-card">
+            <div class="grafico-topo">
+              <div>
+                <h3>Exercícios resolvidos</h3>
+                <p id="grafico-total"></p>
+              </div>
+              <div class="seg" role="group" aria-label="Período do gráfico">
+                <button type="button" class="seg-btn is-ativo" data-periodo="7" aria-pressed="true">7 dias</button>
+                <button type="button" class="seg-btn" data-periodo="30" aria-pressed="false">30 dias</button>
+              </div>
+            </div>
+            <div class="grafico" id="grafico" role="img" aria-label="Gráfico de exercícios resolvidos"></div>
+          </article>
+
+          <div class="prog-colunas">
+            <div>
+              <h2 class="app-titulo-secao">Habilidades</h2>
+              <article class="app-card prog-lista-card">
+                <ul class="skills" id="skills"></ul>
+              </article>
+            </div>
+            <div>
+              <h2 class="app-titulo-secao">Cursos</h2>
+              <article class="app-card prog-lista-card">
+                <ul class="cursos-prog" id="cursos-prog"></ul>
+              </article>
+            </div>
+          </div>
+
+          <h2 class="app-titulo-secao">Últimas atividades</h2>
+          <article class="app-card prog-lista-card">
+            <ul class="historico" id="historico"></ul>
+          </article>
+        </section>
+
+        <!-- ---------- VIEW: AJUSTES ---------- -->
+        <section class="app-view" id="view-ajustes" data-view="ajustes" hidden>
+          <div class="app-hero">
+            <h1>Ajustes</h1>
+            <p>Personalize a plataforma e gerencie sua conta.</p>
+            <span class="app-hero-traco" aria-hidden="true"></span>
+          </div>
+
+          <article class="app-card ajuste-bloco ajuste-aparencia">
+            <header><h2>Aparência</h2><p>Escolha como a plataforma aparece para você.</p></header>
+
+            <!-- abas Claro / Escuro (à direita); a aba escolhida e a prévia formam um objeto só, com um contorno azul -->
+            <div class="temas" role="radiogroup" aria-label="Tema" data-ativo="claro">
+              <svg class="tema-forma" viewBox="0 0 250 80" aria-hidden="true" focusable="false">
+                <path class="tema-forma--claro"  d="M1 10A9 9 0 0 1 10 1H125V28H249V69A10 10 0 0 1 239 79H11A10 10 0 0 1 1 69Z"/>
+                <path class="tema-forma--escuro" d="M1 28H125V1H240A9 9 0 0 1 249 10V69A10 10 0 0 1 239 79H11A10 10 0 0 1 1 69Z"/>
+              </svg>
+
+              <div class="tema-abas">
+                <button type="button" class="tema-op tema-op--claro" role="radio" data-tema="claro" aria-checked="false">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+                  <span class="tema-nome">Claro</span>
+                </button>
+                <button type="button" class="tema-op tema-op--escuro" role="radio" data-tema="escuro" aria-checked="false">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                  <span class="tema-nome">Escuro</span>
+                </button>
+              </div>
+
+              <div class="tema-painel" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            </div>
+          </article>
+
+          <article class="app-card ajuste-bloco">
+            <header><h2>Notificações</h2><p>Decida o que você quer receber.</p></header>
+            <ul class="ajuste-lista">
+              <li><div><strong>Notificações</strong><span>Liga ou desliga todos os avisos.</span></div>
+                <button type="button" class="chave" role="switch" id="chave-notif" data-pref="notif" aria-checked="true" aria-label="Notificações"></button></li>
+              <li data-depende="notif"><div><strong>Novas atividades</strong><span>Avise quando surgir um exercício ou desafio novo.</span></div>
+                <button type="button" class="chave" role="switch" data-pref="notifAtividades" aria-checked="true" aria-label="Avisos de novas atividades"></button></li>
+              <li data-depende="notif"><div><strong>Cursos e conquistas</strong><span>Avise sobre novidades nos cursos e conquistas desbloqueadas.</span></div>
+                <button type="button" class="chave" role="switch" data-pref="notifCursos" aria-checked="true" aria-label="Avisos sobre cursos e conquistas"></button></li>
+            </ul>
+          </article>
+
+          <article class="app-card ajuste-bloco">
+            <header><h2>Privacidade</h2><p>Controle quem vê o seu perfil.</p></header>
+            <div class="seg seg--largo" role="radiogroup" aria-label="Visibilidade do perfil">
+              <button type="button" class="seg-btn" role="radio" data-visib="publico" aria-checked="true">Perfil público</button>
+              <button type="button" class="seg-btn" role="radio" data-visib="privado" aria-checked="false">Perfil privado</button>
+            </div>
+            <p class="ajuste-nota" id="visib-nota"></p>
+            <ul class="ajuste-lista">
+              <li><div><strong>Mostrar e-mail</strong><span>Exibe seu e-mail no perfil.</span></div>
+                <button type="button" class="chave" role="switch" data-pref="mostrarEmail" aria-checked="false" aria-label="Mostrar e-mail no perfil"></button></li>
+              <li><div><strong>Mostrar progresso</strong><span>Exibe cursos e habilidades no perfil.</span></div>
+                <button type="button" class="chave" role="switch" data-pref="mostrarProgresso" aria-checked="true" aria-label="Mostrar progresso no perfil"></button></li>
+              <li><div><strong>Mostrar conquistas</strong><span>Exibe suas conquistas desbloqueadas.</span></div>
+                <button type="button" class="chave" role="switch" data-pref="mostrarConquistas" aria-checked="true" aria-label="Mostrar conquistas no perfil"></button></li>
+            </ul>
+          </article>
+
+          <article class="app-card ajuste-bloco">
+            <header><h2>Conta e segurança</h2><p>Dados de acesso e sessões.</p></header>
+            <ul class="ajuste-lista">
+              <li class="ajuste-linha">
+                <div><strong>Senha</strong><span>Troque por uma senha nova.</span></div>
+                <button type="button" class="btn-sec" data-abre="form-senha" aria-expanded="false">Alterar senha</button>
+              </li>
+              <li class="ajuste-form" id="form-senha" hidden>
+                <form class="mini-form" data-form="senha" novalidate>
+                  <label>Senha atual<input type="password" name="atual" autocomplete="current-password" maxlength="72"></label>
+                  <label>Nova senha<input type="password" name="nova" autocomplete="new-password" maxlength="72" placeholder="Mínimo 8 caracteres"></label>
+                  <label>Confirme a nova senha<input type="password" name="confirma" autocomplete="new-password" maxlength="72"></label>
+                  <p class="mini-erro" role="alert"></p>
+                  <div class="mini-acoes"><button type="submit" class="app-btn">Salvar senha</button><button type="button" class="btn-sec" data-fecha="form-senha">Cancelar</button></div>
+                </form>
+              </li>
+
+              <li class="ajuste-linha">
+                <div><strong>E-mail</strong><span id="aj-email">—</span></div>
+                <button type="button" class="btn-sec" data-abre="form-email" aria-expanded="false">Alterar e-mail</button>
+              </li>
+              <li class="ajuste-form" id="form-email" hidden>
+                <form class="mini-form" data-form="email" novalidate>
+                  <label>Novo e-mail<input type="email" name="email" autocomplete="email" maxlength="255" placeholder="voce@email.com"></label>
+                  <label>Senha atual<input type="password" name="senha" autocomplete="current-password" maxlength="72"></label>
+                  <p class="mini-erro" role="alert"></p>
+                  <div class="mini-acoes"><button type="submit" class="app-btn">Salvar e-mail</button><button type="button" class="btn-sec" data-fecha="form-email">Cancelar</button></div>
+                </form>
+              </li>
+
+              <li class="ajuste-linha">
+                <div><strong>Sessões</strong><span>Encerra o login neste dispositivo e pede a senha de novo.</span></div>
+                <button type="button" class="btn-sec" id="btn-encerrar">Encerrar sessões</button>
+              </li>
+
+              <li class="ajuste-linha ajuste-perigo">
+                <div><strong>Excluir conta</strong><span>Apaga sua conta e seu progresso. Não dá para desfazer.</span></div>
+                <button type="button" class="btn-sec btn-sec--perigo" id="btn-excluir">Excluir conta</button>
+              </li>
+            </ul>
+          </article>
+        </section>
+
+        <!-- ---------- VIEW: EM DESENVOLVIMENTO (Cursos) ---------- -->
         <section class="app-view app-dev" id="view-dev" hidden>
           <div class="app-dev-icone">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 00-5.4 5.1L3.5 17.2a1.9 1.9 0 002.7 2.7l5.8-5.8a4 4 0 005.1-5.4l-2.6 2.6-2.4-.5-.5-2.4 2.6-2.6z"/></svg>
@@ -158,7 +346,55 @@
     </div>
   </div>
 
+
+  <!-- Editar perfil -->
+  <dialog class="dlg" id="dlg-perfil" aria-labelledby="dlg-perfil-titulo">
+    <form method="dialog" id="form-perfil" class="dlg-corpo" novalidate>
+      <h2 id="dlg-perfil-titulo">Editar perfil</h2>
+
+      <div class="dlg-foto">
+        <div class="perfil-avatar perfil-avatar--p" id="dlg-avatar" aria-hidden="true"></div>
+        <div>
+          <label class="btn-sec" for="dlg-foto-arquivo">Escolher foto</label>
+          <input type="file" id="dlg-foto-arquivo" accept="image/png,image/jpeg,image/webp" hidden>
+          <button type="button" class="btn-sec" id="dlg-foto-remover">Remover</button>
+          <p class="dlg-dica">JPG, PNG ou WebP. Ela é reduzida automaticamente.</p>
+        </div>
+      </div>
+
+      <label class="campo">Nome completo<input type="text" id="dlg-nome" maxlength="120" autocomplete="name"></label>
+      <label class="campo">Nome de usuário
+        <span class="campo-prefixo"><b>@</b><input type="text" id="dlg-username" maxlength="24" autocomplete="username" spellcheck="false"></span>
+      </label>
+      <label class="campo">Biografia<textarea id="dlg-bio" rows="3" maxlength="160" placeholder="Conte em uma frase quem você é e o que quer aprender."></textarea>
+        <span class="campo-contador"><span id="dlg-bio-n">0</span>/160</span>
+      </label>
+      <p class="mini-erro" id="dlg-erro" role="alert"></p>
+
+      <div class="mini-acoes">
+        <button type="submit" class="app-btn" value="salvar">Salvar alterações</button>
+        <button type="button" class="btn-sec" id="dlg-cancelar">Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Excluir conta -->
+  <dialog class="dlg dlg--estreito" id="dlg-excluir" aria-labelledby="dlg-excluir-titulo">
+    <form method="dialog" id="form-excluir" class="dlg-corpo" novalidate>
+      <h2 id="dlg-excluir-titulo">Excluir sua conta?</h2>
+      <p class="dlg-texto">Seu perfil, seu progresso e suas conquistas serão apagados e não poderão ser recuperados. Para confirmar, digite <strong>EXCLUIR</strong>.</p>
+      <label class="campo">Confirmação<input type="text" id="dlg-excluir-texto" autocomplete="off" spellcheck="false"></label>
+      <div class="mini-acoes">
+        <button type="submit" class="app-btn app-btn--perigo" id="dlg-excluir-ok" disabled>Excluir minha conta</button>
+        <button type="button" class="btn-sec" id="dlg-excluir-cancelar">Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+
   <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/layout.js"></script>
   <script src="js/home.js"></script>
+  <script src="js/conta.js"></script>
 </body>
 </html>

@@ -1,21 +1,14 @@
 /* ============================================================
    NívelDev — lista de exercícios (categoria.html)
-   1) Proteção: quem não está logado volta para o login
-   2) Lista de exercícios em rolagem (sem paginação),
-      com busca (todos os exercícios são em Python)
-   3) Avatar, menu do usuário (Sair) e menu lateral no celular
+   Lista de exercícios em rolagem (sem paginação), com busca
+   (todos os exercícios são em Python).
+   Menu, topo, usuário e proteção da página: js/layout.js.
    Abre como categoria.html?id=<categoria> (vindo da tela de
    Exercícios) ou só categoria.html para ver todos.
-   Depende de js/auth.js (window.NivelDevAuth).
+   Depende de js/auth.js, js/ui.js e js/layout.js.
    ============================================================ */
 
 (function () {
-  /* ---------- PROTEÇÃO DA PÁGINA ---------- */
-  if (!window.NivelDevAuth || !NivelDevAuth.getToken()) {
-    window.location.replace('login.html');
-    return;
-  }
-
   /* ---------- DADOS ----------
      ATENÇÃO: ainda não existe API de exercícios no back-end,
      então estes exercícios são EXEMPLOS. Quando a rota existir,
@@ -58,6 +51,8 @@
   const $ = (id) => document.getElementById(id);
   const lista = $('cat-lista');
   const vazio = $('cat-vazio');
+  const vazioTitulo = $('cat-vazio-titulo');
+  const vazioTexto = $('cat-vazio-texto');
   const contador = $('cat-contador');
   const busca = $('cat-busca');
 
@@ -87,28 +82,42 @@
     return html;
   }
 
+  // 1–3 fácil, 4–6 médio, 7–10 difícil (define a cor das barrinhas e da etiqueta)
+  function nivel(dificuldade) {
+    if (dificuldade <= 3) return { classe: 'facil', texto: 'Fácil' };
+    if (dificuldade <= 6) return { classe: 'medio', texto: 'Médio' };
+    return { classe: 'dificil', texto: 'Difícil' };
+  }
+
   function render(itens) {
-    lista.innerHTML = itens.map((e) => `
-      <li>
+    lista.innerHTML = itens.map((e, i) => {
+      const n = nivel(e.dificuldade);
+      return `
+      <li style="--i:${Math.min(i, 12)}">
         <article class="cat-linha">
           <div>
             <h3>${e.titulo}</h3>
             <p>${e.desc}</p>
           </div>
-          <div class="cat-dif" aria-label="Dificuldade ${e.dificuldade} de 10">
+          <div class="cat-dif cat-dif--${n.classe}" aria-label="Dificuldade ${n.texto}, ${e.dificuldade} de 10">
             <span class="cat-barras" aria-hidden="true">${barras(e.dificuldade)}</span>
-            <span class="cat-nota" aria-hidden="true">${e.dificuldade} / 10</span>
+            <span class="app-tag tag-${n.classe}" aria-hidden="true">${n.texto}</span>
           </div>
           <a class="cat-resolver" href="resolver.html?id=${e.id}">Resolver ${SETA}</a>
         </article>
-      </li>
-    `).join('');
+      </li>`;
+    }).join('');
 
     vazio.hidden = itens.length > 0;
-    vazio.textContent = daCategoria.length
-      ? 'Nenhum exercício encontrado.'
-      : 'Ainda não há exercícios nesta categoria.';
+    if (daCategoria.length) {
+      vazioTitulo.textContent = 'Nenhum exercício encontrado';
+      vazioTexto.textContent = 'Tente buscar por outro termo, como “soma” ou “lista”.';
+    } else {
+      vazioTitulo.textContent = 'Ainda não há exercícios aqui';
+      vazioTexto.textContent = 'Novos desafios desta categoria chegam em breve.';
+    }
 
+    contador.hidden = itens.length === 0;
     contador.textContent = itens.length === 1
       ? 'Mostrando 1 exercício'
       : `Mostrando ${itens.length} exercícios`;
@@ -129,76 +138,5 @@
 
   busca.addEventListener('input', filtrar);
 
-  /* ============================================================
-     USUÁRIO, MENU DO USUÁRIO E MENU LATERAL (mesmo comportamento da home)
-     ============================================================ */
-  const iniciais = (nome) => {
-    const partes = (nome || '').trim().split(/\s+/).filter(Boolean);
-    if (!partes.length) return '?';
-    const primeira = partes[0][0];
-    const ultima = partes.length > 1 ? partes[partes.length - 1][0] : '';
-    return (primeira + ultima).toUpperCase();
-  };
-
-  function mostrarUsuario(usuario) {
-    const nome = (usuario && usuario.nome) || '';
-    $('app-avatar').textContent = iniciais(nome);
-    $('app-user-nome').textContent = (usuario && (usuario.email || usuario.nome)) || '';
-  }
-
-  const menuUsuario = $('app-user-menu');
-  const botaoUsuario = $('app-user-btn');
-  const lateral = $('app-sidebar');
-  const fundo = $('app-backdrop');
-  const botaoMenu = $('app-menu-btn');
-
-  function alternarMenuUsuario(abrir) {
-    menuUsuario.hidden = !abrir;
-    botaoUsuario.setAttribute('aria-expanded', String(abrir));
-  }
-
-  function abrirMenuLateral() {
-    lateral.classList.add('is-open');
-    fundo.hidden = false;
-    botaoMenu.setAttribute('aria-expanded', 'true');
-  }
-
-  function fecharMenuLateral() {
-    lateral.classList.remove('is-open');
-    fundo.hidden = true;
-    botaoMenu.setAttribute('aria-expanded', 'false');
-  }
-
-  botaoUsuario.addEventListener('click', (e) => {
-    e.stopPropagation();
-    alternarMenuUsuario(menuUsuario.hidden);
-  });
-  document.addEventListener('click', (e) => {
-    if (!menuUsuario.contains(e.target)) alternarMenuUsuario(false);
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') { alternarMenuUsuario(false); fecharMenuLateral(); }
-  });
-
-  botaoMenu.addEventListener('click', abrirMenuLateral);
-  fundo.addEventListener('click', fecharMenuLateral);
-
-  $('btn-sair').addEventListener('click', () => {
-    NivelDevAuth.logout();
-    window.location.href = 'login.html';
-  });
-
-  /* ---------- INÍCIO ---------- */
-  mostrarUsuario(NivelDevAuth.getUser());
-  filtrar();
-
-  // confirma com o servidor se o token ainda vale (pode ter expirado)
-  NivelDevAuth.api.me()
-    .then(({ user }) => mostrarUsuario(user))
-    .catch((erro) => {
-      if (erro.status === 401) {
-        NivelDevAuth.logout();
-        window.location.replace('login.html');
-      }
-    });
+  render(daCategoria);
 })();

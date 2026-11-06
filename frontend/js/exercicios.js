@@ -1,18 +1,11 @@
 /* ============================================================
    NívelDev — tela de Exercícios (exercicios.html)
-   1) Proteção: quem não está logado volta para o login
-   2) Lista de categorias com busca e paginação
-   3) Avatar, menu do usuário (Sair) e menu lateral no celular
-   Depende de js/auth.js (window.NivelDevAuth).
+   Lista de categorias com busca e paginação
+   Menu, topo, usuário e proteção da página: js/layout.js.
+   Depende de js/auth.js, js/ui.js e js/layout.js.
    ============================================================ */
 
 (function () {
-  /* ---------- PROTEÇÃO DA PÁGINA ---------- */
-  if (!window.NivelDevAuth || !NivelDevAuth.getToken()) {
-    window.location.replace('login.html');
-    return;
-  }
-
   // ===== ÍCONES (SVG inline) =====
   const ICONS = {
     play:    '<svg viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z" fill="currentColor" stroke="none"/></svg>',
@@ -42,10 +35,11 @@
   const NEXT  = '<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>';
 
   // ===== DADOS (troque por fetch na API do backend quando estiver pronta) =====
+  // feitos = exercícios já concluídos pelo aluno (EXEMPLO; vem da API no futuro)
   const categorias = [
-    { id: "iniciante",   nome: "Iniciante",            desc: "Comece sua jornada com exercícios básicos.",              total: 12, icone: "play" },
-    { id: "python",      nome: "Python",               desc: "Sintaxe e fundamentos da linguagem Python.",              total: 18, icone: "terminal" },
-    { id: "strings",     nome: "Strings",              desc: "Manipulação e processamento de textos.",                  total: 15, icone: "text" },
+    { id: "iniciante",   nome: "Iniciante",            desc: "Comece sua jornada com exercícios básicos.",              total: 12, feitos: 8, icone: "play" },
+    { id: "python",      nome: "Python",               desc: "Sintaxe e fundamentos da linguagem Python.",              total: 18, feitos: 3, icone: "terminal" },
+    { id: "strings",     nome: "Strings",              desc: "Manipulação e processamento de textos.",                  total: 15, feitos: 1, icone: "text" },
     { id: "estruturas",  nome: "Estruturas de Dados",  desc: "Listas, pilhas, filas e estruturas avançadas.",           total: 14, icone: "layers" },
     { id: "logica",      nome: "Lógica",               desc: "Desafios de lógica e raciocínio computacional.",          total: 16, icone: "logic" },
     { id: "outros",      nome: "Outros",               desc: "Exercícios variados para expandir seus conhecimentos.",   total: 10, icone: "more" },
@@ -96,8 +90,14 @@
   /* ============================================================
      ESTADO E RENDERIZAÇÃO DAS CATEGORIAS
      ============================================================ */
-  const POR_PAGINA = 6;
+  const POR_PAGINA = { blocos: 6, lista: 8 }; // 3 por linha x 2 linhas, ou 8 linhas
   const MAX_BOTOES = 3; // quantos números de página aparecem por vez
+  // modo de exibição escolhido (fica salvo neste navegador)
+  const CHAVE_VISAO = 'niveldev_exercicios_visao';
+  let visao = 'blocos';
+  try { if (localStorage.getItem(CHAVE_VISAO) === 'lista') visao = 'lista'; } catch (e) { /* sem storage */ }
+  const porPagina = () => POR_PAGINA[visao];
+
   let paginaAtual = 1;
   let filtradas = [...categorias];
 
@@ -107,28 +107,54 @@
   const contador = $('ex-contador');
   const vazio = $('ex-vazio');
   const busca = $('ex-busca');
+  const botoesVisao = document.querySelectorAll('.ex-visao-btn');
+
+  // aplica o modo (blocos/lista) na grade e nos botões
+  function aplicarVisao() {
+    grid.classList.toggle('ex-grid--lista', visao === 'lista');
+    botoesVisao.forEach((b) => {
+      const ativo = b.dataset.visao === visao;
+      b.classList.toggle('is-active', ativo);
+      b.setAttribute('aria-pressed', String(ativo));
+    });
+  }
+
+  botoesVisao.forEach((b) => b.addEventListener('click', () => {
+    if (b.dataset.visao === visao) return;
+    visao = b.dataset.visao;
+    try { localStorage.setItem(CHAVE_VISAO, visao); } catch (e) { /* sem storage */ }
+    paginaAtual = 1;
+    aplicarVisao();
+    render();
+  }));
 
   function renderCards() {
-    const inicio = (paginaAtual - 1) * POR_PAGINA;
-    const pagina = filtradas.slice(inicio, inicio + POR_PAGINA);
+    const inicio = (paginaAtual - 1) * porPagina();
+    const pagina = filtradas.slice(inicio, inicio + porPagina());
 
-    grid.innerHTML = pagina.map((c) => `
-      <a class="app-card ex-card" href="categoria.html?id=${c.id}">
+    grid.innerHTML = pagina.map((c, i) => {
+      const feitos = c.feitos || 0;
+      const pct = Math.round((feitos / c.total) * 100);
+      return `
+      <a class="app-card app-card--link ex-card" style="--i:${i}" href="categoria.html?id=${c.id}">
         <div class="ex-icone" aria-hidden="true">${ICONS[c.icone] || ICONS.code}</div>
         <div class="ex-info">
           <h3>${c.nome}</h3>
           <p>${c.desc}</p>
-          <span class="ex-qtd">${c.total} exercícios</span>
+          <div class="ex-progresso" title="${feitos} de ${c.total} concluídos">
+            <div class="app-barra" aria-hidden="true"><span style="width:${pct}%"></span></div>
+            <span class="ex-qtd">${feitos}/${c.total}</span>
+          </div>
         </div>
         <span class="ex-seta" aria-hidden="true">${ARROW}</span>
-      </a>
-    `).join('');
+      </a>`;
+    }).join('');
 
     vazio.hidden = filtradas.length > 0;
   }
 
   function renderPaginacao() {
-    const totalPaginas = Math.max(1, Math.ceil(filtradas.length / POR_PAGINA));
+    const totalPaginas = Math.max(1, Math.ceil(filtradas.length / porPagina()));
 
     // janela de páginas visíveis centrada na atual
     let inicio = Math.max(1, paginaAtual - Math.floor(MAX_BOTOES / 2));
@@ -145,9 +171,9 @@
     paginacao.innerHTML = html;
     paginacao.hidden = filtradas.length === 0;
 
-    const de = filtradas.length ? (paginaAtual - 1) * POR_PAGINA + 1 : 0;
-    const ate = Math.min(paginaAtual * POR_PAGINA, filtradas.length);
-    contador.textContent = `Mostrando ${de} – ${ate} de ${filtradas.length} categorias`;
+    const de = filtradas.length ? (paginaAtual - 1) * porPagina() + 1 : 0;
+    const ate = Math.min(paginaAtual * porPagina(), filtradas.length);
+    contador.textContent = filtradas.length ? `Mostrando ${de} – ${ate} de ${filtradas.length} categorias` : '';
   }
 
   function render() {
@@ -175,76 +201,11 @@
     render();
   });
 
-  /* ============================================================
-     USUÁRIO, MENU DO USUÁRIO E MENU LATERAL (mesmo comportamento da home)
-     ============================================================ */
-  const iniciais = (nome) => {
-    const partes = (nome || '').trim().split(/\s+/).filter(Boolean);
-    if (!partes.length) return '?';
-    const primeira = partes[0][0];
-    const ultima = partes.length > 1 ? partes[partes.length - 1][0] : '';
-    return (primeira + ultima).toUpperCase();
-  };
-
-  function mostrarUsuario(usuario) {
-    const nome = (usuario && usuario.nome) || '';
-    $('app-avatar').textContent = iniciais(nome);
-    $('app-user-nome').textContent = (usuario && (usuario.email || usuario.nome)) || '';
-  }
-
-  const menuUsuario = $('app-user-menu');
-  const botaoUsuario = $('app-user-btn');
-  const lateral = $('app-sidebar');
-  const fundo = $('app-backdrop');
-  const botaoMenu = $('app-menu-btn');
-
-  function alternarMenuUsuario(abrir) {
-    menuUsuario.hidden = !abrir;
-    botaoUsuario.setAttribute('aria-expanded', String(abrir));
-  }
-
-  function abrirMenuLateral() {
-    lateral.classList.add('is-open');
-    fundo.hidden = false;
-    botaoMenu.setAttribute('aria-expanded', 'true');
-  }
-
-  function fecharMenuLateral() {
-    lateral.classList.remove('is-open');
-    fundo.hidden = true;
-    botaoMenu.setAttribute('aria-expanded', 'false');
-  }
-
-  botaoUsuario.addEventListener('click', (e) => {
-    e.stopPropagation();
-    alternarMenuUsuario(menuUsuario.hidden);
-  });
-  document.addEventListener('click', (e) => {
-    if (!menuUsuario.contains(e.target)) alternarMenuUsuario(false);
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') { alternarMenuUsuario(false); fecharMenuLateral(); }
-  });
-
-  botaoMenu.addEventListener('click', abrirMenuLateral);
-  fundo.addEventListener('click', fecharMenuLateral);
-
-  $('btn-sair').addEventListener('click', () => {
-    NivelDevAuth.logout();
-    window.location.href = 'login.html';
-  });
-
-  /* ---------- INÍCIO ---------- */
-  mostrarUsuario(NivelDevAuth.getUser()); // na hora, com o que está salvo
-  render();
-
-  // confirma com o servidor se o token ainda vale (pode ter expirado)
-  NivelDevAuth.api.me()
-    .then(({ user }) => mostrarUsuario(user))
-    .catch((erro) => {
-      if (erro.status === 401) {
-        NivelDevAuth.logout();
-        window.location.replace('login.html');
-      }
-    });
+  /* ---------- INÍCIO ----------
+     Quando existir a API, mostre os esqueletos até o fetch terminar
+     e chame render() com os dados. Por enquanto os dados já estão aqui. */
+  aplicarVisao();
+  NivelDevUI.esqueletos(grid, porPagina(), 'ex-card');
+  paginacao.hidden = true;
+  setTimeout(render, 450);
 })();

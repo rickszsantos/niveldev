@@ -1,25 +1,17 @@
 /* ============================================================
-   NívelDev — área logada (home.html)
-   1) Proteção: quem não está logado volta para o login
-   2) Dados da home (nome, cursos, exercícios, progresso)
-   3) Navegação do menu: só "Início" existe; o resto mostra
-      "Em desenvolvimento"
-   4) Menu do usuário (Sair) e menu lateral no celular
-   Depende de js/auth.js (window.NivelDevAuth).
+   NívelDev — home (home.html)
+   1) Dados da home (nome, nível, sequência, cursos, conquistas)
+   2) Navegação do menu: Início, Perfil, Progresso e Ajustes existem
+      (js/conta.js cuida das três últimas); Cursos mostra "Em desenvolvimento"
+   Menu, topo, usuário e proteção da página: js/layout.js.
+   Depende de js/auth.js, js/ui.js e js/layout.js.
    ============================================================ */
 
 (function () {
-  /* ---------- 1) PROTEÇÃO DA PÁGINA ---------- */
-  if (!window.NivelDevAuth || !NivelDevAuth.getToken()) {
-    window.location.replace('login.html');
-    return;
-  }
-
-  /* ---------- 2) DADOS DA HOME ----------
-     ATENÇÃO: ainda não existe API de cursos/exercícios no back-end,
-     então estes números são EXEMPLOS (os mesmos do protótipo).
-     Quando as rotas /courses, /exercises e /progress existirem,
-     troque este objeto pelo retorno da API. */
+  /* ---------- 1) DADOS DA HOME ----------
+     ATENÇÃO: ainda não existe API de cursos/exercícios/progresso
+     no back-end, então estes números são EXEMPLOS.
+     Quando as rotas existirem, troque este objeto pelo retorno da API. */
   const dadosHome = {
     cursosEmAndamento: 1,
     exerciciosConcluidos: 8,
@@ -28,50 +20,108 @@
       descricao: 'Aprenda os fundamentos da lógica e programe com confiança.',
       capa: 'logica',   // arquivo em img/cursos/ (sem .jpg)
       progresso: 65     // 0 a 100
-    }
+    },
+    nivel: {
+      numero: 7,
+      titulo: 'Desenvolvedor Júnior',
+      xp: 1240,
+      xpProximo: 2000   // XP necessário para o próximo nível
+    },
+    sequencia: {
+      dias: 5,
+      semana: [true, true, true, true, true, false, false]  // segunda a domingo
+    },
+    conquistas: [
+      { icone: 'codigo',  titulo: 'Primeiro código', desc: 'Resolveu o 1º exercício' },
+      { icone: 'estrela', titulo: 'Nível 5',         desc: 'Chegou ao nível 5' },
+      { icone: 'chama',   titulo: 'Maratonista',     desc: '7 dias seguidos', atual: 5, meta: 7 },
+      { icone: 'check',   titulo: 'Dez exercícios',  desc: 'Conclua 10 exercícios', atual: 8, meta: 10 }
+    ]
+  };
+
+  const ICONES_CONQUISTA = {
+    codigo:  '<path d="M8 8l-4 4 4 4"/><path d="M16 8l4 4-4 4"/><path d="M13.5 5l-3 14"/>',
+    estrela: '<path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6L3.3 9.3l6.1-.7L12 3z"/>',
+    chama:   '<path d="M12 2.5c.6 3.2 4.5 5.4 4.5 10a4.5 4.5 0 01-9 0c0-1.7.8-2.8 1.7-3.7.3 1.2.9 1.9 1.6 2.2C10.4 8.2 10.6 5 12 2.5z"/>',
+    check:   '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+    cadeado: '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/>',
   };
 
   const $ = (id) => document.getElementById(id);
-
-  const iniciais = (nome) => {
-    const partes = (nome || '').trim().split(/\s+/).filter(Boolean);
-    if (!partes.length) return '?';
-    const primeira = partes[0][0];
-    const ultima = partes.length > 1 ? partes[partes.length - 1][0] : '';
-    return (primeira + ultima).toUpperCase();
-  };
-
-  function mostrarUsuario(usuario) {
-    const nome = (usuario && usuario.nome) || '';
-    $('hero-nome').textContent = nome.split(' ')[0] || 'aluno'; // textContent: sem risco de HTML injetado
-    $('app-avatar').textContent = iniciais(nome);
-    $('app-user-nome').textContent = (usuario && (usuario.email || usuario.nome)) || '';
-  }
+  const plural = (n, um, varios) => (n === 1 ? um : varios);
 
   function mostrarDados(d) {
-    $('stat-cursos').textContent = d.cursosEmAndamento;
-    $('stat-cursos-rotulo').textContent = d.cursosEmAndamento === 1 ? 'Curso em andamento' : 'Cursos em andamento';
-    $('stat-exercicios').textContent = d.exerciciosConcluidos;
-    $('stat-exercicios-rotulo').textContent = d.exerciciosConcluidos === 1 ? 'Exercício concluído' : 'Exercícios concluídos';
+    // números rápidos
+    NivelDevUI.contar($('stat-cursos'), d.cursosEmAndamento);
+    $('stat-cursos-rotulo').textContent = plural(d.cursosEmAndamento, 'Curso em andamento', 'Cursos em andamento');
+    NivelDevUI.contar($('stat-exercicios'), d.exerciciosConcluidos);
+    $('stat-exercicios-rotulo').textContent = plural(d.exerciciosConcluidos, 'Exercício concluído', 'Exercícios concluídos');
 
+    // curso atual
     const c = d.cursoAtual;
     $('curso-titulo').textContent = c.titulo;
     $('curso-desc').textContent = c.descricao;
     $('curso-capa').src = 'img/cursos/' + c.capa + '.jpg';
-    $('curso-pct').textContent = c.progresso;
+    NivelDevUI.contar($('curso-pct'), c.progresso);
     $('curso-barra').setAttribute('aria-valuenow', String(c.progresso));
-    // pequeno atraso para a barra "crescer" com animação
-    requestAnimationFrame(() => { $('curso-barra-fill').style.width = c.progresso + '%'; });
+
+    // nível e XP
+    const n = d.nivel;
+    const pctXp = Math.min(100, Math.round((n.xp / n.xpProximo) * 100));
+    $('nivel-numero').textContent = n.numero;
+    $('nivel-numero-txt').textContent = n.numero;
+    $('nivel-proximo').textContent = n.numero + 1;
+    $('nivel-titulo').textContent = n.titulo;
+    $('xp-total').textContent = n.xpProximo.toLocaleString('pt-BR');
+    $('xp-falta').textContent = Math.max(0, n.xpProximo - n.xp).toLocaleString('pt-BR');
+    $('xp-barra').setAttribute('aria-valuenow', String(pctXp));
+    NivelDevUI.contar($('xp-atual'), n.xp, 1100);
+
+    // sequência da semana (a bolinha de hoje ganha um anel)
+    const hoje = (new Date().getDay() + 6) % 7; // 0 = segunda
+    const letras = ['S', 'T', 'Q', 'Q', 'S', 'S', 'D'];
+    $('seq-dias').textContent = d.sequencia.dias;
+    $('seq-semana').innerHTML = d.sequencia.semana.map((feito, i) => `
+      <li class="${feito ? 'is-feito' : ''} ${i === hoje ? 'is-hoje' : ''}">
+        <span class="dia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+        ${letras[i]}
+      </li>`).join('');
+
+    // conquistas (as que têm "meta" ainda estão bloqueadas)
+    $('conquistas').innerHTML = d.conquistas.map((q) => {
+      const bloqueada = q.meta && q.atual < q.meta;
+      const icone = ICONES_CONQUISTA[bloqueada ? 'cadeado' : q.icone];
+      return `
+        <article class="conquista ${bloqueada ? 'is-bloqueada' : ''}">
+          <span class="conquista-medalha"><svg viewBox="0 0 24 24" aria-hidden="true">${icone}</svg></span>
+          <strong>${q.titulo}</strong>
+          <span class="conquista-desc">${bloqueada ? q.atual + ' de ' + q.meta : q.desc}</span>
+          ${bloqueada ? `<span class="conquista-prog"><span style="width:${(q.atual / q.meta) * 100}%"></span></span>` : ''}
+        </article>`;
+    }).join('');
+
+    // barras e anel crescem com animação (pequeno atraso para a transição valer)
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      $('curso-barra-fill').style.width = c.progresso + '%';
+      $('xp-barra-fill').style.width = pctXp + '%';
+      $('nivel-anel').style.strokeDashoffset = String(100 - pctXp);
+    }));
   }
 
-  /* ---------- 3) NAVEGAÇÃO ---------- */
+  /* ---------- 2) NAVEGAÇÃO ---------- */
   const TITULOS = {
     inicio: 'Início',
     cursos: 'Cursos',
     exercicios: 'Exercícios',
     progresso: 'Meu Progresso',
-    perfil: 'Meu Perfil'
+    perfil: 'Meu Perfil',
+    ajustes: 'Ajustes'
   };
+
+  // telas liberadas (as outras mostram "em desenvolvimento").
+  // Meu Perfil e Meu Progresso estão prontos no código, mas escondidos por enquanto:
+  // para liberar de novo, é só acrescentar 'perfil' e 'progresso' nesta lista.
+  const TELAS_PRONTAS = ['inicio', 'ajustes'];
 
   function irPara() {
     const nome = window.location.hash.replace('#', '');
@@ -84,77 +134,21 @@
       else item.removeAttribute('aria-current');
     });
 
-    const emDev = tela !== 'inicio';
-    $('view-inicio').hidden = emDev;
+    const emDev = TELAS_PRONTAS.indexOf(tela) === -1;
+    TELAS_PRONTAS.forEach((nomeTela) => { $('view-' + nomeTela).hidden = nomeTela !== tela; });
     $('view-dev').hidden = !emDev;
-    $('dev-titulo').textContent = emDev ? TITULOS[tela] + ' — em desenvolvimento' : '';
+    if (emDev) $('dev-titulo').textContent = TITULOS[tela] + ' — em desenvolvimento';
     document.title = TITULOS[tela] + ' — NívelDev';
-
-    fecharMenuLateral();
     window.scrollTo(0, 0);
   }
 
-  /* ---------- 4) MENUS ---------- */
-  const menuUsuario = $('app-user-menu');
-  const botaoUsuario = $('app-user-btn');
-  const lateral = $('app-sidebar');
-  const fundo = $('app-backdrop');
-  const botaoMenu = $('app-menu-btn');
-
-  function alternarMenuUsuario(abrir) {
-    menuUsuario.hidden = !abrir;
-    botaoUsuario.setAttribute('aria-expanded', String(abrir));
-  }
-
-  function abrirMenuLateral() {
-    lateral.classList.add('is-open');
-    fundo.hidden = false;
-    botaoMenu.setAttribute('aria-expanded', 'true');
-  }
-
-  function fecharMenuLateral() {
-    lateral.classList.remove('is-open');
-    fundo.hidden = true;
-    botaoMenu.setAttribute('aria-expanded', 'false');
-  }
-
-  botaoUsuario.addEventListener('click', (e) => {
-    e.stopPropagation();
-    alternarMenuUsuario(menuUsuario.hidden);
-  });
-  document.addEventListener('click', (e) => {
-    if (!menuUsuario.contains(e.target)) alternarMenuUsuario(false);
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') { alternarMenuUsuario(false); fecharMenuLateral(); }
-  });
-  menuUsuario.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => alternarMenuUsuario(false)));
-
-  botaoMenu.addEventListener('click', abrirMenuLateral);
-  fundo.addEventListener('click', fecharMenuLateral);
-
-  $('btn-sair').addEventListener('click', () => {
-    NivelDevAuth.logout();
-    window.location.href = 'login.html';
-  });
-
   /* ---------- INÍCIO ---------- */
-  document.addEventListener('DOMContentLoaded', async () => {
-    mostrarUsuario(NivelDevAuth.getUser()); // na hora, com o que está salvo
-    mostrarDados(dadosHome);
-    window.addEventListener('hashchange', irPara);
-    irPara();
-
-    // confirma com o servidor se o token ainda vale (pode ter expirado)
-    try {
-      const { user } = await NivelDevAuth.api.me();
-      mostrarUsuario(user);
-    } catch (erro) {
-      if (erro.status === 401) {
-        NivelDevAuth.logout();
-        window.location.replace('login.html');
-      }
-      // outros erros (servidor fora do ar etc.): mantém o que já está na tela
-    }
+  NivelDevLayout.usuario((usuario) => {
+    const nome = (usuario && usuario.nome) || '';
+    $('hero-nome').textContent = nome.split(' ')[0] || 'aluno'; // textContent: sem risco de HTML injetado
   });
+
+  mostrarDados(dadosHome);
+  window.addEventListener('hashchange', irPara);
+  irPara();
 })();

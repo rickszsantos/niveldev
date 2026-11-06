@@ -24,7 +24,7 @@
   </defs>
 
   <!-- fundo branco -->
-  <rect width="1920" height="1080" fill="#ffffff"/>
+  <rect width="1920" height="1080" fill="#f4f4f2"/>
 
   <!-- lençol claro de baixo, que esmaece até o branco -->
   <path d="M0 1000 C200 860 520 740 860 745 C1150 750 1450 880 1750 905 C1830 910 1880 905 1920 895 L1920 370 C1760 460 1560 590 1380 605 C1180 620 1000 580 800 550 C600 520 420 540 280 605 C150 665 60 760 0 840 Z" fill="url(#gSheet)"/>

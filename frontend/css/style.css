@@ -11,10 +11,12 @@
 
   /* Neutros */
   --ink: #12131a;
-  --ink-soft: #4b4d5c;
-  --paper: #eef3ff;   /* fundo claro (azulado) */
-  --card: #f4f8ff;    /* fundo dos cards */
-  --line: #d7e1f7;    /* bordas / divisores */
+  --ink-soft: #55554f;
+  --paper: #f4f4f2;   /* fundo da página (branco acinzentado) */
+  --card: #ffffff;    /* fundo dos cards (branco puro) */
+  --line: #e4e4e0;    /* bordas / divisores (cinza neutro) */
+  --surface: #ecece9; /* hover e áreas rebaixadas */
+  --surface-soft: #f9f9f7; /* cabeçalhos de tabela, faixas sutis */
 
   /* Apoio (usados nos ícones das trilhas) */
   --teal: #0f766e;
@@ -353,7 +355,7 @@ img {
 /* seção de cursos: fundo cinza claro para se destacar do restante */
 .section-cursos {
   background: #eef3ff;
-  border-block: 1px solid #e3e5e9;
+  border-block: 1px solid var(--line);
 }
 
 .cursos-grid {
@@ -368,7 +370,7 @@ img {
   gap: 10px;
   color: inherit;
   background: #fff;
-  border: 1px solid #dfe2e8; /* borda fina separando cada curso */
+  border: 1px solid var(--line); /* borda fina separando cada curso */
   border-radius: var(--radius-md);
   padding: 12px;
   transition: border-color 0.15s;
@@ -457,7 +459,7 @@ img {
   font-size: 12px;
   font-weight: 600;
   color: var(--brand-deep);
-  background: #eef3ff;/*lllllllll*/
+  background: var(--surface);
   padding: 3px 10px;
   border-radius: 6px;
 }
@@ -574,7 +576,7 @@ img {
   padding: 0;
   border: none;
   border-radius: 999px;
-  background: #b9c8ee;
+  background: #cfcfca;
   cursor: pointer;
   transition: width 0.25s ease, background 0.25s ease;
 }

@@ -185,8 +185,9 @@
       try {
         const resultado = await api.login($('email').value.trim(), $('senha').value);
         salvarSessao(resultado, $('lembrar').checked);
-        mostrarAlerta(alerta, 'success', 'Login feito! Redirecionando...');
-        setTimeout(() => { window.location.href = 'home.html'; }, 800);
+        // login certo: vai direto para a tela de carregamento (sem aviso de sucesso);
+        // o botão continua em "Entrando..." até a página trocar
+        window.location.replace('carregando.html');
       } catch (erro) {
         carregando(botao, false, 'Entrar', 'Entrando...');
         mostrarAlerta(alerta, 'error', erro.message);
