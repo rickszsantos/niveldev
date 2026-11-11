@@ -72,7 +72,7 @@ const listar = async ({ busca, dificuldade, ativo, limite, offset }) => {
                 (SELECT COUNT(*)::int FROM test_cases t WHERE t.exercicio_id = e.id) AS total_casos
            FROM exercises e
            ${where}
-          ORDER BY CASE e.dificuldade WHEN 'facil' THEN 1 WHEN 'medio' THEN 2 ELSE 3 END,
+          ORDER BY e.dificuldade ASC,
                    e.titulo ASC, e.id ASC
           LIMIT $${valores.length + 1} OFFSET $${valores.length + 2}`,
         [...valores, limite, offset]

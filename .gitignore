@@ -1,3 +1,4 @@
 .env
 backend/node_modules/
+backend/teste-docker/
 node_modules/

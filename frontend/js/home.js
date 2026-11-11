@@ -2,7 +2,7 @@
    NívelDev — home (home.html)
    1) Dados da home (nome, nível, sequência, cursos, conquistas)
    2) Navegação do menu: Início, Perfil, Progresso e Ajustes existem
-      (js/conta.js cuida das três últimas); Cursos mostra "Em desenvolvimento"
+      (js/conta.js cuida das três últimas); Cursos tem tela própria (cursos.html)
    Menu, topo, usuário e proteção da página: js/layout.js.
    Depende de js/auth.js, js/ui.js e js/layout.js.
    ============================================================ */
@@ -125,6 +125,13 @@
 
   function irPara() {
     const nome = window.location.hash.replace('#', '');
+
+    // Cursos agora tem tela própria (links antigos com #cursos continuam funcionando)
+    if (nome === 'cursos') {
+      window.location.replace('cursos.html');
+      return;
+    }
+
     const tela = TITULOS[nome] ? nome : 'inicio';
 
     document.querySelectorAll('.app-nav-item').forEach((item) => {

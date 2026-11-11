@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resolver exercício — NívelDev</title>
+
+  <link rel="icon" href="img/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192.png">
+  <link rel="apple-touch-icon" href="img/favicon-192.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+  <script src="js/preferencias.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/app-base.css">
+  <link rel="stylesheet" href="css/resolver.css">
+</head>
+<body class="app-page" data-pagina="resolver">
+
+  <div class="app-shell">
+
+    <!-- menu lateral e topo são montados por js/layout.js -->
+    <div data-layout="menu"></div>
+
+    <div class="app-main">
+      <div data-layout="topo"></div>
+
+      <main class="app-content rs-content" id="app-content" tabindex="-1">
+
+        <a href="categoria.html" class="rs-voltar" id="rs-voltar">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+          Voltar para exercícios
+        </a>
+
+        <!-- exercício não encontrado -->
+        <div class="estado-vazio" id="rs-vazio" hidden>
+          <span class="estado-vazio-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4M8.5 11h5"/></svg></span>
+          <strong>Exercício não encontrado</strong>
+          <p>O link pode estar incorreto. Escolha um exercício na lista para começar.</p>
+          <a href="categoria.html" class="app-btn">Ver exercícios</a>
+        </div>
+
+        <div class="rs-grid" id="rs-grid">
+
+          <!-- ============ ENUNCIADO ============ -->
+          <article class="app-card rs-enunciado" aria-labelledby="rs-titulo">
+            <header class="rs-cabecalho">
+              <span class="rs-play" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg>
+              </span>
+              <div>
+                <h1 id="rs-titulo">Exercício</h1>
+                <div class="rs-tags">
+                  <span class="app-tag" id="rs-nivel"></span>
+                  <span class="app-tag tag-facil" id="rs-resolvido" hidden>Resolvido</span>
+                </div>
+              </div>
+            </header>
+
+            <div class="rs-texto-enunciado" id="rs-enunciado"></div>
+
+            <section class="rs-bloco">
+              <h2>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h7l4 4V20a.5.5 0 01-.5.5h-10.5A.5.5 0 016.5 20V4a.5.5 0 01.5-.5z"/><path d="M9.5 12h5M9.5 15.5h5"/></svg>
+                Exemplo de entrada
+              </h2>
+              <pre class="rs-caixa" id="rs-ex-entrada"></pre>
+            </section>
+
+            <section class="rs-bloco">
+              <h2>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.8"/></svg>
+                Saída esperada
+              </h2>
+              <pre class="rs-caixa" id="rs-ex-saida"></pre>
+            </section>
+
+            <aside class="rs-dica">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 00-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0012 3z"/></svg>
+              <div>
+                <strong>Dica</strong>
+                <p id="rs-dica"></p>
+              </div>
+            </aside>
+          </article>
+
+          <!-- ============ EDITOR + SAÍDA ============ -->
+          <div class="rs-trabalho">
+
+            <section class="rs-painel rs-editor-card" aria-label="Editor de código">
+              <header class="rs-barra">
+                <div class="rs-lang">
+                  <span class="rs-lang-icone" aria-hidden="true">Py</span>
+                  Python 3
+                </div>
+
+                <div class="rs-acoes">
+                  <button type="button" class="rs-btn-icone" id="rs-reiniciar" aria-label="Restaurar código inicial" title="Restaurar código inicial">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 108-8 8.5 8.5 0 00-6 2.5L4 9"/><path d="M4 4v5h5"/></svg>
+                  </button>
+                  <button type="button" class="rs-btn rs-btn--sec" id="rs-executar" title="Executar (Ctrl + Enter)">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg>
+                    Executar
+                  </button>
+                  <button type="button" class="rs-btn rs-btn--primario" id="rs-enviar">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+                    Enviar solução
+                  </button>
+                </div>
+              </header>
+
+              <div class="rs-editor" id="rs-editor">
+                <div class="rs-linhas">
+                  <div class="rs-gutter" id="rs-gutter" aria-hidden="true"></div>
+                  <div class="rs-codigo" id="rs-codigo">
+                    <pre class="rs-realce" aria-hidden="true"><code id="rs-realce"></code></pre>
+                    <textarea class="rs-texto" id="rs-texto" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" wrap="off"
+                              aria-label="Editor de código Python"></textarea>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="rs-painel rs-saida-card" aria-label="Execução">
+              <header class="rs-barra rs-barra--saida">
+                <div class="rs-saida-titulo">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/><path d="M7.5 8.5l2.5 2-2.5 2"/></svg>
+                  Saída do programa
+                </div>
+                <span class="rs-status" id="rs-status" data-estado="carregando" role="status">
+                  <i aria-hidden="true"></i>
+                  <span id="rs-status-txt">Preparando o Python…</span>
+                </span>
+              </header>
+
+              <div class="rs-io">
+                <div class="rs-io-col">
+                  <label class="rs-io-rotulo" for="rs-entrada">Entrada <span>(uma linha para cada input)</span></label>
+                  <textarea class="rs-io-caixa" id="rs-entrada" rows="4" spellcheck="false" autocomplete="off"></textarea>
+                </div>
+                <div class="rs-io-col">
+                  <span class="rs-io-rotulo" id="rs-saida-rotulo">Saída</span>
+                  <pre class="rs-io-caixa rs-io-saida is-vazio" id="rs-saida" aria-labelledby="rs-saida-rotulo"><span class="rs-out-texto" id="rs-out-texto"></span><span class="rs-out-erro" id="rs-out-erro"></span></pre>
+                </div>
+              </div>
+
+              <!-- resultado do envio -->
+              <div class="rs-testes" id="rs-testes" hidden>
+                <div class="rs-testes-resumo" id="rs-testes-resumo"></div>
+                <ul class="rs-testes-lista" id="rs-testes-lista"></ul>
+              </div>
+            </section>
+
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/resolver-dados.js"></script>
+  <script src="js/resolver.js"></script>
+</body>
+</html>

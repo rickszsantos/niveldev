@@ -1,35 +1,41 @@
-// ============================================================================
-// MOTOR · EXECUTOR  (ESTRUTURA — ainda não implementado)
-// ============================================================================
-// O que é: o MAESTRO do motor. Recebe o código + os casos de teste e conduz a
-// correção do começo ao fim. É o único arquivo que o submissionService conhece.
-//
-// Assinatura prevista:
-//   executar({ linguagem, codigo, casosDeTeste }) -> Promise<ExecutionResult>
-//
-// Fluxo previsto (seção 3 do documento do motor):
-//   1. Gerar id único da execução (ex.: exec_<aleatório>).
-//   2. Criar a pasta temp/executions/<id>/ e gravar o código como main.py
-//      (extensão conforme a linguagem).
-//   3. Pedir ao containerManager para criar o container isolado.
-//   4. Para cada caso de teste, EM ORDEM:
-//        a. enviar a entrada ao programa (via containerManager);
-//        b. receber { saida, erro, codigoSaida, tempoMs, estourouTempo, estourouMemoria };
-//        c. se houve falha de execução (timeout, memória, erro) -> monta o
-//           resultado e PARA (não roda os testes restantes);
-//        d. senão, pedir ao resultEvaluator para comparar saída x esperada;
-//        e. se divergiu -> WRONG_ANSWER e PARA; se igual -> próximo teste.
-//   5. Se todos passaram -> ACCEPTED.
-//   6. SEMPRE (mesmo com erro): remover o container e a pasta temporária
-//      (bloco finally). Nunca deixar lixo para trás.
-//   7. Qualquer falha inesperada nossa vira INTERNAL_ERROR (nunca vaza detalhes
-//      internos ao aluno).
-//
-// Regra de ouro: "O Docker executa o código; o backend controla e avalia".
-// Este arquivo NÃO conhece detalhes do Docker (isso é do containerManager) e
-// NÃO sabe comparar saídas (isso é do resultEvaluator).
-//
-// Pontos a decidir:
-//   - Um container por submissão (docs) rodando todos os testes, ou um por teste?
-//   - Quantas execuções simultâneas permitir (fila / limite global)?
-// ============================================================================
+const crypto = require('crypto');
+const fs = require('fs/promises');
+const path = require('path');
+const { executarTeste } = require('./containerManager');
+const { avaliar } = require('./resultEvaluator');
+const { STATUS, criar } = require('./executionResult');
+
+const PASTA_BASE = path.join(__dirname, '../../temp/executions');
+const LIMITE_TEMPO_MS = 3000;
+
+const executar = async ({ linguagem, codigo, casosDeTeste }) => {
+    const id = `exec_${crypto.randomBytes(6).toString('hex')}`;
+    const pasta = path.join(PASTA_BASE, id);
+    try {
+        await fs.mkdir(pasta, { recursive: true });
+        await fs.writeFile(path.join(pasta, 'main.py'), codigo);
+
+        let tempoTotal = 0;
+        for (let i = 0; i < casosDeTeste.length; i++) {
+            const caso = casosDeTeste[i];
+            const r = await executarTeste({
+                nome: `niveldev_${id}_${i}`,
+                pastaExecucao: pasta,
+                entrada: caso.entrada,
+                limiteTempoMs: LIMITE_TEMPO_MS,
+            });
+            tempoTotal += r.tempoMs;
+            // TODO: se r.estourouTempo         -> devolver TIME_LIMIT_EXCEEDED
+            // TODO: se r.codigoSaida === 137   -> devolver MEMORY_LIMIT_EXCEEDED
+            // TODO: se r.estourouSaida ou r.codigoSaida !== 0 -> devolver RUNTIME_ERROR
+            // TODO: se !avaliar(r.saida, caso.saida_esperada) -> devolver WRONG_ANSWER
+        }
+        return criar(STATUS.ACCEPTED, { tempoMs: tempoTotal, testesPassados: casosDeTeste.length, totalTestes: casosDeTeste.length });
+    } catch (e) {
+        return criar(STATUS.INTERNAL_ERROR, { mensagem: 'Erro interno ao corrigir. Tente novamente.', detalhe: e.message });
+    } finally {
+        await fs.rm(pasta, { recursive: true, force: true });
+    }
+};
+
+module.exports = { executar };

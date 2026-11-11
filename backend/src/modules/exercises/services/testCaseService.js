@@ -20,7 +20,7 @@ const listar = async (exercicioId) => {
 const criar = async (ator, exercicioId, corpo) => {
     const entrada = v.validarEntrada(corpo.entrada === undefined ? '' : corpo.entrada);
     const saidaEsperada = v.validarSaidaEsperada(corpo.saida_esperada);
-    const oculto = corpo.oculto === undefined ? false : v.validarOculto(corpo.oculto);
+    const oculto = corpo.oculto === undefined ? true : v.validarOculto(corpo.oculto);
     const ordem = corpo.ordem === undefined ? undefined : v.validarOrdem(corpo.ordem);
 
     await garantirExercicio(exercicioId);

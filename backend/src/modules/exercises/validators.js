@@ -1,6 +1,6 @@
 const AppError = require('../../shared/errors/AppError');
 
-const DIFICULDADES = ['facil', 'medio', 'dificil'];
+
 const MAX_CASOS_POR_EXERCICIO = 50;
 const MAX_TEXTO_CASO = 10000; // caracteres de uma entrada ou de uma saída esperada
 
@@ -12,6 +12,8 @@ const validarTitulo = (valor) => {
     return titulo;
 };
 
+
+
 const validarEnunciado = (valor) => {
     const enunciado = typeof valor === 'string' ? valor.trim() : '';
     if (enunciado.length < 10 || enunciado.length > 20000) {
@@ -20,12 +22,19 @@ const validarEnunciado = (valor) => {
     return enunciado;
 };
 
+
+
+
 const validarDificuldade = (valor) => {
-    if (!DIFICULDADES.includes(valor)) {
-        throw new AppError(`Dificuldade inválida. Use: ${DIFICULDADES.join(', ')}.`, 400);
+    const n = Number(valor);
+    if (typeof valor === 'boolean' || !Number.isInteger(n) || n < 1 || n > 10) {
+        throw new AppError('Dificuldade inválida. Use um número inteiro de 1 a 10.', 400);
     }
-    return valor;
+    return n;
 };
+
+
+
 
 // A entrada pode ser vazia (programa que não lê nada), mas precisa ser texto.
 // O texto é guardado exatamente como veio (sem trim): espaços e quebras de linha
@@ -37,12 +46,18 @@ const validarEntrada = (valor) => {
     return valor;
 };
 
+
+
+
 const validarSaidaEsperada = (valor) => {
     if (typeof valor !== 'string' || valor.trim().length === 0 || valor.length > MAX_TEXTO_CASO) {
         throw new AppError(`A saída esperada é obrigatória (texto de até ${MAX_TEXTO_CASO} caracteres).`, 400);
     }
     return valor;
 };
+
+
+
 
 const validarOculto = (valor) => {
     if (typeof valor !== 'boolean') {
@@ -51,6 +66,8 @@ const validarOculto = (valor) => {
     return valor;
 };
 
+
+
 const validarOrdem = (valor) => {
     if (!Number.isInteger(valor) || valor < 1 || valor > 10000) {
         throw new AppError('A ordem deve ser um número inteiro entre 1 e 10000.', 400);
@@ -58,8 +75,13 @@ const validarOrdem = (valor) => {
     return valor;
 };
 
+
+
+
+
+
+
 module.exports = {
-    DIFICULDADES, MAX_CASOS_POR_EXERCICIO,
     validarTitulo, validarEnunciado, validarDificuldade,
     validarEntrada, validarSaidaEsperada, validarOculto, validarOrdem,
 };

@@ -1,5 +1,5 @@
 /* ============================================================
-   NívelDev — layout das telas logadas (home, exercícios, categoria)
+   NívelDev — layout das telas logadas (home, cursos, exercícios, categoria, resolver)
    Monta o MENU LATERAL e o TOPO em um só lugar, então qualquer
    mudança no menu é feita aqui e vale para todas as telas.
 
@@ -50,7 +50,7 @@
   const base = naHome ? '' : 'home.html';
   const ITENS = [
     { id: 'inicio',     texto: 'Início',        href: base + '#inicio',    view: 'inicio' },
-    { id: 'cursos',     texto: 'Cursos',        href: base + '#cursos',    view: 'cursos' },
+    { id: 'cursos',     texto: 'Cursos',        href: 'cursos.html',      view: null },
     { id: 'exercicios', texto: 'Exercícios',    href: 'exercicios.html',   view: null },
     { id: 'progresso',  texto: 'Meu Progresso', href: base + '#progresso', view: 'progresso' },
     { id: 'perfil',     texto: 'Meu Perfil',    href: base + '#perfil',    view: 'perfil' },
@@ -58,8 +58,8 @@
     { id: 'ajustes',    texto: 'Ajustes',       href: base + '#ajustes',   view: 'ajustes' },
   ];
 
-  // categoria.html pertence ao menu "Exercícios"
-  const ativoNestaTela = pagina === 'categoria' ? 'exercicios' : pagina;
+  // categoria.html e resolver.html (tela de execução) pertencem ao menu "Exercícios"
+  const ativoNestaTela = (pagina === 'categoria' || pagina === 'resolver') ? 'exercicios' : pagina;
 
   const svg = (caminhos) => `<svg viewBox="0 0 24 24" aria-hidden="true">${caminhos}</svg>`;
 

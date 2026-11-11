@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cursos — NívelDev</title>
+
+  <link rel="icon" href="img/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192.png">
+  <link rel="apple-touch-icon" href="img/favicon-192.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+  <script src="js/preferencias.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/app-base.css">
+  <link rel="stylesheet" href="css/cursos.css">
+</head>
+<body class="app-page" data-pagina="cursos">
+
+  <div class="app-shell">
+
+    <!-- menu lateral e topo são montados por js/layout.js -->
+    <div data-layout="menu"></div>
+
+    <div class="app-main">
+      <div data-layout="topo"></div>
+
+      <main class="app-content" id="app-content" tabindex="-1">
+
+        <div class="app-hero">
+          <h1>Cursos</h1>
+          <p>Aprenda no seu ritmo e evolua em programação.</p>
+          <span class="app-hero-traco" aria-hidden="true"></span>
+        </div>
+
+        <!-- Destaque. O mascote é opcional: se existir o arquivo img/mascote.png (PNG com fundo
+             transparente), ele aparece sozinho do lado direito; se não existir, nada quebra. -->
+        <section class="cr-banner" aria-labelledby="cr-banner-titulo">
+          <div class="cr-banner-texto">
+            <h2 id="cr-banner-titulo">Evolua suas habilidades em <span>programação</span>!</h2>
+            <p>Descubra novos cursos e leve seus conhecimentos para o próximo nível.</p>
+            <a href="#cr-lista-titulo" class="cr-banner-btn">
+              Explorar cursos
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+
+          <svg class="cr-banner-codigo" viewBox="0 0 160 80" aria-hidden="true" focusable="false">
+            <path d="M44 14L12 40l32 26"/>
+            <path d="M116 14l32 26-32 26"/>
+            <path d="M92 8L68 72"/>
+          </svg>
+
+          <img class="cr-banner-mascote" src="img/mascote.png" alt="" hidden
+               onload="this.hidden = false" onerror="this.remove()">
+        </section>
+
+        <!-- Busca e filtros -->
+        <div class="cr-filtros" role="search">
+          <label class="cr-busca">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+            <input type="search" id="cr-busca" placeholder="Pesquisar por cursos..." autocomplete="off" aria-label="Pesquisar por cursos">
+          </label>
+
+          <label class="cr-select">
+            <svg class="cr-select-icone" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg>
+            <select id="cr-categoria" aria-label="Filtrar por categoria"></select>
+            <svg class="cr-select-seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </label>
+
+          <label class="cr-select">
+            <svg class="cr-select-icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-5M12 20V10M19 20V4"/></svg>
+            <select id="cr-nivel" aria-label="Filtrar por nível"></select>
+            <svg class="cr-select-seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </label>
+        </div>
+
+        <div class="cr-secao">
+          <h2 class="cr-secao-titulo" id="cr-lista-titulo" tabindex="-1">Explore nossos cursos</h2>
+          <p>Encontre o curso ideal para você.</p>
+        </div>
+
+        <ul class="cr-lista" id="cr-lista" aria-live="polite"></ul>
+
+        <div class="estado-vazio" id="cr-vazio" hidden>
+          <span class="estado-vazio-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4M8.5 11h5"/></svg></span>
+          <strong>Nenhum curso encontrado</strong>
+          <p>Tente buscar por outro termo, como “python” ou “web”, ou limpe os filtros.</p>
+          <button type="button" class="cr-limpar" id="cr-limpar">Limpar filtros</button>
+        </div>
+
+        <footer class="cr-rodape" id="cr-rodape">
+          <nav class="cr-paginacao" id="cr-paginacao" aria-label="Paginação"></nav>
+          <span class="cr-contador" id="cr-contador"></span>
+        </footer>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/cursos.js"></script>
+</body>
+</html>
