@@ -1,4 +1,7 @@
 .env
+backend/.env
 backend/node_modules/
 backend/teste-docker/
 node_modules/
+backend/temp/execucoes/*
+!backend/temp/execucoes/.gitkeep

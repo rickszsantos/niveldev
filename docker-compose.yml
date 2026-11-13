@@ -1,8 +1,12 @@
-# Sobe o site + API (app) e o PostgreSQL (db) com um comando:
-#   docker compose up -d --build
-# As variáveis ${...} vêm do arquivo .env na raiz (copie de .env.example).
+
+# Sobe a aplicação e o PostgreSQL com um comando:
+# docker compose up -d --build
 
 services:
+
+
+
+
   db:
     image: postgres:16-alpine
     restart: unless-stopped
@@ -11,10 +15,8 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:?Defina DB_PASSWORD no arquivo .env}
       POSTGRES_DB: ${DB_NAME:?Defina DB_NAME no arquivo .env}
     volumes:
-      - niveldev-db:/var/lib/postgresql/data   # os dados sobrevivem a "docker compose down"
+      - niveldev-db:/var/lib/postgresql/data
     ports:
-      # Só acessível pela sua própria máquina (útil p/ rodar o backend com "npm run dev" ou abrir um cliente SQL).
-      # Se a porta 5432 já estiver em uso no seu PC, troque o primeiro número (ex.: 127.0.0.1:5433:5432).
       - "127.0.0.1:5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
@@ -22,26 +24,63 @@ services:
       timeout: 5s
       retries: 10
 
+
+
+
   app:
     build: .
     restart: unless-stopped
+
+
+
+
+    group_add:
+      - "128"
+
+
+
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./backend/temp/execucoes:/app/backend/temp/execucoes
+
+
+
+
+
     depends_on:
       db:
-        condition: service_healthy   # só inicia a API depois que o banco aceitar conexões
+        condition: service_healthy
+
+
+
+
+
     environment:
       PORT: 5050
       JWT_SECRET: ${JWT_SECRET:?Defina JWT_SECRET no arquivo .env}
-      DB_HOST: db                    # nome do serviço acima: é assim que um contêiner acha o outro
+      DB_HOST: db
       DB_PORT: 5432
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
-      # Primeiro administrador (opcional; só é criado se ainda não existir nenhum admin)
       ADMIN_NOME: ${ADMIN_NOME:-Administrador}
       ADMIN_EMAIL: ${ADMIN_EMAIL:-}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+
+      PASTA_EXECUCOES_HOST: /home/carlos/Documentos/projetos/NivelDev/niveldev/backend/temp/execucoes
+
+
+
+
+
     ports:
       - "${APP_PORT:-5050}:5050"
+
+
+
+
+
 
 volumes:
   niveldev-db:

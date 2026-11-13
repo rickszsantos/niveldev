@@ -1,7 +1,7 @@
 /* ============================================================
    NívelDev — autenticação no front-end
    1) Sessão: guarda/lê o token e o usuário no navegador
-   2) Chamadas à API (/auth/login, /auth/register, /auth/me)
+   2) Chamadas à API (/auth/*, /exercises, /submissions)
    3) Formulários das páginas login.html e cadastro.html
    Este arquivo é carregado em todas as páginas; os formulários
    só são ativados nas páginas em que existem.
@@ -90,6 +90,12 @@
     login: (email, password) => chamarApi('/auth/login', { method: 'POST', corpo: { email, password } }),
     cadastrar: (nome, email, password) => chamarApi('/auth/register', { method: 'POST', corpo: { nome, email, password } }),
     me: () => chamarApi('/auth/me', { autenticado: true }),
+
+    // exercícios e submissões (todas exigem login)
+    listarExercicios: (query = '') => chamarApi('/exercises' + query, { autenticado: true }),
+    obterExercicio: (id) => chamarApi('/exercises/' + encodeURIComponent(id), { autenticado: true }),
+    enviarSubmissao: (corpo) => chamarApi('/submissions', { method: 'POST', corpo, autenticado: true }),
+    listarSubmissoes: (query = '') => chamarApi('/submissions' + query, { autenticado: true }),
   };
 
   // Disponível para outros scripts (ex.: script.js usa para montar o cabeçalho)

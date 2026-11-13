@@ -1,0 +1,428 @@
+/* ============================================================
+   NívelDev — telas Perfil e Progresso (dentro de home.html)
+   Só a área de conteúdo: menu e topo vêm de js/layout.js.
+   Cores por variável (app-base.css) para funcionar nos dois temas;
+   as medalhas têm cores fixas de propósito (são ilustrações).
+   Montadas por js/conta.js.
+   ============================================================ */
+
+/* ---------- Peças compartilhadas ---------- */
+
+.pf-titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--title);
+  letter-spacing: -.01em;
+}
+
+.pf-titulo svg {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  fill: none;
+  stroke: var(--brand-text);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pf-card { padding: 22px 26px; }
+
+.pf-card-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.pf-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--brand-text);
+  font: 600 14px 'IBM Plex Sans', system-ui, sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.pf-link svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .15s; }
+.pf-link:hover svg { transform: translateX(3px); }
+.pf-link:focus-visible,
+.pf-editar:focus-visible { outline: 3px solid var(--brand-bright); outline-offset: 3px; border-radius: 8px; }
+
+/* ---------- PERFIL: faixa azul ---------- */
+
+.pf-banner {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-top: 28px;
+  padding: 28px 36px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(100deg, #0b3a9e 0%, #1547d6 55%, #2f6df0 100%);
+  color: #fff;
+  box-shadow: var(--shadow-card);
+}
+
+/* degraus decorativos (lembram a logo) */
+.pf-banner::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: min(360px, 42%);
+  height: 100%;
+  background: rgba(255, 255, 255, .12);
+  clip-path: polygon(0 100%, 0 80%, 22% 80%, 22% 60%, 44% 60%, 44% 38%, 66% 38%, 66% 18%, 84% 18%, 84% 0, 100% 0, 100% 100%);
+  pointer-events: none;
+}
+
+.pf-avatar {
+  position: relative;
+  z-index: 1;
+  width: 128px;
+  height: 128px;
+  flex: none;
+  border-radius: 50%;
+  background: #fff center / cover no-repeat;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, .22);
+}
+
+.pf-avatar svg { width: 62%; height: 62%; fill: #0b3a9e; stroke: none; }
+
+.pf-banner-info { position: relative; z-index: 1; min-width: 0; }
+
+.pf-banner-info h2 {
+  font-size: clamp(26px, 3vw, 34px);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+  color: #fff;
+  overflow-wrap: anywhere;
+}
+
+.pf-banner-info p { margin-top: 6px; font-size: 18px; color: rgba(255, 255, 255, .92); overflow-wrap: anywhere; }
+
+.pf-papel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 6px 18px 6px 14px;
+  border-radius: 999px;
+  background: #dbe8ff;
+  color: #0b3a9e;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.pf-papel svg { width: 18px; height: 18px; fill: #1547d6; stroke: #1547d6; stroke-width: 1.5; stroke-linejoin: round; }
+
+/* ---------- PERFIL: grade de cards ---------- */
+
+.pf-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 22px;
+}
+
+/* informações pessoais */
+.pf-editar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 18px;
+  border: 1.5px solid var(--brand-text);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--brand-text);
+  font: 600 14px 'IBM Plex Sans', system-ui, sans-serif;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.pf-editar:hover { background: var(--brand-tint); }
+.pf-editar svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+.pf-linhas { margin: 0; }
+
+.pf-linhas > div {
+  display: grid;
+  grid-template-columns: minmax(150px, 190px) minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.pf-linhas > div:last-child { border-bottom: 0; padding-bottom: 4px; }
+
+.pf-linhas dt { display: flex; align-items: center; gap: 12px; font-size: 15px; color: var(--ink-soft); }
+.pf-linhas dt svg { width: 20px; height: 20px; flex: none; fill: none; stroke: var(--ink-faint); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.pf-linhas dd { margin: 0; font-size: 15.5px; font-weight: 500; color: var(--ink); overflow-wrap: anywhere; }
+
+/* seu progresso (resumo) */
+.pf-pct { font: 700 54px/1 'Space Grotesk', system-ui, sans-serif; letter-spacing: -.03em; color: var(--title); }
+.pf-pct-rotulo { margin-top: 6px; font-size: 15px; color: var(--ink-soft); }
+
+.pf-barra { flex: none; height: 12px; margin-top: 18px; }
+
+.pf-numeros {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 24px;
+}
+
+.pf-numeros > div { display: flex; align-items: center; gap: 12px; padding: 0 14px; }
+.pf-numeros > div:first-child { padding-left: 0; }
+.pf-numeros > div + div { border-left: 1px solid var(--line); }
+
+.pf-num-ic { flex: none; color: var(--brand-text); display: grid; place-items: center; }
+.pf-num-ic svg { width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.pf-numeros strong { display: block; font: 700 22px/1.1 'Space Grotesk', system-ui, sans-serif; color: var(--title); }
+.pf-numeros span:not(.pf-num-ic) { display: block; font-size: 13.5px; line-height: 1.3; color: var(--ink-soft); }
+
+/* ---------- Medalhas hexagonais ---------- */
+
+.medalhas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.medalhas--5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+
+.medalha { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+
+.medalha svg.hex { width: 84px; max-width: 100%; height: auto; transition: transform .18s; }
+.medalha:hover svg.hex { transform: translateY(-3px); }
+
+.medalha svg.hex .icone { fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.medalha span { font-size: 13.5px; line-height: 1.3; color: var(--ink); }
+.medalha.is-bloqueada span { color: var(--ink-soft); }
+
+/* ---------- Linha do tempo (atividade recente) ---------- */
+
+.linha-tempo { list-style: none; margin: 0; padding: 0; }
+
+.linha-tempo li { position: relative; padding: 0 0 18px 28px; }
+.linha-tempo li:last-child { padding-bottom: 0; }
+
+.linha-tempo li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--brand);
+  box-shadow: 0 0 0 4px var(--card);
+  z-index: 1;
+}
+
+.linha-tempo li::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 17px;
+  bottom: -5px;
+  width: 2px;
+  background: var(--brand-tint-hover);
+}
+
+.linha-tempo li:last-child::after { display: none; }
+
+.linha-tempo strong { display: block; font-size: 15px; font-weight: 400; line-height: 1.4; color: var(--ink); overflow-wrap: anywhere; }
+.linha-tempo small { display: block; margin-top: 2px; font-size: 12.5px; color: var(--ink-faint); }
+
+/* ---------- PROGRESSO: números do topo ---------- */
+
+.pg-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.pg-stat { display: flex; align-items: center; gap: 16px; padding: 20px 22px; }
+
+.pg-stat-ic {
+  width: 62px;
+  height: 62px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--brand-tint);
+  color: var(--brand-text);
+  display: grid;
+  place-items: center;
+}
+
+.pg-stat-ic svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.pg-stat strong { display: block; font: 700 32px/1.05 'Space Grotesk', system-ui, sans-serif; letter-spacing: -.02em; color: var(--title); }
+.pg-stat > div > span { display: block; margin-top: 2px; font-size: 14.5px; line-height: 1.3; color: var(--ink-soft); }
+
+/* ---------- PROGRESSO: anel e gráfico ---------- */
+
+.pg-meio {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.pg-card { padding: 22px 26px 26px; }
+
+.pg-geral-corpo { display: flex; align-items: center; gap: 28px; margin-top: 18px; }
+
+.anel { position: relative; width: 190px; height: 190px; flex: none; }
+.anel svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+
+.anel circle { fill: none; stroke-width: 12; }
+.anel-fundo { stroke: var(--brand-tint-hover); }
+.anel-fill {
+  stroke: var(--brand);
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 1.1s cubic-bezier(.2, .8, .2, 1);
+}
+
+html[data-theme="dark"] .anel-fill { stroke: var(--brand-bright); }
+
+.anel-centro { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.anel-centro strong { font: 700 44px/1 'Space Grotesk', system-ui, sans-serif; letter-spacing: -.03em; color: var(--title); }
+.anel-centro > span { margin-top: 4px; font-size: 15px; color: var(--ink-soft); }
+
+.pg-geral-texto { min-width: 0; align-self: stretch; display: flex; flex-direction: column; justify-content: center; padding-left: 26px; border-left: 1px solid var(--line); }
+.pg-geral-texto h4 { font: 600 19px/1.3 'Space Grotesk', system-ui, sans-serif; color: var(--title); }
+.pg-geral-texto p { margin-top: 12px; font-size: 15px; line-height: 1.45; color: var(--ink-soft); }
+
+.pg-geral-texto .pg-incentivo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--brand-tint);
+  color: var(--brand-text);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.pg-incentivo svg { width: 22px; height: 22px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* gráfico de barras por semana (sem biblioteca) */
+.pg-chart {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 12px;
+  margin-top: 22px;
+  --alt: 210px;
+}
+
+.pg-y {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: var(--alt);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: right;
+  font-size: 13px;
+  line-height: 0;
+  color: var(--ink-soft);
+}
+
+.pg-plot {
+  position: relative;
+  height: var(--alt);
+  border-bottom: 1.5px solid var(--ink-faint);
+  border-left: 1.5px solid var(--ink-faint);
+  background: linear-gradient(to bottom, var(--line) 1px, transparent 1px) 0 0 / 100% 25%;
+}
+
+.pg-cols { position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: space-around; padding: 0 2%; }
+
+.pg-col { position: relative; flex: 1; height: 100%; display: flex; align-items: flex-end; justify-content: center; }
+
+.pg-bar {
+  width: min(62%, 78px);
+  height: 0;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(to top, var(--brand), var(--brand-bright));
+  transition: height .8s cubic-bezier(.2, .8, .2, 1);
+}
+
+.pg-bar-n {
+  position: absolute;
+  bottom: calc(var(--h, 0%) + 6px);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--title);
+  transition: bottom .8s cubic-bezier(.2, .8, .2, 1);
+}
+
+.pg-x { grid-column: 2; display: flex; justify-content: space-around; padding: 10px 2% 0; }
+.pg-x span { flex: 1; text-align: center; font-size: 13.5px; color: var(--ink-soft); white-space: nowrap; }
+
+/* ---------- PROGRESSO: parte de baixo ---------- */
+
+.pg-base {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* ---------- Telas menores ---------- */
+
+@media (max-width: 1100px) {
+  .pg-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pg-meio, .pg-base { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 960px) {
+  .pf-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .pf-banner { flex-direction: column; align-items: flex-start; gap: 20px; padding: 24px; }
+  .pf-avatar { width: 96px; height: 96px; }
+  .pf-banner-info p { font-size: 16px; }
+  .pf-card, .pg-card { padding: 20px; }
+  .pf-linhas > div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .pf-numeros { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .pf-numeros > div { padding: 0; }
+  .pf-numeros > div + div { border-left: 0; }
+  .medalhas, .medalhas--5 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 12px; }
+  .pg-stats { grid-template-columns: minmax(0, 1fr); }
+  .pg-geral-corpo { flex-direction: column; align-items: center; }
+  .pg-geral-texto { padding: 18px 0 0; border-left: 0; border-top: 1px solid var(--line); }
+  .pg-x span { font-size: 11.5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anel-fill, .pg-bar, .pg-bar-n, .medalha svg.hex, .pf-link svg { transition: none; }
+}

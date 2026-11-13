@@ -1,258 +1,182 @@
 /* ============================================================
    NívelDev — tela de Cursos (cursos.html)
+   Vitrine estilo marketplace: a página rola para baixo.
    A barra lateral, o topo e as cores vêm de app-base.css.
    Todas as classes começam com "cr-" para não colidir.
    ============================================================ */
 
-/* ---------- Destaque (banner) ----------
-   Azul fixo nos dois temas (como a logo), por isso as cores ficam aqui. */
+:root {
+  --cr-banner-1: #dce8ff;
+  --cr-banner-2: #c6dafd;
+  --cr-arte-morro: #a9c4fb;
+  --cr-arte-tela: #0c2c8f;
+  --cr-arte-base: #17389f;
+}
+
+html[data-theme="dark"] {
+  --cr-banner-1: #1a2547;
+  --cr-banner-2: #223468;
+  --cr-arte-morro: #2c4690;
+  --cr-arte-tela: #3a63e0;
+  --cr-arte-base: #274bb8;
+}
+
+/* ---------- Banner ---------- */
 
 .cr-banner {
   position: relative;
   display: flex;
   align-items: center;
-  min-height: 236px;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 220px;
   margin-top: 28px;
-  padding: 36px 44px;
+  padding: 32px 44px;
   border-radius: 20px;
   overflow: hidden;
-  isolation: isolate;
-  color: #fff;
-  background: linear-gradient(115deg, #0a1d66 0%, #1038b8 55%, #1547d6 100%);
-  box-shadow: 0 18px 40px rgba(12, 28, 77, .28);
+  background: linear-gradient(100deg, var(--cr-banner-1) 0%, var(--cr-banner-2) 100%);
+  border: 1px solid var(--line);
 }
 
-/* formas suaves ao fundo (mesma linguagem do banner da página inicial) */
-.cr-banner::before,
-.cr-banner::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  border-radius: 32px;
-  background: rgba(255, 255, 255, .07);
-  transform: rotate(-18deg);
-}
-
-.cr-banner::before { width: 220px; height: 220px; right: 22%; top: -90px; }
-.cr-banner::after  { width: 300px; height: 120px; right: -60px; bottom: -40px; background: rgba(59, 107, 255, .35); }
-
-.cr-banner-texto { max-width: 520px; }
+.cr-banner-texto { position: relative; z-index: 1; max-width: 460px; }
 
 .cr-banner h2 {
-  font-size: clamp(26px, 3vw, 38px);
+  font-size: clamp(28px, 3.2vw, 40px);
   font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  text-wrap: balance;
+  line-height: 1.12;
+  letter-spacing: -.02em;
+  color: var(--title);
 }
-
-.cr-banner h2 span { color: #86b4ff; }
 
 .cr-banner p {
   margin-top: 14px;
-  max-width: 440px;
-  font-size: 16px;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, .88);
+  font-size: 17px;
+  line-height: 1.45;
+  color: var(--ink);
 }
 
-.cr-banner-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 22px;
-  padding: 12px 22px;
-  border-radius: 999px;
-  background: #fff;
-  color: #0c1c4d;
-  font-weight: 600;
-  font-size: 14.5px;
-  transition: transform .15s, box-shadow .15s;
+.cr-banner-arte {
+  flex: none;
+  align-self: flex-end;
+  width: min(430px, 44%);
+  height: auto;
+  margin: -32px -44px -32px 0;
 }
 
-.cr-banner-btn svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: transform .15s;
-}
+.cr-banner-arte .arte-morro  { fill: var(--cr-arte-morro); opacity: .65; }
+.cr-banner-arte .arte-tela   { fill: var(--cr-arte-tela); stroke: var(--cr-arte-tela); stroke-width: 6; stroke-linejoin: round; }
+.cr-banner-arte .arte-base   { fill: var(--cr-arte-base); stroke: var(--cr-arte-base); stroke-width: 4; stroke-linejoin: round; }
+.cr-banner-arte .arte-codigo { fill: none; stroke: #fff; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+.cr-banner-arte .arte-faisca { fill: none; stroke: var(--cr-arte-tela); stroke-width: 4; stroke-linecap: round; }
+.cr-banner-arte .l1 { fill: #2563eb; }
+.cr-banner-arte .l2 { fill: #3b82f6; }
+.cr-banner-arte .l3 { fill: #0c2c8f; }
+.cr-banner-arte .pg { fill: #fff; opacity: .92; }
 
-.cr-banner-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0, 0, 0, .22); }
-.cr-banner-btn:hover svg { transform: translateX(3px); }
+/* ---------- Títulos das seções ---------- */
 
-.cr-banner-btn:focus-visible {
-  outline: 3px solid #fff;
-  outline-offset: 3px;
-}
-
-/* o </> grande do lado direito */
-.cr-banner-codigo {
-  position: absolute;
-  right: 18%;
-  top: 50%;
-  width: 190px;
-  transform: translateY(-50%);
-  fill: none;
-  stroke: #5b8bff;
-  stroke-width: 10;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: .9;
-  pointer-events: none;
-}
-
-.cr-banner-mascote {
-  position: absolute;
-  right: 28px;
-  bottom: 0;
-  height: 112%;
-  max-height: 290px;
-  width: auto;
-  pointer-events: none;
-}
-
-.cr-banner-mascote[hidden] { display: none; }
-
-/* ---------- Busca e filtros ---------- */
-
-.cr-filtros {
+.cr-sec-topo {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-top: 22px;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 38px 0 16px;
 }
 
-.cr-busca {
-  flex: 1;
-  min-width: 0;
+.cr-sec-titulo {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 0 18px;
-  height: 48px;
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  box-shadow: var(--shadow-card);
-  transition: border-color .15s, box-shadow .15s;
-}
-
-.cr-busca:focus-within,
-.cr-select:focus-within {
-  border-color: var(--brand);
-  box-shadow: 0 0 0 4px var(--brand-tint);
-}
-
-.cr-busca svg {
-  width: 20px;
-  height: 20px;
-  flex: none;
-  fill: none;
-  stroke: var(--brand-text);
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.cr-busca input {
-  flex: 1;
-  min-width: 0;
-  border: 0;
-  outline: none;
-  background: transparent;
-  font: 400 15px 'IBM Plex Sans', system-ui, sans-serif;
-  color: var(--ink);
-}
-
-.cr-busca input::placeholder { color: var(--ink-faint); }
-.cr-busca input::-webkit-search-cancel-button { display: none; }
-
-.cr-select {
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex: none;
-  height: 48px;
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  box-shadow: var(--shadow-card);
-  transition: border-color .15s, box-shadow .15s;
-}
-
-.cr-select select {
-  appearance: none;
-  height: 100%;
-  min-width: 168px;
-  padding: 0 44px 0 46px;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--ink);
-  font: 500 15px 'IBM Plex Sans', system-ui, sans-serif;
-  cursor: pointer;
-  outline: none;
-}
-
-.cr-select option { color: #12131a; background: #fff; }
-
-.cr-select-icone,
-.cr-select-seta {
-  position: absolute;
-  top: 50%;
-  width: 18px;
-  height: 18px;
-  transform: translateY(-50%);
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.1;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  pointer-events: none;
-}
-
-.cr-select-icone { left: 16px; color: var(--brand-text); }
-.cr-select-seta  { right: 14px; color: var(--ink-soft); }
-
-/* ---------- Título da lista ---------- */
-
-.cr-secao { margin: 34px 0 16px; }
-
-.cr-secao-titulo {
   font-size: 22px;
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: -.01em;
   color: var(--title);
   outline: none;
 }
 
-.cr-secao p { margin-top: 4px; font-size: 15px; color: var(--ink-soft); }
+.cr-sec-estrela { width: 26px; height: 26px; fill: var(--brand-text); stroke: var(--brand-text); stroke-width: 1.2; stroke-linejoin: round; }
+.cr-sec-grade   { width: 26px; height: 26px; fill: var(--brand-text); stroke: none; }
 
-/* ---------- Cards de curso ---------- */
+.cr-ver-todos {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--brand-text);
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px;
+}
 
-.cr-lista {
+.cr-ver-todos svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; transition: transform .15s; }
+.cr-ver-todos:hover svg { transform: translateX(3px); }
+.cr-ver-todos:focus-visible { outline: 3px solid var(--brand-bright); outline-offset: 3px; }
+
+/* ordenar */
+.cr-ordem {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-soft);
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.cr-ordem:focus-within { border-color: var(--brand); box-shadow: 0 0 0 4px var(--brand-tint); }
+
+.cr-ordem select {
+  appearance: none;
+  height: 100%;
+  padding: 0 40px 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: 500 14px 'IBM Plex Sans', system-ui, sans-serif;
+  cursor: pointer;
+  outline: none;
+}
+
+.cr-ordem option { color: #12131a; background: #fff; }
+
+.cr-ordem svg {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  transform: translateY(-50%);
+  fill: none;
+  stroke: var(--ink-soft);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+/* ---------- Grade e cards ---------- */
+
+.cr-grade {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
 }
 
+.cr-grade > li { display: flex; }
+
 .cr-card {
-  position: relative;
+  width: 100%;
   display: flex;
-  align-items: center;
-  gap: 20px;
-  height: 100%;
-  padding: 16px 20px 16px 16px;
+  flex-direction: column;
+  overflow: hidden;
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
+  border-radius: 16px;
   box-shadow: var(--shadow-card);
   transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
 }
@@ -263,26 +187,36 @@
   box-shadow: 0 14px 30px rgba(21, 71, 214, .14);
 }
 
-.cr-capa {
-  width: 132px;
-  height: 132px;
-  flex: none;
-  object-fit: cover;
-  border-radius: 12px;
-  background: var(--surface);
+.cr-topo {
+  position: relative;
+  height: 118px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--c1), var(--c2));
 }
 
-.cr-info { flex: 1; min-width: 0; }
+.cr-logo { width: 64px; height: 64px; overflow: visible; }
+.cr-logo--largo { width: 112px; height: 52px; }
 
-.cr-info h3 {
-  font-size: 18px;
+.cr-selo {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .9);
+  color: #0c1c4d;
+  font-size: 12.5px;
   font-weight: 600;
-  line-height: 1.25;
-  color: var(--title);
 }
 
-.cr-info p {
-  margin-top: 6px;
+.cr-corpo { flex: 1; display: flex; flex-direction: column; padding: 18px 20px 20px; }
+
+.cr-corpo h3 { font-size: 17px; font-weight: 700; line-height: 1.25; color: var(--title); }
+
+.cr-corpo p {
+  margin-top: 8px;
+  min-height: 42px;
   font-size: 14.5px;
   line-height: 1.45;
   color: var(--ink-soft);
@@ -290,173 +224,66 @@
 
 .cr-meta {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 8px 18px;
-  margin-top: 12px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--ink);
-}
-
-.cr-meta span { display: inline-flex; align-items: center; gap: 7px; }
-
-.cr-meta svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: var(--brand-text);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* ícone de nível: 3 barras, as "acesas" mostram o nível */
-.cr-nivel-barras rect { fill: currentColor; stroke: none; opacity: .28; }
-.cr-nivel-barras rect.on { opacity: 1; }
-.cr-nivel-barras { color: var(--brand-text); }
-
-.cr-progresso {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.cr-progresso .app-barra { height: 6px; }
-
-.cr-progresso-txt {
-  font-size: 13px;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 16px;
+  font-size: 13.5px;
   color: var(--ink-soft);
-  white-space: nowrap;
 }
 
-/* botão-seta: o card inteiro é clicável (o ::after estica o botão) */
-.cr-ir {
-  width: 40px;
-  height: 40px;
-  flex: none;
-  display: grid;
-  place-items: center;
-  border: 0;
-  border-radius: 50%;
-  background: var(--brand-tint);
-  color: var(--brand-text);
-  cursor: pointer;
-  transition: background .15s, color .15s;
-}
+.cr-meta > span { display: inline-flex; align-items: center; gap: 6px; }
+.cr-meta b { color: var(--title); font-weight: 700; }
 
-.cr-ir::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius-lg); }
+.cr-estrela { width: 17px; height: 17px; fill: #f5b301; stroke: #f5b301; stroke-width: 1.2; stroke-linejoin: round; }
 
-.cr-ir svg {
-  width: 19px;
-  height: 19px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: transform .15s;
-}
+.cr-horas svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-.cr-card:hover .cr-ir { background: var(--brand); color: #fff; }
-.cr-card:hover .cr-ir svg { transform: translateX(2px); }
-
-.cr-ir:focus-visible { outline: none; }
-.cr-ir:focus-visible::after { outline: 3px solid var(--brand-bright); outline-offset: 2px; }
-
-/* ---------- Estado vazio ---------- */
-
-.cr-limpar {
-  margin-top: 10px;
-  padding: 10px 20px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--card);
-  color: var(--brand-text);
-  font: 600 14px 'IBM Plex Sans', system-ui, sans-serif;
-  cursor: pointer;
-  transition: background .15s;
-}
-
-.cr-limpar:hover { background: var(--brand-tint); }
-.cr-limpar:focus-visible { outline: 3px solid var(--brand-bright); outline-offset: 2px; }
-
-/* ---------- Paginação ---------- */
+.cr-progresso { display: flex; align-items: center; gap: 14px; margin-top: 14px; }
+.cr-progresso .app-barra { height: 7px; }
+.cr-progresso strong { min-width: 38px; text-align: right; font-size: 14px; color: var(--title); }
 
 .cr-rodape {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
   gap: 12px;
-  margin-top: 26px;
+  margin-top: auto;
+  padding-top: 18px;
 }
 
-.cr-rodape[hidden] { display: none; }
+.cr-preco { font: 700 20px 'Space Grotesk', system-ui, sans-serif; letter-spacing: -.01em; color: var(--title); }
 
-.cr-paginacao { display: flex; align-items: center; gap: 8px; }
-
-.cr-pag {
-  width: 40px;
-  height: 40px;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  background: var(--card);
-  color: var(--ink);
+.cr-inscrever {
+  min-height: 40px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--brand);
+  color: #fff;
   font: 600 14.5px 'IBM Plex Sans', system-ui, sans-serif;
   cursor: pointer;
-  transition: background .15s, border-color .15s, color .15s;
+  white-space: nowrap;
+  transition: background .15s, transform .15s;
 }
 
-.cr-pag:hover { background: var(--brand-tint); border-color: var(--brand-bright); }
-
-.cr-pag[aria-current="page"] {
-  background: var(--brand);
-  border-color: var(--brand);
-  color: #fff;
-  cursor: default;
-}
-
-.cr-pag svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.cr-pag:focus-visible { outline: 3px solid var(--brand-bright); outline-offset: 2px; }
-
-.cr-contador { font-size: 14px; color: var(--ink-soft); }
+.cr-inscrever:hover { background: var(--brand-bright); transform: translateY(-1px); }
+.cr-inscrever:focus-visible { outline: 3px solid var(--brand-bright); outline-offset: 3px; }
 
 /* ---------- Telas menores ---------- */
 
 @media (max-width: 1100px) {
-  .cr-lista { grid-template-columns: 1fr; }
-  .cr-banner-codigo { right: 6%; width: 150px; opacity: .55; }
+  .cr-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 720px) {
-  .cr-banner { padding: 28px 24px; min-height: 0; }
-  .cr-banner-codigo, .cr-banner-mascote { display: none; }
-
-  .cr-filtros { flex-wrap: wrap; }
-  .cr-busca { flex: 1 1 100%; }
-  .cr-select { flex: 1 1 140px; }
-  .cr-select select { width: 100%; min-width: 0; }
-
-  .cr-card { flex-wrap: wrap; }
-  .cr-capa { width: 96px; height: 96px; }
-  .cr-info { flex-basis: calc(100% - 140px); }
-  .cr-ir { margin-left: auto; }
+  .cr-banner { padding: 26px 24px; min-height: 0; }
+  .cr-banner-arte { display: none; }
+  .cr-grade { grid-template-columns: minmax(0, 1fr); }
+  .cr-sec-topo { flex-wrap: wrap; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cr-card, .cr-banner-btn, .cr-banner-btn svg, .cr-ir svg { transition: none; }
-  .cr-card:hover { transform: none; }
+  .cr-card, .cr-inscrever, .cr-ver-todos svg { transition: none; }
+  .cr-card:hover, .cr-inscrever:hover { transform: none; }
 }

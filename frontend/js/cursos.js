@@ -1,8 +1,8 @@
 /* ============================================================
    NívelDev — tela de Cursos (cursos.html)
-   Lista de cursos com busca, filtros de categoria e nível e
-   paginação. Menu, topo, usuário e proteção da página:
-   js/layout.js.
+   Vitrine de cursos (estilo marketplace): "Cursos em Destaque" e
+   "Mais Cursos" com ordenação. A página rola para baixo.
+   Menu, topo, usuário e proteção da página: js/layout.js.
    Depende de js/auth.js, js/ui.js e js/layout.js.
    ============================================================ */
 
@@ -11,175 +11,128 @@
      ATENÇÃO: ainda não existe API de cursos no back-end, então estes
      cursos são EXEMPLOS. Quando a rota existir, troque este array pelo
      retorno da API (mesmos campos).
-       nivel:     1 = Iniciante, 2 = Intermediário, 3 = Avançado
-       capa:      arquivo em img/cursos/ (sem .jpg)
-       progresso: 0 a 100 (só aparece quando o aluno já começou o curso) */
+       destaque:  true = aparece em "Cursos em Destaque" (com selo)
+       selo:      texto da etiqueta no canto da capa
+       logo:      desenho da capa (ver LOGOS)   cor: degradê da capa (ver CORES)
+       nota / avaliacoes: média e quantidade de avaliações
+       horas:     carga horária     preco: em reais
+       progresso: 0 a 100 (barra só aparece em destaque, se o aluno já começou)
+       data:      lançamento (para "Mais recentes") */
   const cursos = [
-    { id: 'logica',     titulo: 'Lógica de Programação',            desc: 'Aprenda os fundamentos da lógica e programe com confiança.',     categoria: 'logica',      nivel: 1, aulas: 24, capa: 'logica',     progresso: 65 },
-    { id: 'python',     titulo: 'Python do Zero ao Avançado',       desc: 'Comece a programar com uma das linguagens mais amigáveis.',      categoria: 'programacao', nivel: 1, aulas: 32, capa: 'python',     progresso: 0 },
-    { id: 'html-css',   titulo: 'HTML e CSS Essencial',             desc: 'Monte páginas bonitas e responsivas desde o primeiro dia.',      categoria: 'web',         nivel: 1, aulas: 20, capa: 'html-css',   progresso: 0 },
-    { id: 'javascript', titulo: 'JavaScript Essencial',             desc: 'Domine a linguagem que move a web.',                             categoria: 'web',         nivel: 2, aulas: 18, capa: 'javascript', progresso: 0 },
-    { id: 'sql',        titulo: 'SQL na Prática',                   desc: 'Consulte, filtre e organize dados em bancos relacionais.',       categoria: 'dados',       nivel: 2, aulas: 16, capa: 'sql',        progresso: 0 },
-    { id: 'git',        titulo: 'Git e GitHub',                     desc: 'Versione seu código e trabalhe em equipe sem medo.',             categoria: 'ferramentas', nivel: 1, aulas: 12, capa: 'git',        progresso: 0 },
-    { id: 'nodejs',     titulo: 'Node.js e APIs',                   desc: 'Crie servidores e APIs REST usando JavaScript.',                 categoria: 'web',         nivel: 3, aulas: 22, capa: 'nodejs',     progresso: 0 },
-    { id: 'algoritmos', titulo: 'Algoritmos e Estruturas de Dados', desc: 'Resolva problemas com eficiência: listas, pilhas, filas e mais.', categoria: 'logica',      nivel: 3, aulas: 28, capa: 'algoritmos', progresso: 0 },
+    { id: 'python',     titulo: 'Python do Zero ao Avançado',        desc: 'Aprenda Python desde o básico até recursos avançados.', logo: 'python', cor: 'azul',     nota: 4.9, avaliacoes: '12k', horas: 40, preco: 79.90, progresso: 60, destaque: true, selo: 'Mais Popular', data: '2026-06-10' },
+    { id: 'javascript', titulo: 'JavaScript Essencial',              desc: 'Domine a linguagem que move a web.',                     logo: 'js',     cor: 'amarelo',  nota: 4.8, avaliacoes: '9k',  horas: 35, preco: 69.90, progresso: 20, destaque: true, selo: 'Em Alta',      data: '2026-07-02' },
+    { id: 'web',        titulo: 'Desenvolvimento Web Completo',      desc: 'Crie sites modernos com HTML, CSS e JavaScript.',        logo: 'web',    cor: 'roxo',     nota: 4.9, avaliacoes: '15k', horas: 50, preco: 89.90, progresso: 75, destaque: true, selo: 'Novo',         data: '2026-10-20' },
+    { id: 'postgres',   titulo: 'Banco de Dados com PostgreSQL',     desc: 'Aprenda a trabalhar com bancos de dados usando PostgreSQL.', logo: 'banco', cor: 'azul2',  nota: 4.7, avaliacoes: '7k',  horas: 30, preco: 69.90, progresso: 0, data: '2026-09-15' },
+    { id: 'algoritmos', titulo: 'Algoritmos e Lógica de Programação', desc: 'Desenvolva seu raciocínio lógico com algoritmos.',      logo: 'codigo', cor: 'roxo2',    nota: 4.8, avaliacoes: '6k',  horas: 25, preco: 59.90, progresso: 0, data: '2026-05-04' },
+    { id: 'linux',      titulo: 'Linux para Desenvolvedores',        desc: 'Aprenda os principais comandos e ferramentas do Linux.', logo: 'linux',  cor: 'verde',    nota: 4.7, avaliacoes: '5k',  horas: 20, preco: 49.90, progresso: 0, data: '2026-04-18' },
+    { id: 'git',        titulo: 'Git e GitHub',                      desc: 'Controle versões e colabore em seus projetos.',          logo: 'git',    cor: 'laranja',  nota: 4.8, avaliacoes: '6k',  horas: 18, preco: 49.90, progresso: 0, data: '2026-08-08' },
+    { id: 'nodejs',     titulo: 'Node.js na Prática',                desc: 'Construa APIs e aplicações com Node.js.',                logo: 'node',   cor: 'verde2',   nota: 4.9, avaliacoes: '8k',  horas: 40, preco: 79.90, progresso: 0, data: '2026-10-01' },
+    { id: 'cpp',        titulo: 'C++ do Zero ao Avançado',           desc: 'Aprenda C++ com foco na prática e projetos reais.',      logo: 'cpp',    cor: 'roxo3',    nota: 4.7, avaliacoes: '5k',  horas: 35, preco: 69.90, progresso: 0, data: '2026-03-12' },
   ];
 
-  const CATEGORIAS = {
-    programacao: 'Programação',
-    web: 'Web',
-    dados: 'Banco de dados',
-    ferramentas: 'Ferramentas',
-    logica: 'Lógica',
+  const ORDENS = [
+    ['recentes', 'Ordenar por: Mais recentes', (a, b) => b.data.localeCompare(a.data)],
+    ['nota',     'Ordenar por: Mais bem avaliados', (a, b) => b.nota - a.nota],
+    ['menor',    'Ordenar por: Menor preço', (a, b) => a.preco - b.preco],
+    ['maior',    'Ordenar por: Maior preço', (a, b) => b.preco - a.preco],
+  ];
+
+  // degradês das capas (fixos nos dois temas)
+  const CORES = {
+    azul:    ['#1556e6', '#3d8bff'],
+    amarelo: ['#f5b800', '#ffd84d'],
+    roxo:    ['#7a45e6', '#b583f7'],
+    azul2:   ['#1f5cf0', '#4a9bff'],
+    roxo2:   ['#7440e0', '#b07af5'],
+    verde:   ['#10b981', '#3ddc97'],
+    laranja: ['#ff5f15', '#ff8a3d'],
+    verde2:  ['#2fc46e', '#7beaa6'],
+    roxo3:   ['#6a43e0', '#a477f5'],
   };
 
-  const NIVEIS = { 1: 'Iniciante', 2: 'Intermediário', 3: 'Avançado' };
-
-  const POR_PAGINA = 4;
+  // desenhos simples das capas (não são as marcas oficiais)
+  const LOGOS = {
+    python: '<g stroke="#fff" stroke-width="3" stroke-linejoin="round"><rect x="8" y="6" width="32" height="34" rx="13" fill="#2f6df0"/><rect x="24" y="24" width="32" height="34" rx="13" fill="#ffc83d"/></g><circle cx="20" cy="18" r="2.6" fill="#fff"/><circle cx="44" cy="46" r="2.6" fill="#fff"/>',
+    js:     '<rect x="6" y="6" width="52" height="52" rx="6" fill="#1b1b1b"/><text x="52" y="51" text-anchor="end" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="27" fill="#ffd400">JS</text>',
+    web:    '<g font-family="Space Grotesk, sans-serif" font-weight="700" font-size="17" text-anchor="middle" fill="#fff"><path d="M2 4h26l-2.4 32L15 40 4.4 36z" fill="#ef4f23" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><text x="15" y="30">5</text><path d="M34 4h26l-2.4 32L47 40 36.4 36z" fill="#2b86f2" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><text x="47" y="30">3</text><path d="M66 4h26l-2.4 32L79 40 68.4 36z" fill="#f2b705" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><text x="79" y="30">5</text></g>',
+    banco:  '<g fill="#fff" stroke="#3b82f6" stroke-width="1.6"><ellipse cx="32" cy="13" rx="21" ry="7"/><path d="M11 13v11c0 4 9.4 7 21 7s21-3 21-7V13c0 4-9.4 7-21 7s-21-3-21-7z"/><path d="M11 27v11c0 4 9.4 7 21 7s21-3 21-7V27c0 4-9.4 7-21 7s-21-3-21-7z"/><path d="M11 41v9c0 4 9.4 7 21 7s21-3 21-7v-9c0 4-9.4 7-21 7s-21-3-21-7z"/></g>',
+    codigo: '<path d="M20 16L6 32l14 16M44 16l14 16-14 16M37 10L27 54" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>',
+    linux:  '<rect x="6" y="9" width="52" height="46" rx="9" fill="#0d2b20"/><path d="M17 24l9 8-9 8" fill="none" stroke="#3ddc97" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M31 42h14" stroke="#fff" stroke-width="5" stroke-linecap="round"/>',
+    git:    '<rect x="11" y="11" width="42" height="42" rx="8" transform="rotate(45 32 32)" fill="#fff"/><g stroke="#f0541a" stroke-width="4" fill="none" stroke-linecap="round"><path d="M25 22v20M25 31c8 0 12-3 15-9"/></g><g fill="#f0541a"><circle cx="25" cy="22" r="4.4"/><circle cx="25" cy="42" r="4.4"/><circle cx="40" cy="22" r="4.4"/></g>',
+    node:   '<path d="M32 5l23 13v28L32 59 9 46V18z" fill="none" stroke="#10432b" stroke-width="5" stroke-linejoin="round"/><text x="32" y="39" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="19" fill="#10432b">JS</text>',
+    cpp:    '<path d="M32 4l24 14v28L32 60 8 46V18z" fill="#2563eb" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><text x="32" y="39" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="20" fill="#fff">C++</text>',
+  };
 
   /* ---------- ELEMENTOS ---------- */
   const $ = (id) => document.getElementById(id);
-  const lista = $('cr-lista');
-  const vazio = $('cr-vazio');
-  const rodape = $('cr-rodape');
-  const paginacao = $('cr-paginacao');
-  const contador = $('cr-contador');
-  const busca = $('cr-busca');
-  const selCategoria = $('cr-categoria');
-  const selNivel = $('cr-nivel');
+  const gradeDestaque = $('cr-destaque');
+  const gradeMais = $('cr-mais');
+  const selOrdem = $('cr-ordem');
 
-  let pagina = 1;
-  let filtrados = cursos;
+  const ESTRELA = '<svg class="cr-estrela" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.8 6 6.5.8-4.8 4.5 1.3 6.5L12 17.4l-5.8 3.2 1.3-6.5L2.7 9.6l6.5-.8L12 2.8z"/></svg>';
+  const RELOGIO = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
 
-  /* ---------- ÍCONES ---------- */
-  const SETA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
-  const SETA_ESQ = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>';
-  const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg>';
-
-  // 3 barrinhas: as primeiras "n" ficam acesas
-  function iconeNivel(nivel) {
-    const barra = (x, y, h, i) => `<rect class="${i < nivel ? 'on' : ''}" x="${x}" y="${y}" width="4.4" height="${h}" rx="1.4"/>`;
-    return `<svg class="cr-nivel-barras" viewBox="0 0 24 24" aria-hidden="true">${barra(4, 13, 7, 0)}${barra(9.8, 8.5, 11.5, 1)}${barra(15.6, 4, 16, 2)}</svg>`;
-  }
-
-  /* ---------- FILTROS (opções) ---------- */
-  selCategoria.innerHTML = '<option value="">Categoria</option>' +
-    Object.keys(CATEGORIAS).map((k) => `<option value="${k}">${CATEGORIAS[k]}</option>`).join('');
-
-  selNivel.innerHTML = '<option value="">Nível</option>' +
-    Object.keys(NIVEIS).map((k) => `<option value="${k}">${NIVEIS[k]}</option>`).join('');
-
-  // remove acentos para a busca funcionar com "logica" ou "lógica"
-  const normalizar = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-
-  function aplicarFiltros() {
-    const termo = normalizar(busca.value.trim());
-    const cat = selCategoria.value;
-    const niv = selNivel.value;
-
-    filtrados = cursos.filter((c) =>
-      (!cat || c.categoria === cat) &&
-      (!niv || String(c.nivel) === niv) &&
-      (!termo || normalizar(c.titulo).includes(termo) || normalizar(c.desc).includes(termo) ||
-        normalizar(CATEGORIAS[c.categoria]).includes(termo))
-    );
-    pagina = 1;
-    render();
-  }
+  const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const reais = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  const nota = (n) => n.toLocaleString('pt-BR', { minimumFractionDigits: 1 });
 
   /* ---------- RENDERIZAÇÃO ---------- */
   function cardCurso(c) {
-    const comecou = c.progresso > 0;
-    const acao = comecou ? 'Continuar o curso' : 'Abrir o curso';
+    const [c1, c2] = CORES[c.cor] || CORES.azul;
+    const largo = c.logo === 'web';
+    const comecou = c.destaque && c.progresso > 0;
     return `
       <li>
         <article class="cr-card">
-          <img class="cr-capa" src="img/cursos/${c.capa}.jpg" alt="" width="132" height="132" loading="lazy">
-          <div class="cr-info">
-            <h3>${c.titulo}</h3>
-            <p>${c.desc}</p>
+          <div class="cr-topo" style="--c1:${c1};--c2:${c2}">
+            ${c.selo ? `<span class="cr-selo">${esc(c.selo)}</span>` : ''}
+            <svg class="cr-logo${largo ? ' cr-logo--largo' : ''}" viewBox="0 0 ${largo ? '94 44' : '64 64'}" aria-hidden="true" focusable="false">${LOGOS[c.logo] || ''}</svg>
+          </div>
+          <div class="cr-corpo">
+            <h3>${esc(c.titulo)}</h3>
+            <p>${esc(c.desc)}</p>
             <div class="cr-meta">
-              <span>${iconeNivel(c.nivel)}${NIVEIS[c.nivel]}</span>
-              <span>${PLAY}${c.aulas} aulas</span>
+              <span class="cr-nota" aria-label="Nota ${nota(c.nota)} de 5, ${esc(c.avaliacoes)} avaliações">${ESTRELA}<b>${nota(c.nota)}</b> (${esc(c.avaliacoes)} avaliações)</span>
+              <span class="cr-horas" aria-label="${c.horas} horas">${RELOGIO}${c.horas}h</span>
             </div>
             ${comecou ? `
             <div class="cr-progresso">
-              <div class="app-barra" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${c.progresso}" aria-label="Progresso em ${c.titulo}">
-                <span style="width:${c.progresso}%"></span>
-              </div>
-              <span class="cr-progresso-txt">${c.progresso}% concluído</span>
+              <div class="app-barra" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${c.progresso}" aria-label="Seu progresso em ${esc(c.titulo)}"><span data-w="${c.progresso}"></span></div>
+              <strong>${c.progresso}%</strong>
             </div>` : ''}
+            <div class="cr-rodape">
+              <strong class="cr-preco">${reais(c.preco)}</strong>
+              <button type="button" class="cr-inscrever" data-curso="${c.id}" aria-label="Inscrever-se em ${esc(c.titulo)}">Inscrever-se</button>
+            </div>
           </div>
-          <button type="button" class="cr-ir" data-curso="${c.id}" aria-label="${acao}: ${c.titulo}">${SETA}</button>
         </article>
       </li>`;
   }
 
-  function botaoPagina(texto, destino, atual, rotulo) {
-    return `<button type="button" class="cr-pag" data-pagina="${destino}"` +
-      (atual ? ' aria-current="page"' : '') +
-      (rotulo ? ` aria-label="${rotulo}"` : ` aria-label="Página ${destino}"`) + `>${texto}</button>`;
+  function animarBarras() {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      document.querySelectorAll('.cr-progresso .app-barra span[data-w]').forEach((el) => { el.style.width = el.dataset.w + '%'; });
+    }));
   }
 
-  function render() {
-    const totalPaginas = Math.max(1, Math.ceil(filtrados.length / POR_PAGINA));
-    pagina = Math.min(pagina, totalPaginas);
-
-    const inicio = (pagina - 1) * POR_PAGINA;
-    const visiveis = filtrados.slice(inicio, inicio + POR_PAGINA);
-
-    lista.innerHTML = visiveis.map(cardCurso).join('');
-    lista.hidden = visiveis.length === 0;
-    vazio.hidden = visiveis.length > 0;
-    rodape.hidden = visiveis.length === 0;
-
-    // paginação: ‹ 1 2 3 ›  (setas só quando há para onde ir)
-    let html = '';
-    if (pagina > 1) html += botaoPagina(SETA_ESQ, pagina - 1, false, 'Página anterior');
-    if (totalPaginas > 1) {
-      for (let p = 1; p <= totalPaginas; p++) html += botaoPagina(p, p, p === pagina);
-    }
-    if (pagina < totalPaginas) html += botaoPagina(SETA, pagina + 1, false, 'Próxima página');
-    paginacao.innerHTML = html;
-
-    const n = filtrados.length;
-    contador.textContent = n === 1
-      ? 'Mostrando 1 curso'
-      : `Mostrando ${inicio + 1}–${inicio + visiveis.length} de ${n} cursos`;
+  function desenharMais() {
+    const ordem = ORDENS.find((o) => o[0] === selOrdem.value) || ORDENS[0];
+    const lista = cursos.filter((c) => !c.destaque).sort(ordem[2]);
+    gradeMais.innerHTML = lista.map(cardCurso).join('');
   }
 
-  /* ---------- EVENTOS ---------- */
-  busca.addEventListener('input', aplicarFiltros);
-  selCategoria.addEventListener('change', aplicarFiltros);
-  selNivel.addEventListener('change', aplicarFiltros);
+  selOrdem.innerHTML = ORDENS.map((o) => `<option value="${o[0]}">${o[1]}</option>`).join('');
+  selOrdem.addEventListener('change', desenharMais);
 
-  $('cr-limpar').addEventListener('click', () => {
-    busca.value = '';
-    selCategoria.value = '';
-    selNivel.value = '';
-    aplicarFiltros();
-    busca.focus();
-  });
+  gradeDestaque.innerHTML = cursos.filter((c) => c.destaque).map(cardCurso).join('');
+  desenharMais();
+  animarBarras();
 
-  paginacao.addEventListener('click', (e) => {
-    const botao = e.target.closest('[data-pagina]');
-    if (!botao) return;
-    pagina = Number(botao.dataset.pagina);
-    render();
-    // volta para o começo da lista se ela ficou acima da tela
-    const titulo = $('cr-lista-titulo');
-    if (titulo.getBoundingClientRect().top < 0) titulo.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    paginacao.querySelector('[aria-current="page"]').focus();
-  });
-
-  // TODO: quando existir a tela do curso, troque o aviso por
-  //       window.location.href = 'curso.html?id=' + id
-  lista.addEventListener('click', (e) => {
+  // TODO: quando existir a API de matrículas/pagamento, troque o aviso pela inscrição de verdade
+  document.addEventListener('click', (e) => {
     const botao = e.target.closest('[data-curso]');
     if (!botao) return;
     const curso = cursos.find((c) => c.id === botao.dataset.curso);
-    NivelDevUI.toast('As aulas de “' + curso.titulo + '” chegam em breve.', 'info');
+    NivelDevUI.toast('A inscrição em “' + curso.titulo + '” chega em breve.', 'info');
   });
-
-  render();
 })();

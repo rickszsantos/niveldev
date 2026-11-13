@@ -1,5 +1,5 @@
 /* ============================================================
-   NívelDev — telas Meu Perfil, Meu Progresso e Ajustes
+   NívelDev — telas Perfil, Progresso e Ajustes
    (as três ficam dentro de home.html)
 
    ATENÇÃO: ainda não existe API de perfil, progresso, troca de
@@ -17,45 +17,50 @@
 
   const ICONES = {
     codigo:  '<path d="M8 8l-4 4 4 4"/><path d="M16 8l4 4-4 4"/><path d="M13.5 5l-3 14"/>',
+    trofeu:  '<path d="M8 4h8v5a4 4 0 01-8 0V4z"/><path d="M8 6H5a3 3 0 003 4M16 6h3a3 3 0 01-3 4M12 13v4M9 20h6M10 17h4"/>',
+    chama:   '<path d="M12 2.5c.6 3.2 4.5 5.4 4.5 10a4.5 4.5 0 01-9 0c0-1.7.8-2.8 1.7-3.7.3 1.2.9 1.9 1.6 2.2C10.4 8.2 10.6 5 12 2.5z"/>',
+    cadeado: '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/><path d="M12 15v2"/>',
+    coroa:   '<path d="M3.5 8l4.5 4 4-6.5 4 6.5 4.5-4-2 10.5h-13L3.5 8z"/>',
     estrela: '<path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6L3.3 9.3l6.1-.7L12 3z"/>',
-    check:   '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
     livro:   '<path d="M12 6.5C10.4 5.3 8 4.7 4 4.7v13.6c4 0 6.4.6 8 1.8 1.6-1.2 4-1.8 8-1.8V4.7c-4 0-6.4.6-8 1.8z"/><path d="M12 6.5v13.6"/>',
   };
 
-  /* ---------- DADOS DE EXEMPLO (troque pela API quando existir) ---------- */
+  /* cores das medalhas: [claro, escuro] do degradê */
+  const CORES = {
+    azul:   ['#4b86ff', '#1547d6'],
+    dourado:['#ffcf4a', '#f59e0b'],
+    roxo:   ['#9a7cf8', '#6a3de8'],
+    cinza:  ['#c9ccd6', '#9a9fae'],
+    verde:  ['#3fdc9e', '#0fb27a'],
+  };
+
+  /* ---------- DADOS DE EXEMPLO (troque pela API quando existir) ----------
+     Perfil e Progresso leem deste mesmo objeto, então os números sempre batem. */
   const progresso = {
-    exercicios: 8,
-    cursos: [
-      { titulo: 'Lógica de Programação', pct: 65 },
-      { titulo: 'HTML e CSS',            pct: 100 },
-      { titulo: 'Git e GitHub',          pct: 100 },
-    ],
-    skills: [
-      { nome: 'Lógica de programação', pct: 72 },
-      { nome: 'HTML',                  pct: 58 },
-      { nome: 'CSS',                   pct: 45 },
-      { nome: 'JavaScript',            pct: 22 },
-      { nome: 'Git',                   pct: 30 },
-      { nome: 'SQL',                   pct: 10 },
-    ],
-    // exercícios por dia (últimos 7 dias, terminando hoje) e por semana (últimas 4)
-    ultimos7: [0, 0, 1, 2, 1, 1, 1],
-    semanas:  [1, 1, 0, 6],
-    atividades: [
-      { icone: 'codigo',  texto: 'Resolveu "Soma de dois números"', quando: 'Hoje, 09:12',  xp: 40 },
-      { icone: 'check',   texto: 'Concluiu a aula "Estruturas de repetição"', quando: 'Ontem', xp: 25 },
-      { icone: 'codigo',  texto: 'Resolveu "Par ou ímpar"', quando: 'Ontem', xp: 40 },
-      { icone: 'estrela', texto: 'Subiu para o nível 7', quando: 'Há 3 dias', xp: 0 },
-      { icone: 'livro',   texto: 'Concluiu o curso "Git e GitHub"', quando: 'Há 5 dias', xp: 120 },
-    ],
+    exercicios: 48,
+    pontos: 1250,
+    conclusaoCurso: 68,                    // 0 a 100
+    semanas: [30, 45, 60, 68, 75],         // % de conclusão ao fim de cada semana
+    // as 4 primeiras aparecem no Perfil e as 5 primeiras em Progresso
     conquistas: [
-      { icone: 'codigo',  titulo: 'Primeiro código', desc: 'Resolveu o 1º exercício', liberada: true },
-      { icone: 'estrela', titulo: 'Nível 5',         desc: 'Chegou ao nível 5',       liberada: true },
-      { icone: 'check',   titulo: 'Dez exercícios',  desc: 'Conclua 10 exercícios',   liberada: false },
+      { icone: 'codigo',  cor: 'azul',    titulo: 'Primeiro Exercício',   liberada: true  },
+      { icone: 'trofeu',  cor: 'dourado', titulo: '10 Exercícios',        liberada: true  },
+      { icone: 'chama',   cor: 'roxo',    titulo: 'Sequência de 7 dias',  liberada: true  },
+      { icone: 'cadeado', cor: 'cinza',   titulo: 'Explorador NívelDev',  liberada: false },
+      { icone: 'coroa',   cor: 'verde',   titulo: 'Mestre dos Exercícios', liberada: true },
+      { icone: 'estrela', cor: 'azul',    titulo: 'Nível 5',              liberada: true  },
+      { icone: 'livro',   cor: 'dourado', titulo: 'Primeiro Curso',       liberada: true  },
+      { icone: 'codigo',  cor: 'roxo',    titulo: '25 Exercícios',        liberada: true  },
+    ],
+    atividades: [
+      { texto: 'Você concluiu o exercício "Estruturas de Repetição"', quando: 'há 2 horas' },
+      { texto: 'Você ganhou a conquista "10 Exercícios"',             quando: 'há 1 dia'   },
+      { texto: 'Você iniciou a trilha de Python',                     quando: 'há 2 dias'  },
     ],
   };
 
-  const nivelDe = (pct) => (pct >= 67 ? ['Avançado', 'avancado'] : pct >= 34 ? ['Intermediário', 'intermediario'] : ['Iniciante', 'iniciante']);
+  const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const totalConquistas = () => progresso.conquistas.filter((q) => q.liberada).length;
 
   /* ---------- PREFERÊNCIAS E PERFIL (localStorage) ---------- */
   const lerJson = (chave, padrao) => {
@@ -90,52 +95,68 @@
     return (p[0][0] + (p.length > 1 ? p[p.length - 1][0] : '')).toUpperCase();
   };
 
-  function dataCadastro(u) {
-    const bruto = u && (u.created_at || u.createdAt || u.criado_em);
-    const d = bruto ? new Date(bruto) : null;
-    if (!d || isNaN(d)) return 'Não informado';
-    return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
-  }
-
   function pintarAvatar(el, nome, foto) {
     el.textContent = foto ? '' : iniciais(nome);
     el.style.backgroundImage = foto ? 'url("' + foto + '")' : '';
   }
 
+  function dataCurta(u) {
+    const bruto = u && (u.created_at || u.createdAt || u.criado_em);
+    const d = bruto ? new Date(bruto) : null;
+    if (!d || isNaN(d)) return 'Não informado';
+    return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  }
+
+  /* medalha hexagonal (SVG, com cantos arredondados) */
+  let seqMedalha = 0;
+  function medalha(q) {
+    const id = 'hex' + (++seqMedalha);
+    const [c1, c2] = CORES[q.cor] || CORES.azul;
+    return '<li class="medalha' + (q.liberada ? '' : ' is-bloqueada') + '">' +
+      '<svg class="hex" viewBox="0 0 80 80" aria-hidden="true">' +
+        '<defs><linearGradient id="' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + c1 + '"/><stop offset="1" stop-color="' + c2 + '"/></linearGradient></defs>' +
+        '<polygon points="40,8 68,24 68,56 40,72 12,56 12,24" fill="url(#' + id + ')" stroke="url(#' + id + ')" stroke-width="8" stroke-linejoin="round"/>' +
+        '<g transform="translate(24 24) scale(1.35)" class="icone">' + ICONES[q.icone] + '</g>' +
+      '</svg><span>' + esc(q.titulo) + '</span></li>';
+  }
+
+  const linhaTempo = (lista) => lista.map((a) => '<li><strong>' + esc(a.texto) + '</strong><small>' + esc(a.quando) + '</small></li>').join('');
+
   /* ============================================================
-     MEU PERFIL
+     PERFIL
      ============================================================ */
+  const ICONE_PESSOA = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4.2"/><path d="M3.8 21c0-4.5 3.7-7.2 8.2-7.2s8.2 2.7 8.2 7.2z"/></svg>';
+
   function desenharPerfil() {
     const nome = (usuario && usuario.nome) || 'Aluno';
+    const email = (usuario && usuario.email) || '—';
+
     $('perfil-nome').textContent = nome;
-    $('perfil-username').textContent = perfil.username || usernamePadrao(usuario);
-    $('perfil-email').textContent = (usuario && usuario.email) || '—';
-    $('perfil-desde').textContent = dataCadastro(usuario);
-    $('perfil-visib').textContent = prefs.visibilidade === 'privado' ? 'Privado' : 'Público';
+    $('perfil-nome-completo').textContent = nome;
+    $('perfil-email-topo').textContent = email;
+    $('perfil-email').textContent = email;
+    $('perfil-documento').textContent = (usuario && (usuario.documento || usuario.cpf)) || 'Não informado';
+    $('perfil-desde').textContent = dataCurta(usuario);
 
-    const bio = $('perfil-bio');
-    bio.textContent = perfil.bio || 'Você ainda não escreveu uma biografia. Use "Editar perfil" para contar quem você é.';
-    bio.classList.toggle('is-vazia', !perfil.bio);
+    // sem foto: ícone de pessoa; com foto: a imagem escolhida em "Editar"
+    const av = $('perfil-avatar');
+    av.innerHTML = perfil.foto ? '' : ICONE_PESSOA;
+    av.style.backgroundImage = perfil.foto ? 'url("' + perfil.foto + '")' : '';
 
-    pintarAvatar($('perfil-avatar'), nome, perfil.foto);
+    // resumo de progresso
+    const pct = progresso.conclusaoCurso;
+    NivelDevUI.contar($('perfil-pct'), pct);
+    $('perfil-barra').setAttribute('aria-valuenow', String(pct));
+    NivelDevUI.contar($('perfil-ex'), progresso.exercicios);
+    NivelDevUI.contar($('perfil-conq-n'), totalConquistas());
+    NivelDevUI.contar($('perfil-pontos'), progresso.pontos);
 
-    const concluidos = progresso.cursos.filter((c) => c.pct >= 100);
-    $('perfil-n-cursos').textContent = concluidos.length;
-    $('perfil-cursos').innerHTML = concluidos.length
-      ? concluidos.map((c) => '<li><span class="resumo-icone">' + svg(ICONES.livro) + '</span><span></span></li>').join('')
-      : '<li class="resumo-vazio">Nenhum curso concluído ainda.</li>';
-    $('perfil-cursos').querySelectorAll('li > span:last-child').forEach((el, i) => { el.textContent = concluidos[i].titulo; });
+    $('perfil-conquistas').innerHTML = progresso.conquistas.slice(0, 4).map(medalha).join('');
+    $('perfil-atividades').innerHTML = linhaTempo(progresso.atividades);
 
-    const liberadas = progresso.conquistas.filter((q) => q.liberada);
-    $('perfil-n-conq').textContent = liberadas.length;
-    $('perfil-conquistas').innerHTML = liberadas.length
-      ? liberadas.map(() => '<li><span class="resumo-icone"></span><span><b></b><small></small></span></li>').join('')
-      : '<li class="resumo-vazio">Resolva exercícios para desbloquear conquistas.</li>';
-    $('perfil-conquistas').querySelectorAll('li:not(.resumo-vazio)').forEach((li, i) => {
-      li.querySelector('.resumo-icone').innerHTML = svg(ICONES[liberadas[i].icone]);
-      li.querySelector('b').textContent = liberadas[i].titulo;
-      li.querySelector('small').textContent = liberadas[i].desc;
-    });
+    // a barra cresce com animação (pequeno atraso para a transição valer)
+    $('perfil-barra-fill').style.width = '0%';
+    requestAnimationFrame(() => requestAnimationFrame(() => { $('perfil-barra-fill').style.width = pct + '%'; }));
   }
 
   /* ----- edição (diálogo) ----- */
@@ -218,90 +239,56 @@
   [dlg, $('dlg-excluir')].forEach((d) => d.addEventListener('click', (e) => { if (e.target === d) d.close(); }));
 
   /* ============================================================
-     MEU PROGRESSO
+     PROGRESSO
      ============================================================ */
+  const incentivo = (pct) => (pct >= 60 ? 'Você está indo muito bem!' : pct >= 30 ? 'Bom ritmo, continue assim!' : 'Comece hoje a sua jornada!');
+
   function desenharProgresso() {
-    const concluidos = progresso.cursos.filter((c) => c.pct >= 100).length;
-    const andamento = progresso.cursos.length - concluidos;
+    const pct = progresso.conclusaoCurso;
+
     NivelDevUI.contar($('prog-exercicios'), progresso.exercicios);
-    NivelDevUI.contar($('prog-concluidos'), concluidos);
-    NivelDevUI.contar($('prog-andamento'), andamento);
-    NivelDevUI.contar($('prog-skills'), progresso.skills.length);
+    NivelDevUI.contar($('prog-pontos'), progresso.pontos);
+    NivelDevUI.contar($('prog-conquistas'), totalConquistas());
+    NivelDevUI.contar($('prog-pct'), pct);
 
-    $('skills').innerHTML = progresso.skills.map((s) => {
-      const [rotulo, classe] = nivelDe(s.pct);
-      return '<li><div class="linha-topo"><strong></strong><span class="nivel-tag nivel-tag--' + classe + '">' + rotulo + '</span></div>' +
-        '<div class="app-barra" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + s.pct + '"><span data-w="' + s.pct + '"></span></div></li>';
-    }).join('');
-    $('skills').querySelectorAll('strong').forEach((el, i) => { el.textContent = progresso.skills[i].nome; });
+    // anel de progresso geral
+    NivelDevUI.contar($('prog-anel-pct'), pct);
+    $('prog-pct-texto').textContent = pct;
+    $('prog-incentivo').textContent = incentivo(pct);
+    $('prog-anel-box').setAttribute('aria-label', 'Conclusão do curso: ' + pct + '%');
+    $('prog-anel').style.strokeDashoffset = '100';
 
-    $('cursos-prog').innerHTML = progresso.cursos.map((c) =>
-      '<li><div class="linha-topo"><strong></strong><span>' + (c.pct >= 100 ? 'Concluído' : c.pct + '%') + '</span></div>' +
-      '<div class="app-barra" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + c.pct + '"><span data-w="' + c.pct + '"></span></div></li>'
-    ).join('');
-    $('cursos-prog').querySelectorAll('strong').forEach((el, i) => { el.textContent = progresso.cursos[i].titulo; });
+    $('prog-medalhas').innerHTML = progresso.conquistas.slice(0, 5).map(medalha).join('');
+    $('prog-atividades').innerHTML = linhaTempo(progresso.atividades);
 
-    $('historico').innerHTML = progresso.atividades.map((a) =>
-      '<li><span class="resumo-icone">' + svg(ICONES[a.icone]) + '</span><div><strong></strong><small>' + a.quando + '</small></div>' +
-      (a.xp ? '<span class="xp">+' + a.xp + ' XP</span>' : '') + '</li>'
-    ).join('');
-    $('historico').querySelectorAll('strong').forEach((el, i) => { el.textContent = progresso.atividades[i].texto; });
+    desenharGrafico();
 
-    desenharGrafico(periodo);
-    animarBarras();
-  }
-
-  function animarBarras() {
     requestAnimationFrame(() => requestAnimationFrame(() => {
-      document.querySelectorAll('#view-progresso .app-barra span[data-w]').forEach((el) => { el.style.width = el.dataset.w + '%'; });
+      $('prog-anel').style.strokeDashoffset = String(100 - pct);
     }));
   }
 
-  /* gráfico de barras (sem biblioteca) */
-  let periodo = 7;
+  /* gráfico de barras por semana (sem biblioteca) */
+  function desenharGrafico() {
+    const valores = progresso.semanas;
+    const rotulos = valores.map((_, i) => 'Semana ' + (i + 1));
 
-  function desenharGrafico(dias) {
-    const hoje = new Date();
-    let valores, rotulos;
-    if (dias === 7) {
-      valores = progresso.ultimos7;
-      rotulos = valores.map((_, i) => {
-        const d = new Date(hoje); d.setDate(hoje.getDate() - (6 - i));
-        return i === 6 ? 'Hoje' : d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '');
-      });
-    } else {
-      valores = progresso.semanas;
-      rotulos = valores.map((_, i) => (i === valores.length - 1 ? 'Esta semana' : 'Há ' + (valores.length - 1 - i) + ' sem.'));
-    }
-    const maximo = Math.max(4, Math.max.apply(null, valores));
-    const total = valores.reduce((a, b) => a + b, 0);
+    $('grafico').setAttribute('aria-label', 'Desempenho por semana: ' + rotulos.map((r, i) => r + ' ' + valores[i] + '%').join(', '));
+    $('grafico').innerHTML =
+      '<ul class="pg-y" aria-hidden="true"><li>100%</li><li>75%</li><li>50%</li><li>25%</li><li>0%</li></ul>' +
+      '<div class="pg-plot"><div class="pg-cols">' +
+        valores.map((v) => '<div class="pg-col"><span class="pg-bar-n">' + v + '%</span><span class="pg-bar"></span></div>').join('') +
+      '</div></div>' +
+      '<div class="pg-x" aria-hidden="true">' + rotulos.map((r) => '<span>' + r + '</span>').join('') + '</div>';
 
-    $('grafico-total').textContent = total + (total === 1 ? ' exercício' : ' exercícios') + ' nos últimos ' + dias + ' dias';
-    $('grafico').setAttribute('aria-label', 'Exercícios resolvidos: ' + rotulos.map((r, i) => r + ' ' + valores[i]).join(', '));
-
-    $('grafico').innerHTML = valores.map((v, i) =>
-      '<div class="barra' + (v === 0 ? ' is-zero' : '') + (i === valores.length - 1 ? ' is-hoje' : '') + '">' +
-        '<span class="barra-n">' + v + '</span><span class="barra-valor"></span><span class="barra-rotulo">' + rotulos[i] + '</span></div>'
-    ).join('');
-
-    const barras = $('grafico').querySelectorAll('.barra');
+    const colunas = $('grafico').querySelectorAll('.pg-col');
     requestAnimationFrame(() => requestAnimationFrame(() => {
-      barras.forEach((b, i) => {
-        const pct = (valores[i] / maximo) * 100;
-        b.style.setProperty('--h', pct + '%');
-        b.querySelector('.barra-valor').style.height = valores[i] ? pct + '%' : '';
+      colunas.forEach((c, i) => {
+        c.style.setProperty('--h', valores[i] + '%');
+        c.querySelector('.pg-bar').style.height = valores[i] + '%';
       });
     }));
   }
-
-  document.querySelectorAll('[data-periodo]').forEach((b) => b.addEventListener('click', () => {
-    periodo = Number(b.dataset.periodo);
-    document.querySelectorAll('[data-periodo]').forEach((x) => {
-      x.classList.toggle('is-ativo', x === b);
-      x.setAttribute('aria-pressed', String(x === b));
-    });
-    desenharGrafico(periodo);
-  }));
 
   /* ============================================================
      AJUSTES
@@ -448,8 +435,14 @@
   pintarChaves();
   desenharProgresso();
 
-  // ao abrir "Meu Progresso" as barras e o gráfico crescem de novo
+  // "Ver todas" (telas ainda não criadas)
+  document.querySelectorAll('[data-em-breve]').forEach((b) => b.addEventListener('click', () => {
+    NivelDevUI.toast(b.dataset.emBreve + ' ainda está em desenvolvimento.', 'info');
+  }));
+
+  // ao abrir Perfil ou Progresso, barras, anel e gráfico crescem de novo
   window.addEventListener('hashchange', () => {
     if (window.location.hash === '#progresso') desenharProgresso();
+    if (window.location.hash === '#perfil') desenharPerfil();
   });
 })();

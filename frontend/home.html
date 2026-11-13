@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="css/app-base.css">
   <link rel="stylesheet" href="css/home.css">
   <link rel="stylesheet" href="css/conta.css">
+  <link rel="stylesheet" href="css/perfil-progresso.css">
 </head>
 <body class="app-page" data-pagina="home">
 
@@ -137,94 +138,198 @@
           <div class="conquistas" id="conquistas"></div>
         </section>
 
-        <!-- ---------- VIEW: MEU PERFIL ---------- -->
+        <!-- ---------- VIEW: PERFIL ---------- -->
         <section class="app-view" id="view-perfil" data-view="perfil" hidden>
           <div class="app-hero">
-            <h1>Meu Perfil</h1>
-            <p>Suas informações pessoais e como você aparece na plataforma.</p>
+            <h1>Perfil</h1>
+            <p>Visualize e gerencie suas informações.</p>
             <span class="app-hero-traco" aria-hidden="true"></span>
           </div>
 
-          <article class="app-card perfil-card">
-            <div class="perfil-avatar" id="perfil-avatar" aria-hidden="true"></div>
-            <div class="perfil-dados">
+          <!-- faixa azul com foto, nome, e-mail e papel -->
+          <article class="pf-banner">
+            <div class="pf-avatar" id="perfil-avatar" role="img" aria-label="Foto do perfil"></div>
+            <div class="pf-banner-info">
               <h2 id="perfil-nome">Aluno</h2>
-              <p class="perfil-user">@<span id="perfil-username">aluno</span></p>
-              <p class="perfil-bio" id="perfil-bio"></p>
-              <dl class="perfil-meta">
-                <div><dt>E-mail</dt><dd id="perfil-email">—</dd></div>
-                <div><dt>Membro desde</dt><dd id="perfil-desde">—</dd></div>
-                <div><dt>Perfil</dt><dd id="perfil-visib">Público</dd></div>
-              </dl>
+              <p id="perfil-email-topo">—</p>
+              <span class="pf-papel">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 8l4.5 4 4-6.5 4 6.5 4.5-4-2 10.5h-13L3.5 8z"/></svg>
+                Aluno
+              </span>
             </div>
-            <button type="button" class="app-btn" id="btn-editar-perfil">
-              Editar perfil
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 00-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>
-            </button>
           </article>
 
-          <h2 class="app-titulo-secao">Resumo</h2>
-          <div class="perfil-resumo">
-            <article class="app-card resumo-card">
-              <h3>Cursos concluídos <span class="resumo-n" id="perfil-n-cursos">0</span></h3>
-              <ul class="resumo-lista" id="perfil-cursos"></ul>
+          <div class="pf-grid">
+            <!-- Informações pessoais -->
+            <article class="app-card pf-card pf-info">
+              <header class="pf-card-topo">
+                <h3 class="pf-titulo">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg>
+                  Informações Pessoais
+                </h3>
+                <button type="button" class="pf-editar" id="btn-editar-perfil">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 00-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>
+                  Editar
+                </button>
+              </header>
+              <dl class="pf-linhas">
+                <div>
+                  <dt><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>Nome completo</dt>
+                  <dd id="perfil-nome-completo">—</dd>
+                </div>
+                <div>
+                  <dt><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>E-mail</dt>
+                  <dd id="perfil-email">—</dd>
+                </div>
+                <div>
+                  <dt><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l5 5v13H6z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>Documento</dt>
+                  <dd id="perfil-documento">—</dd>
+                </div>
+                <div>
+                  <dt><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Data de cadastro</dt>
+                  <dd id="perfil-desde">—</dd>
+                </div>
+              </dl>
             </article>
-            <article class="app-card resumo-card">
-              <h3>Conquistas desbloqueadas <span class="resumo-n" id="perfil-n-conq">0</span></h3>
-              <ul class="resumo-lista" id="perfil-conquistas"></ul>
+
+            <!-- Seu progresso (resumo) -->
+            <article class="app-card pf-card pf-prog">
+              <header class="pf-card-topo">
+                <h3 class="pf-titulo">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-7M12 20V5M19 20v-10"/></svg>
+                  Seu Progresso
+                </h3>
+                <a href="#progresso" class="pf-link">Ver detalhes <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </header>
+              <p class="pf-pct"><span id="perfil-pct">0</span>%</p>
+              <p class="pf-pct-rotulo">de conclusão no curso</p>
+              <div class="app-barra pf-barra" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Conclusão do curso" id="perfil-barra"><span id="perfil-barra-fill"></span></div>
+
+              <div class="pf-numeros">
+                <div>
+                  <span class="pf-num-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg></span>
+                  <div><strong id="perfil-ex">0</strong><span>Exercícios concluídos</span></div>
+                </div>
+                <div>
+                  <span class="pf-num-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 01-8 0V4z"/><path d="M8 6H5a3 3 0 003 4M16 6h3a3 3 0 01-3 4M12 13v4M9 20h6M10 17h4"/></svg></span>
+                  <div><strong id="perfil-conq-n">0</strong><span>Conquistas</span></div>
+                </div>
+                <div>
+                  <span class="pf-num-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6L3.3 9.3l6.1-.7L12 3z"/></svg></span>
+                  <div><strong id="perfil-pontos">0</strong><span>Pontos</span></div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Suas conquistas -->
+            <article class="app-card pf-card pf-conq">
+              <header class="pf-card-topo">
+                <h3 class="pf-titulo">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6L3.3 9.3l6.1-.7L12 3z"/></svg>
+                  Suas Conquistas
+                </h3>
+                <button type="button" class="pf-link" data-em-breve="A lista completa de conquistas">Ver todas <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+              </header>
+              <ul class="medalhas" id="perfil-conquistas"></ul>
+            </article>
+
+            <!-- Atividade recente -->
+            <article class="app-card pf-card pf-ativ">
+              <header class="pf-card-topo">
+                <h3 class="pf-titulo">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                  Atividade Recente
+                </h3>
+              </header>
+              <ul class="linha-tempo" id="perfil-atividades"></ul>
             </article>
           </div>
         </section>
 
-        <!-- ---------- VIEW: MEU PROGRESSO ---------- -->
+        <!-- ---------- VIEW: PROGRESSO ---------- -->
         <section class="app-view" id="view-progresso" data-view="progresso" hidden>
           <div class="app-hero">
-            <h1>Meu Progresso</h1>
-            <p>Acompanhe como você está evoluindo na plataforma.</p>
+            <h1>Progresso</h1>
+            <p>Acompanhe sua evolução na plataforma.</p>
             <span class="app-hero-traco" aria-hidden="true"></span>
           </div>
 
-          <div class="prog-numeros">
-            <article class="app-card prog-num"><span class="prog-num-valor" id="prog-exercicios">0</span><span>Exercícios resolvidos</span></article>
-            <article class="app-card prog-num"><span class="prog-num-valor" id="prog-concluidos">0</span><span>Cursos concluídos</span></article>
-            <article class="app-card prog-num"><span class="prog-num-valor" id="prog-andamento">0</span><span>Cursos em andamento</span></article>
-            <article class="app-card prog-num"><span class="prog-num-valor" id="prog-skills">0</span><span>Habilidades desenvolvidas</span></article>
+          <div class="pg-stats">
+            <article class="app-card pg-stat">
+              <span class="pg-stat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 01-8 0V4z"/><path d="M8 6H5a3 3 0 003 4M16 6h3a3 3 0 01-3 4M12 13v4M9 20h6M10 17h4"/></svg></span>
+              <div><strong id="prog-exercicios">0</strong><span>Exercícios concluídos</span></div>
+            </article>
+            <article class="app-card pg-stat">
+              <span class="pg-stat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6L3.3 9.3l6.1-.7L12 3z"/></svg></span>
+              <div><strong id="prog-pontos">0</strong><span>Pontos totais</span></div>
+            </article>
+            <article class="app-card pg-stat">
+              <span class="pg-stat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="15" r="5"/><path d="M8.6 11.3L6 3h4l2 5 2-5h4l-2.6 8.3"/></svg></span>
+              <div><strong id="prog-conquistas">0</strong><span>Conquistas</span></div>
+            </article>
+            <article class="app-card pg-stat">
+              <span class="pg-stat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-7M12 20V5M19 20v-10"/></svg></span>
+              <div><strong><span id="prog-pct">0</span>%</strong><span>de conclusão do curso</span></div>
+            </article>
           </div>
 
-          <h2 class="app-titulo-secao">Evolução</h2>
-          <article class="app-card grafico-card">
-            <div class="grafico-topo">
-              <div>
-                <h3>Exercícios resolvidos</h3>
-                <p id="grafico-total"></p>
+          <div class="pg-meio">
+            <article class="app-card pg-card pg-geral">
+              <h3 class="pf-titulo">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-7M12 20V5M19 20v-10"/></svg>
+                Seu progresso geral
+              </h3>
+              <div class="pg-geral-corpo">
+                <div class="anel" role="img" id="prog-anel-box" aria-label="Conclusão do curso">
+                  <svg viewBox="0 0 120 120" aria-hidden="true">
+                    <circle class="anel-fundo" cx="60" cy="60" r="52"/>
+                    <circle class="anel-fill" id="prog-anel" cx="60" cy="60" r="52" pathLength="100"/>
+                  </svg>
+                  <div class="anel-centro"><strong><span id="prog-anel-pct">0</span>%</strong><span>Concluído</span></div>
+                </div>
+                <div class="pg-geral-texto">
+                  <h4>Você já concluiu <span id="prog-pct-texto">0</span>% do seu curso!</h4>
+                  <p>Continue estudando para alcançar seus objetivos.</p>
+                  <p class="pg-incentivo">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3 2 5 5 5 9l-2 3H9l-2-3c0-4 2-7 5-9z"/><circle cx="12" cy="10" r="1.6"/><path d="M9 15l-2 4 3-1M15 15l2 4-3-1"/></svg>
+                    <span id="prog-incentivo">Você está indo muito bem!</span>
+                  </p>
+                </div>
               </div>
-              <div class="seg" role="group" aria-label="Período do gráfico">
-                <button type="button" class="seg-btn is-ativo" data-periodo="7" aria-pressed="true">7 dias</button>
-                <button type="button" class="seg-btn" data-periodo="30" aria-pressed="false">30 dias</button>
-              </div>
-            </div>
-            <div class="grafico" id="grafico" role="img" aria-label="Gráfico de exercícios resolvidos"></div>
-          </article>
+            </article>
 
-          <div class="prog-colunas">
-            <div>
-              <h2 class="app-titulo-secao">Habilidades</h2>
-              <article class="app-card prog-lista-card">
-                <ul class="skills" id="skills"></ul>
-              </article>
-            </div>
-            <div>
-              <h2 class="app-titulo-secao">Cursos</h2>
-              <article class="app-card prog-lista-card">
-                <ul class="cursos-prog" id="cursos-prog"></ul>
-              </article>
-            </div>
+            <article class="app-card pg-card pg-desemp">
+              <h3 class="pf-titulo">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>
+                Seu desempenho ao longo do tempo
+              </h3>
+              <div class="pg-chart" id="grafico" role="img" aria-label="Gráfico de desempenho por semana"></div>
+            </article>
           </div>
 
-          <h2 class="app-titulo-secao">Últimas atividades</h2>
-          <article class="app-card prog-lista-card">
-            <ul class="historico" id="historico"></ul>
-          </article>
+          <div class="pg-base">
+            <article class="app-card pf-card">
+              <header class="pf-card-topo">
+                <h3 class="pf-titulo">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6L3.3 9.3l6.1-.7L12 3z"/></svg>
+                  Suas conquistas
+                </h3>
+                <button type="button" class="pf-link" data-em-breve="A lista completa de conquistas">Ver todas <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+              </header>
+              <ul class="medalhas medalhas--5" id="prog-medalhas"></ul>
+            </article>
+
+            <article class="app-card pf-card">
+              <header class="pf-card-topo">
+                <h3 class="pf-titulo">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                  Atividade recente
+                </h3>
+                <button type="button" class="pf-link" data-em-breve="O histórico completo de atividades">Ver todas <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+              </header>
+              <ul class="linha-tempo" id="prog-atividades"></ul>
+            </article>
+          </div>
         </section>
 
         <!-- ---------- VIEW: AJUSTES ---------- -->

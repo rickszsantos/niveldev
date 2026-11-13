@@ -118,10 +118,8 @@
     ajustes: 'Ajustes'
   };
 
-  // telas liberadas (as outras mostram "em desenvolvimento").
-  // Meu Perfil e Meu Progresso estão prontos no código, mas escondidos por enquanto:
-  // para liberar de novo, é só acrescentar 'perfil' e 'progresso' nesta lista.
-  const TELAS_PRONTAS = ['inicio', 'ajustes'];
+  // telas liberadas (as outras mostram "em desenvolvimento")
+  const TELAS_PRONTAS = ['inicio', 'perfil', 'progresso', 'ajustes'];
 
   function irPara() {
     const nome = window.location.hash.replace('#', '');

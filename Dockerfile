@@ -1,18 +1,38 @@
 # syntax=docker/dockerfile:1
 
+
 # ---------- Estágio 1: instala só as dependências de produção ----------
 FROM node:22-alpine AS deps
 WORKDIR /app/backend
 COPY backend/package.json backend/package-lock.json ./
 RUN npm ci --omit=dev
 
+
+
+
+
+
+
+
 # ---------- Estágio 2: imagem final (enxuta) ----------
 # O backend serve o frontend (../../frontend), por isso as duas pastas vão na imagem
 # e o contexto de build é a RAIZ do projeto (não a pasta backend).
 FROM node:22-alpine
+# Instala o cliente Docker (não instala outro Docker Engine)
+RUN apk add --no-cache docker-cli
 ENV NODE_ENV=production
 WORKDIR /app/backend
+# Prepara a pasta temporária para o usuário node
+RUN mkdir -p /app/backend/temp/execucoes \
+    && chown -R node:node /app/backend/temp
 
+
+
+
+
+
+
+    
 COPY --from=deps /app/backend/node_modules ./node_modules
 COPY backend/package.json ./
 COPY backend/src ./src

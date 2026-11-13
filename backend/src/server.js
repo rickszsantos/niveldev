@@ -1,8 +1,8 @@
 require('dotenv').config({ quiet: true }); // precisa vir antes de qualquer require que leia process.env
 
 const app = require('./app');
-const pool = require('./shared/database/pool');
-const { migrate } = require('./shared/database/migrate');
+const pool = require('./compartilhado/banco-de-dados/conexao');
+const { migrar } = require('./compartilhado/banco-de-dados/migrar');
 
 const PORT = process.env.PORT || 5050;
 
@@ -15,7 +15,7 @@ if (faltando.length > 0) {
 }
 
 async function start() {
-    await migrate();
+    await migrar();
 
     const server = app.listen(PORT, () => {
         console.log(`Server rodando na porta ${PORT}`);

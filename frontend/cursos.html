@@ -32,70 +32,61 @@
 
         <div class="app-hero">
           <h1>Cursos</h1>
-          <p>Aprenda no seu ritmo e evolua em programação.</p>
+          <p>Aprenda no seu ritmo e evolua na programação.</p>
           <span class="app-hero-traco" aria-hidden="true"></span>
         </div>
 
-        <!-- Destaque. O mascote é opcional: se existir o arquivo img/mascote.png (PNG com fundo
-             transparente), ele aparece sozinho do lado direito; se não existir, nada quebra. -->
+        <!-- Banner -->
         <section class="cr-banner" aria-labelledby="cr-banner-titulo">
           <div class="cr-banner-texto">
-            <h2 id="cr-banner-titulo">Evolua suas habilidades em <span>programação</span>!</h2>
-            <p>Descubra novos cursos e leve seus conhecimentos para o próximo nível.</p>
-            <a href="#cr-lista-titulo" class="cr-banner-btn">
-              Explorar cursos
+            <h2 id="cr-banner-titulo">Seu próximo nível<br>começa aqui!</h2>
+            <p>Explore nossos cursos e desenvolva suas habilidades em programação.</p>
+          </div>
+
+          <svg class="cr-banner-arte" viewBox="0 0 420 230" aria-hidden="true" focusable="false">
+            <path class="arte-morro" d="M20 214c46-58 126-40 196-66s96-36 170-6v88H20z"/>
+            <path class="arte-faisca" d="M338 22l8 22M360 34l16 14M370 62l24-6"/>
+            <g class="arte-livros">
+              <rect x="300" y="92" width="104" height="20" rx="5" class="l1"/><rect x="312" y="97" width="84" height="6" rx="2" class="pg"/>
+              <rect x="296" y="116" width="108" height="20" rx="5" class="l2"/><rect x="310" y="121" width="86" height="6" rx="2" class="pg"/>
+              <rect x="304" y="140" width="100" height="20" rx="5" class="l1"/><rect x="316" y="145" width="80" height="6" rx="2" class="pg"/>
+              <rect x="292" y="164" width="116" height="12" rx="4" class="l3"/>
+            </g>
+            <path class="arte-tela" d="M96 60L276 36l16 124-180 24z"/>
+            <path class="arte-base" d="M108 184l180-24 30 14-176 26z"/>
+            <path class="arte-codigo" d="M170 100l-20 18 20 18M224 92l20 18-20 18M206 86l-14 52" transform="rotate(-4 197 112)"/>
+          </svg>
+        </section>
+
+        <!-- Cursos em destaque -->
+        <section aria-labelledby="cr-dest-titulo">
+          <div class="cr-sec-topo">
+            <h2 class="cr-sec-titulo" id="cr-dest-titulo">
+              <svg class="cr-sec-estrela" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.8 6 6.5.8-4.8 4.5 1.3 6.5L12 17.4l-5.8 3.2 1.3-6.5L2.7 9.6l6.5-.8L12 2.8z"/></svg>
+              Cursos em Destaque
+            </h2>
+            <a href="#cr-mais-titulo" class="cr-ver-todos">
+              Ver todos
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
           </div>
-
-          <svg class="cr-banner-codigo" viewBox="0 0 160 80" aria-hidden="true" focusable="false">
-            <path d="M44 14L12 40l32 26"/>
-            <path d="M116 14l32 26-32 26"/>
-            <path d="M92 8L68 72"/>
-          </svg>
-
-          <img class="cr-banner-mascote" src="img/mascote.png" alt="" hidden
-               onload="this.hidden = false" onerror="this.remove()">
+          <ul class="cr-grade" id="cr-destaque"></ul>
         </section>
 
-        <!-- Busca e filtros -->
-        <div class="cr-filtros" role="search">
-          <label class="cr-busca">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
-            <input type="search" id="cr-busca" placeholder="Pesquisar por cursos..." autocomplete="off" aria-label="Pesquisar por cursos">
-          </label>
-
-          <label class="cr-select">
-            <svg class="cr-select-icone" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg>
-            <select id="cr-categoria" aria-label="Filtrar por categoria"></select>
-            <svg class="cr-select-seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-          </label>
-
-          <label class="cr-select">
-            <svg class="cr-select-icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-5M12 20V10M19 20V4"/></svg>
-            <select id="cr-nivel" aria-label="Filtrar por nível"></select>
-            <svg class="cr-select-seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-          </label>
-        </div>
-
-        <div class="cr-secao">
-          <h2 class="cr-secao-titulo" id="cr-lista-titulo" tabindex="-1">Explore nossos cursos</h2>
-          <p>Encontre o curso ideal para você.</p>
-        </div>
-
-        <ul class="cr-lista" id="cr-lista" aria-live="polite"></ul>
-
-        <div class="estado-vazio" id="cr-vazio" hidden>
-          <span class="estado-vazio-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4M8.5 11h5"/></svg></span>
-          <strong>Nenhum curso encontrado</strong>
-          <p>Tente buscar por outro termo, como “python” ou “web”, ou limpe os filtros.</p>
-          <button type="button" class="cr-limpar" id="cr-limpar">Limpar filtros</button>
-        </div>
-
-        <footer class="cr-rodape" id="cr-rodape">
-          <nav class="cr-paginacao" id="cr-paginacao" aria-label="Paginação"></nav>
-          <span class="cr-contador" id="cr-contador"></span>
-        </footer>
+        <!-- Mais cursos -->
+        <section aria-labelledby="cr-mais-titulo">
+          <div class="cr-sec-topo">
+            <h2 class="cr-sec-titulo" id="cr-mais-titulo" tabindex="-1">
+              <svg class="cr-sec-grade" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7.5" height="7.5" rx="2.2"/><rect x="13" y="3.5" width="7.5" height="7.5" rx="2.2"/><rect x="3.5" y="13" width="7.5" height="7.5" rx="2.2"/><rect x="13" y="13" width="7.5" height="7.5" rx="2.2"/></svg>
+              Mais Cursos
+            </h2>
+            <label class="cr-ordem">
+              <select id="cr-ordem" aria-label="Ordenar cursos"></select>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </label>
+          </div>
+          <ul class="cr-grade" id="cr-mais" aria-live="polite"></ul>
+        </section>
 
       </main>
     </div>

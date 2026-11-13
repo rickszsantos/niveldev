@@ -36,17 +36,11 @@
 button.app-btn { border: 0; font-family: inherit; cursor: pointer; }
 
 /* ============================================================
-   MEU PERFIL
+   Peças compartilhadas
+   (as telas Perfil e Progresso agora ficam em css/perfil-progresso.css)
    ============================================================ */
 
-.perfil-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 26px;
-  margin-top: 28px;
-  padding: 28px;
-}
-
+/* avatar redondo do diálogo "Editar perfil" */
 .perfil-avatar {
   width: 108px;
   height: 108px;
@@ -58,147 +52,11 @@ button.app-btn { border: 0; font-family: inherit; cursor: pointer; }
   place-items: center;
   font: 700 36px 'Space Grotesk', system-ui, sans-serif;
   letter-spacing: .02em;
-  box-shadow: 0 0 0 4px var(--card), 0 0 0 6px var(--brand-tint-hover);
 }
 
-.perfil-avatar--p { width: 72px; height: 72px; font-size: 24px; box-shadow: none; }
+.perfil-avatar--p { width: 72px; height: 72px; font-size: 24px; }
 
-.perfil-dados { flex: 1; min-width: 0; }
-
-.perfil-dados h2 { font-size: 26px; font-weight: 700; letter-spacing: -.01em; color: var(--title); line-height: 1.15; overflow-wrap: anywhere; }
-.perfil-user { margin-top: 2px; font-size: 15px; color: var(--brand-text); font-weight: 500; }
-
-.perfil-bio {
-  max-width: 62ch;
-  margin-top: 12px;
-  font-size: 15px;
-  color: var(--ink);
-  overflow-wrap: anywhere;
-}
-
-.perfil-bio.is-vazia { color: var(--ink-faint); font-style: italic; }
-
-.perfil-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px 36px;
-  margin: 20px 0 0;
-  padding-top: 18px;
-  border-top: 1px solid var(--line);
-}
-
-.perfil-meta dt { font-size: 12.5px; color: var(--ink-faint); }
-.perfil-meta dd { margin: 2px 0 0; font-size: 14.5px; font-weight: 500; color: var(--ink); overflow-wrap: anywhere; }
-
-.perfil-resumo {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
-}
-
-.resumo-card { padding: 22px 24px; }
-
-.resumo-card h3 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--title);
-}
-
-.resumo-n {
-  min-width: 26px;
-  padding: 1px 9px;
-  border-radius: 999px;
-  background: var(--brand-tint);
-  color: var(--brand-text);
-  font: 600 13px 'IBM Plex Sans', system-ui, sans-serif;
-  text-align: center;
-}
-
-.resumo-lista { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
-
-.resumo-lista li { display: flex; align-items: center; gap: 12px; font-size: 14.5px; color: var(--ink); }
-.resumo-lista li small { display: block; font-size: 12.5px; color: var(--ink-soft); }
-
-.resumo-icone {
-  width: 36px;
-  height: 36px;
-  flex: none;
-  border-radius: 10px;
-  background: var(--brand-tint);
-  color: var(--brand-text);
-  display: grid;
-  place-items: center;
-}
-
-.resumo-icone svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.resumo-vazio { font-size: 14px; color: var(--ink-faint); }
-
-/* ============================================================
-   MEU PROGRESSO
-   ============================================================ */
-
-.prog-numeros {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: 28px;
-}
-
-.prog-num { padding: 18px 20px; display: flex; flex-direction: column; gap: 2px; }
-.prog-num-valor { font: 700 32px/1.1 'Space Grotesk', system-ui, sans-serif; color: var(--title); letter-spacing: -.02em; }
-.prog-num > span:last-child { font-size: 13.5px; color: var(--ink-soft); }
-
-.prog-colunas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; }
-.prog-lista-card { padding: 8px 22px; }
-
-/* gráfico de barras */
-.grafico-card { padding: 22px 24px 18px; }
-.grafico-topo { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-.grafico-topo h3 { font-size: 16px; font-weight: 600; color: var(--title); }
-.grafico-topo p { margin-top: 2px; font-size: 13.5px; color: var(--ink-soft); }
-
-.grafico {
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  gap: clamp(8px, 2.4vw, 26px);
-  height: 190px;
-  margin-top: 20px;
-  padding: 0 4px 26px;
-  background: repeating-linear-gradient(to top, var(--line) 0 1px, transparent 1px 41px);
-  background-size: 100% calc(100% - 26px);
-  background-repeat: no-repeat;
-}
-
-.barra { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; position: relative; }
-
-.barra-valor {
-  width: min(100%, 44px);
-  min-height: 3px;
-  border-radius: 8px 8px 3px 3px;
-  background: linear-gradient(to top, var(--brand), var(--brand-bright));
-  height: 0;
-  transition: height .7s cubic-bezier(.2, .8, .2, 1);
-}
-
-.barra.is-zero .barra-valor { background: var(--surface); }
-
-.barra-n {
-  position: absolute;
-  bottom: calc(var(--h, 0%) + 4px);
-  transition: bottom .7s cubic-bezier(.2, .8, .2, 1);
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--ink);
-}
-
-.barra-rotulo { position: absolute; bottom: -24px; font-size: 12.5px; color: var(--ink-soft); white-space: nowrap; }
-.barra.is-hoje .barra-rotulo { color: var(--brand-text); font-weight: 600; }
-
-/* alternador (7 dias / 30 dias, público / privado) */
+/* alternador (público / privado) */
 .seg { display: inline-flex; padding: 3px; gap: 2px; border-radius: 10px; background: var(--surface); }
 .seg--largo { display: flex; width: 100%; max-width: 360px; }
 
@@ -219,29 +77,6 @@ button.app-btn { border: 0; font-family: inherit; cursor: pointer; }
 .seg-btn.is-ativo,
 .seg-btn[aria-checked="true"] { background: var(--card); color: var(--brand-text); box-shadow: 0 1px 3px rgba(18, 19, 26, .14); font-weight: 600; }
 .seg-btn:focus-visible { outline: 3px solid var(--brand-bright); outline-offset: 1px; }
-
-/* habilidades */
-.skills, .cursos-prog, .historico { list-style: none; margin: 0; padding: 0; }
-.skills li, .cursos-prog li, .historico li { padding: 14px 0; border-bottom: 1px solid var(--line); }
-.skills li:last-child, .cursos-prog li:last-child, .historico li:last-child { border-bottom: 0; }
-
-.linha-topo { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
-.linha-topo strong { font-size: 14.5px; font-weight: 600; color: var(--ink); }
-.linha-topo span { font-size: 13px; color: var(--ink-soft); }
-
-.nivel-tag { padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
-.nivel-tag--iniciante     { background: var(--warn-bg);   color: var(--warn); }
-.nivel-tag--intermediario { background: var(--brand-tint); color: var(--brand-text); }
-.nivel-tag--avancado      { background: var(--ok-bg);     color: var(--ok); }
-
-.prog-lista-card .app-barra { height: 7px; }
-
-/* histórico */
-.historico li { display: flex; align-items: center; gap: 14px; }
-.historico .resumo-icone { width: 38px; height: 38px; }
-.historico strong { display: block; font-size: 14.5px; font-weight: 500; color: var(--ink); }
-.historico small { font-size: 12.5px; color: var(--ink-faint); }
-.historico .xp { margin-left: auto; flex: none; font-size: 13px; font-weight: 600; color: var(--brand-text); }
 
 /* ============================================================
    AJUSTES
@@ -510,17 +345,11 @@ button.app-btn { border: 0; font-family: inherit; cursor: pointer; }
 
 /* ---------- Telas pequenas ---------- */
 
-@media (max-width: 960px) {
-  .prog-numeros { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .prog-colunas, .perfil-resumo { grid-template-columns: minmax(0, 1fr); }
-}
-
 @media (max-width: 640px) {
-  .perfil-card { flex-direction: column; align-items: stretch; padding: 22px; }
   .temas { grid-template-columns: 1fr 1fr; }
   .ajuste-lista > li.ajuste-linha { flex-wrap: wrap; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .barra-valor, .chave, .chave::after { transition: none; }
+  .chave, .chave::after { transition: none; }
 }

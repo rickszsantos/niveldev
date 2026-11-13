@@ -8,42 +8,28 @@
    Depende de js/auth.js, js/ui.js e js/layout.js.
    ============================================================ */
 
-(function () {
-  /* ---------- DADOS ----------
-     ATENÇÃO: ainda não existe API de exercícios no back-end,
-     então estes exercícios são EXEMPLOS. Quando a rota existir,
-     troque este array pelo retorno da API (mesmos campos).
-     dificuldade: de 1 a 10 */
-  const exercicios = [
-    { id: 1,  titulo: 'Soma de Dois Números',      desc: 'Leia dois números e mostre a soma deles.',              dificuldade: 1,  categoria: 'iniciante',  linguagem: 'python' },
-    { id: 2,  titulo: 'Par ou Ímpar',              desc: 'Informe se um número digitado é par ou ímpar.',         dificuldade: 1,  categoria: 'iniciante',  linguagem: 'python' },
-    { id: 3,  titulo: 'Maior de Três Números',     desc: 'Descubra qual é o maior entre três números.',           dificuldade: 2,  categoria: 'iniciante',  linguagem: 'python' },
-    { id: 4,  titulo: 'Média de Notas',            desc: 'Calcule a média de quatro notas e diga se foi aprovado.', dificuldade: 2, categoria: 'iniciante',  linguagem: 'python' },
-    { id: 5,  titulo: 'Tabuada',                   desc: 'Mostre a tabuada de 1 a 10 de um número informado.',    dificuldade: 2,  categoria: 'iniciante',  linguagem: 'python' },
-    { id: 6,  titulo: 'Conversor de Temperatura',  desc: 'Converta graus Celsius para Fahrenheit.',               dificuldade: 2,  categoria: 'python',     linguagem: 'python' },
-    { id: 7,  titulo: 'Calculadora Simples',       desc: 'Faça as quatro operações com dois números.',            dificuldade: 3,  categoria: 'python',     linguagem: 'python' },
-    { id: 8,  titulo: 'Contagem de Vogais',        desc: 'Conte quantas vogais existem em uma frase.',            dificuldade: 3,  categoria: 'strings',    linguagem: 'python' },
-    { id: 9,  titulo: 'Inverter uma Palavra',      desc: 'Mostre uma palavra escrita de trás para frente.',       dificuldade: 3,  categoria: 'strings',    linguagem: 'python' },
-    { id: 10, titulo: 'Contar Palavras',           desc: 'Conte quantas palavras existem em um texto.',           dificuldade: 3,  categoria: 'strings',    linguagem: 'python' },
-    { id: 11, titulo: 'Maior Elemento da Lista',   desc: 'Encontre o maior número de uma lista sem usar max().',  dificuldade: 3,  categoria: 'estruturas', linguagem: 'python' },
-    { id: 12, titulo: 'Fatorial',                  desc: 'Calcule o fatorial de um número informado.',            dificuldade: 4,  categoria: 'logica',     linguagem: 'python' },
-    { id: 13, titulo: 'Palíndromo',                desc: 'Verifique se uma palavra é igual de trás para frente.', dificuldade: 4,  categoria: 'strings',    linguagem: 'python' },
-    { id: 14, titulo: 'Remover Duplicados',        desc: 'Remova os itens repetidos de uma lista.',               dificuldade: 5,  categoria: 'estruturas', linguagem: 'python' },
-    { id: 15, titulo: 'Ordenar Lista',             desc: 'Ordene uma lista de números sem usar sort().',          dificuldade: 6,  categoria: 'estruturas', linguagem: 'python' },
-    { id: 16, titulo: 'Verificar Número Primo',    desc: 'Verifique se um número é primo.',                       dificuldade: 7,  categoria: 'logica',     linguagem: 'python' },
-    { id: 17, titulo: 'Primos até N',              desc: 'Mostre todos os números primos até um limite.',         dificuldade: 8,  categoria: 'logica',     linguagem: 'python' },
-    { id: 18, titulo: 'Sequência de Fibonacci',    desc: 'Mostre os N primeiros números da sequência.',           dificuldade: 9,  categoria: 'logica',     linguagem: 'python' },
-  ];
+(async function () {
+  /* ---------- DADOS (vêm da API: GET /exercises) ----------
+     A API ainda não tem categoria nem resumo; por isso a lista é única
+     e sem descrição. Quando existirem, basta preencher aqui. */
+  let exercicios = [];
+  try {
+    const { exercises } = await NivelDevAuth.api.listarExercicios('?limite=100');
+    exercicios = exercises.map((e) => ({
+      id: e.id, titulo: e.titulo, desc: '', dificuldade: e.dificuldade, categoria: '', linguagem: 'python',
+    }));
+  } catch (erro) {
+    if (erro.status === 401) {
+      NivelDevAuth.logout();
+      window.location.replace('login.html');
+      return;
+    }
+    NivelDevUI.toast(erro.message, 'erro');
+  }
 
-  // nomes das categorias (os mesmos ids da tela de Exercícios)
-  const NOMES_CATEGORIA = {
-    iniciante: 'Iniciante',
-    python: 'Python',
-    strings: 'Strings',
-    estruturas: 'Estruturas de Dados',
-    logica: 'Lógica',
-    outros: 'Outros',
-  };
+  // escapa o texto antes de montar HTML (os títulos vêm do banco, escritos por professores)
+  const esc = (s) => String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
   const SETA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 
@@ -57,17 +43,8 @@
   const busca = $('cat-busca');
 
   /* ---------- CATEGORIA DA URL ---------- */
-  const categoriaId = new URLSearchParams(window.location.search).get('id');
-  const nomeCategoria = NOMES_CATEGORIA[categoriaId];
-
-  if (nomeCategoria) {
-    $('cat-titulo').textContent = nomeCategoria;
-    document.title = nomeCategoria + ' — Exercícios — NívelDev';
-  }
-
-  const daCategoria = nomeCategoria
-    ? exercicios.filter((e) => e.categoria === categoriaId)
-    : exercicios;
+  // Sem categoria na API por enquanto: mostramos todos os exercícios.
+  const daCategoria = exercicios;
 
   /* ---------- RENDERIZAÇÃO ---------- */
 
@@ -96,8 +73,8 @@
       <li style="--i:${Math.min(i, 12)}">
         <article class="cat-linha">
           <div>
-            <h3>${e.titulo}</h3>
-            <p>${e.desc}</p>
+            <h3>${esc(e.titulo)}</h3>
+            ${e.desc ? `<p>${esc(e.desc)}</p>` : ''}
           </div>
           <div class="cat-dif cat-dif--${n.classe}" aria-label="Dificuldade ${n.texto}, ${e.dificuldade} de 10">
             <span class="cat-barras" aria-hidden="true">${barras(e.dificuldade)}</span>
