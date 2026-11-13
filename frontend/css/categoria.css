@@ -10,7 +10,6 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 18px;
   color: var(--brand-text);
   font-size: 15px;
   font-weight: 600;
@@ -38,19 +37,14 @@
 
 /* ---------- Cabeçalho da página ---------- */
 
-.cat-head {
+/* linha de cima: Voltar (esquerda) e pesquisa (direita) */
+.cat-topo {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 24px;
+  align-items: center;
+  gap: 16px;
   flex-wrap: wrap;
-}
-
-.cat-filtros {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-top: 8px;
+  margin-bottom: 24px;
 }
 
 .cat-search {
@@ -106,7 +100,7 @@
 .cat-cabecalho,
 .cat-linha {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 190px 150px;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 20px;
   padding-inline: 24px;
@@ -124,6 +118,8 @@
   color: var(--title);
 }
 
+.cat-cabecalho span:last-child { text-align: right; }
+
 .cat-lista {
   list-style: none;
   margin: 0;
@@ -131,6 +127,7 @@
 }
 
 .cat-linha {
+  cursor: pointer;
   padding-block: 18px;
   border-bottom: 1px solid var(--line);
   transition: background .15s;
@@ -142,6 +139,11 @@
 
 .cat-linha:hover {
   background: var(--surface-soft);
+}
+
+.cat-linha:focus-visible {
+  outline: 3px solid var(--brand-bright);
+  outline-offset: -3px;
 }
 
 /* as linhas entram subindo, uma depois da outra (--i vem do categoria.js) */
@@ -163,12 +165,13 @@
   color: var(--ink-soft);
 }
 
-/* ---------- Dificuldade (4 barrinhas + nota) ---------- */
+/* ---------- Dificuldade (3 degraus + nota de 1 a 10) ---------- */
 
 .cat-dif {
   display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: flex-end;
+  gap: 14px;
 }
 
 .cat-barras {
@@ -179,17 +182,16 @@
 
 .cat-barra {
   position: relative;
-  width: 14px;
+  width: 16px;
   border-radius: 3px;
   background: var(--brand-tint);
   overflow: hidden;
 }
 
-/* barrinhas em "escada", como um sinal de dificuldade */
+/* 3 degraus, como na logo */
 .cat-barra:nth-child(1) { height: 10px; }
-.cat-barra:nth-child(2) { height: 13px; }
-.cat-barra:nth-child(3) { height: 16px; }
-.cat-barra:nth-child(4) { height: 19px; }
+.cat-barra:nth-child(2) { height: 16px; }
+.cat-barra:nth-child(3) { height: 22px; }
 
 .cat-barra span {
   position: absolute;
@@ -197,53 +199,14 @@
   background: var(--brand);
 }
 
-/* a cor das barrinhas acompanha o nível */
-.cat-dif--facil   .cat-barra span { background: var(--ok); }
-.cat-dif--medio   .cat-barra span { background: #e8a317; }
-.cat-dif--dificil .cat-barra span { background: #e5484d; }
+/* degraus acesos e nota na mesma cor do título do exercício */
+.cat-barra span { background: var(--title); }
 
-.cat-dif .app-tag { min-width: 64px; text-align: center; }
-
-/* ---------- Botão Resolver ---------- */
-
-.cat-resolver {
-  justify-self: end;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  border-radius: 999px;
-  border: 1.5px solid var(--brand);
-  color: var(--brand-text);
-  font-size: 15px;
-  font-weight: 600;
-  white-space: nowrap;
-  transition: background .15s, color .15s;
-}
-
-.cat-resolver svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: transform .15s;
-}
-
-.cat-resolver:hover {
-  background: var(--brand);
-  color: #fff;
-}
-
-.cat-resolver:hover svg {
-  transform: translateX(3px);
-}
-
-.cat-resolver:focus-visible {
-  outline: 3px solid var(--brand-bright);
-  outline-offset: 2px;
+.cat-nota {
+  min-width: 22px;
+  text-align: right;
+  font: 600 16.5px 'Space Grotesk', system-ui, sans-serif;
+  color: var(--title);
 }
 
 .cat-contador {
@@ -256,7 +219,6 @@
 /* ---------- Responsivo ---------- */
 
 @media (max-width: 760px) {
-  .cat-filtros,
   .cat-search {
     width: 100%;
   }
@@ -265,15 +227,9 @@
     display: none;
   }
 
-  /* no celular: título em cima, dificuldade e botão embaixo */
   .cat-linha {
-    grid-template-columns: 1fr auto;
     padding-inline: 18px;
     gap: 12px 16px;
-  }
-
-  .cat-linha > div:first-child {
-    grid-column: 1 / -1;
   }
 
   .cat-contador {
@@ -283,8 +239,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .cat-linha,
-  .cat-resolver,
-  .cat-resolver svg {
+  .cat-voltar svg {
     transition: none;
   }
 }

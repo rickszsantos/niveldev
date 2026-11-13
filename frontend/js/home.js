@@ -144,6 +144,16 @@
     $('view-dev').hidden = !emDev;
     if (emDev) $('dev-titulo').textContent = TITULOS[tela] + ' — em desenvolvimento';
     document.title = TITULOS[tela] + ' — NívelDev';
+
+    // Perfil, Progresso e Ajustes: título e subtítulo vão para o topo.
+    // O Início mantém o "Olá, nome" no corpo e o topo sem título.
+    const hero = tela === 'inicio' || emDev ? null : $('view-' + tela).querySelector('.app-hero');
+    if (hero) {
+      NivelDevLayout.titulo(hero.querySelector('h1').textContent.trim(), (hero.querySelector('p') || {}).textContent);
+      hero.hidden = true;
+    } else {
+      NivelDevLayout.titulo('');
+    }
     window.scrollTo(0, 0);
   }
 

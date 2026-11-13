@@ -337,14 +337,54 @@ html.pronto .app-card {
   height: var(--topbar-h);
   background: var(--card);
   border-bottom: 1px solid var(--line);
-  display: flex;
+  /* 3 colunas: o título fica no centro exato do topo, as ações à direita */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: flex-end;
   gap: 24px;
   padding-inline: 32px;
   position: sticky;
   top: 0;
   z-index: 10;
+}
+
+.app-topo-titulo {
+  grid-column: 2;
+  max-width: min(460px, 100%);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.app-topo-titulo[hidden] { display: none; }
+
+.app-topo-titulo h1 {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--title);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-topo-titulo p {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-topo-titulo p[hidden] { display: none; }
+
+/* com a busca aberta o campo ocupa o espaço: o título some para não colidir */
+@media (max-width: 1280px) {
+  .app-topbar:has(.app-busca.is-aberta) .app-topo-titulo { visibility: hidden; }
+}
+
+@media (max-width: 900px) {
+  .app-topo-titulo p { display: none; }
 }
 
 /* busca: só o ícone; ao clicar o campo desliza para a esquerda */
@@ -393,7 +433,8 @@ html.pronto .app-card {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-left: auto;
+  grid-column: 3;
+  justify-self: end;
 }
 
 /* botões redondos do topo (tema, notificações) */
@@ -584,6 +625,10 @@ html.pronto .app-card {
 }
 
 .app-view[hidden] { display: none; }
+
+/* o título subiu para o topo: o primeiro bloco do conteúdo não precisa mais da folga que ficava abaixo dele */
+.app-content > :first-child,
+.app-view > .app-hero[hidden] + * { margin-top: 0; }
 
 @media (max-width: 1280px) {
   .app-content { padding-inline: 32px; }

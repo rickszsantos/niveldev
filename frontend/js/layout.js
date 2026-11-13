@@ -97,6 +97,12 @@
   // As notificações abaixo são EXEMPLOS. Quando existir uma API, troque por dados reais.
   const htmlTopo = `
     <header class="app-topbar">
+      <!-- título da tela, centralizado (preenchido por NivelDevLayout.titulo) -->
+      <div class="app-topo-titulo" id="app-topo-titulo" hidden>
+        <h1 id="app-topo-h1"></h1>
+        <p id="app-topo-sub"></p>
+      </div>
+
       <div class="app-acoes">
         <!-- busca: só o ícone; ao clicar, o campo abre ao lado -->
         <div class="app-busca" id="app-busca">
@@ -139,6 +145,27 @@
 
   document.querySelector('[data-layout="menu"]').outerHTML = htmlMenu;
   document.querySelector('[data-layout="topo"]').outerHTML = htmlTopo;
+
+  /* ---------- TÍTULO DA TELA NO TOPO ----------
+     Nas telas fora da home, o título e o subtítulo (o "app-hero" do conteúdo)
+     sobem para o centro do topo. Na home, quem controla é o home.js
+     (o Início mantém o "Olá, nome" no corpo da página). */
+  function definirTitulo(titulo, subtitulo) {
+    $('app-topo-h1').textContent = titulo || '';
+    $('app-topo-sub').textContent = subtitulo || '';
+    $('app-topo-sub').hidden = !subtitulo;
+    $('app-topo-titulo').hidden = !titulo;
+  }
+
+  if (!naHome) {
+    const hero = document.querySelector('#app-content .app-hero');
+    if (hero) {
+      const h1 = hero.querySelector('h1');
+      const p = hero.querySelector('p');
+      definirTitulo(h1 && h1.textContent.trim(), p && p.textContent.trim());
+      hero.remove();
+    }
+  }
 
   /* ---------- USUÁRIO ---------- */
   const ouvintes = [];
@@ -270,6 +297,8 @@
       ouvintes.push(fn);
       fn(usuarioAtual);
     },
+    // título/subtítulo centralizados no topo ('' esconde)
+    titulo: definirTitulo,
     // redesenha o avatar do topo (ex.: depois de trocar a foto do perfil)
     atualizarAvatar() { mostrarUsuario(usuarioAtual); },
   };

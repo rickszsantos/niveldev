@@ -31,8 +31,6 @@
   const esc = (s) => String(s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-  const SETA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
-
   /* ---------- ELEMENTOS ---------- */
   const $ = (id) => document.getElementById(id);
   const lista = $('cat-lista');
@@ -48,40 +46,30 @@
 
   /* ---------- RENDERIZAÇÃO ---------- */
 
-  // 4 barrinhas: cada uma vale 2,5 pontos; a última pode ficar parcialmente cheia
+  // 3 degraus (como na logo): 1–3 acende 1, 4–6 acende 2, 7–10 acende os 3
   function barras(dificuldade) {
-    const cheias = (dificuldade / 10) * 4;
+    const acesos = dificuldade <= 3 ? 1 : dificuldade <= 6 ? 2 : 3;
     let html = '';
-    for (let i = 0; i < 4; i++) {
-      const pct = Math.max(0, Math.min(1, cheias - i)) * 100;
-      html += `<span class="cat-barra"><span style="width:${pct}%"></span></span>`;
+    for (let i = 0; i < 3; i++) {
+      html += `<span class="cat-barra"><span style="width:${i < acesos ? 100 : 0}%"></span></span>`;
     }
     return html;
   }
 
-  // 1–3 fácil, 4–6 médio, 7–10 difícil (define a cor das barrinhas e da etiqueta)
-  function nivel(dificuldade) {
-    if (dificuldade <= 3) return { classe: 'facil', texto: 'Fácil' };
-    if (dificuldade <= 6) return { classe: 'medio', texto: 'Médio' };
-    return { classe: 'dificil', texto: 'Difícil' };
-  }
-
   function render(itens) {
     lista.innerHTML = itens.map((e, i) => {
-      const n = nivel(e.dificuldade);
       return `
       <li style="--i:${Math.min(i, 12)}">
-        <article class="cat-linha">
+        <a class="cat-linha" href="resolver.html?id=${e.id}" aria-label="Resolver: ${esc(e.titulo)}, dificuldade ${e.dificuldade} de 10">
           <div>
             <h3>${esc(e.titulo)}</h3>
             ${e.desc ? `<p>${esc(e.desc)}</p>` : ''}
           </div>
-          <div class="cat-dif cat-dif--${n.classe}" aria-label="Dificuldade ${n.texto}, ${e.dificuldade} de 10">
-            <span class="cat-barras" aria-hidden="true">${barras(e.dificuldade)}</span>
-            <span class="app-tag tag-${n.classe}" aria-hidden="true">${n.texto}</span>
+          <div class="cat-dif" aria-hidden="true">
+            <span class="cat-barras">${barras(e.dificuldade)}</span>
+            <span class="cat-nota">${e.dificuldade}</span>
           </div>
-          <a class="cat-resolver" href="resolver.html?id=${e.id}">Resolver ${SETA}</a>
-        </article>
+        </a>
       </li>`;
     }).join('');
 

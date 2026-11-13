@@ -30,7 +30,6 @@
     terminal:'<svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 9l3 3-3 3M12 15h6"/></svg>',
   };
 
-  const ARROW = '<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
   const PREV  = '<svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>';
   const NEXT  = '<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>';
 
@@ -146,7 +145,6 @@
             <span class="ex-qtd">${feitos}/${c.total}</span>
           </div>
         </div>
-        <span class="ex-seta" aria-hidden="true">${ARROW}</span>
       </a>`;
     }).join('');
 
