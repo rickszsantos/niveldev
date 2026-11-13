@@ -10,7 +10,7 @@
 
 .rs-content {
   max-width: 1480px;
-  padding-top: 28px;
+  padding-top: 24px;
   padding-bottom: 32px;
 }
 
@@ -50,7 +50,7 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
   align-items: stretch;
-  height: calc(100vh - var(--topbar-h) - 112px);
+  height: calc(100vh - var(--topbar-h) - 56px);
   min-height: 560px;
 }
 
@@ -82,7 +82,7 @@
   height: 34px;
   padding: 0 8px;
   margin-right: 12px;
-  border-radius: 10px;
+  border-radius: 6px;
   font: 700 17px/1 'Space Grotesk', system-ui, sans-serif;
   vertical-align: 2px;
 }
@@ -155,7 +155,7 @@
 .rs-nota {
   margin-top: 24px;
   padding: 12px 14px;
-  border-radius: 12px;
+  border-radius: 6px;
   border: 1px dashed var(--line, #cdd6ea);
   font-size: 14px;
   line-height: 1.5;
@@ -256,7 +256,7 @@
   min-width: 160px;
   padding: 0 42px 0 16px;
   border: 1px solid var(--code-linha);
-  border-radius: 999px;
+  border-radius: 6px;
   background: rgba(255, 255, 255, .06);
   color: var(--code-texto);
   font: 600 14.5px 'IBM Plex Sans', system-ui, sans-serif;
@@ -301,7 +301,7 @@
   gap: 8px;
   height: 40px;
   padding: 0 18px;
-  border-radius: 999px;
+  border-radius: 6px;
   font-size: 14.5px;
   font-weight: 600;
   color: #fff;
@@ -566,7 +566,7 @@
   align-items: center;
   height: 40px;
   padding: 0 18px;
-  border-radius: 999px;
+  border-radius: 6px;
   background: var(--brand);
   color: #fff;
   font-size: 14.5px;
@@ -647,3 +647,39 @@
   background: transparent;
   font-size: 14px;
 }
+
+
+/* ============================================================
+   AJUSTES: nível em pílula, play no Enviar, lixeira e bordas
+   menos arredondadas
+   ============================================================ */
+
+.rs-nivel-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  margin-top: 10px;
+  padding: 0 12px;
+  border-radius: 6px;
+  background: var(--brand-tint);
+  color: var(--brand-text);
+  font: 600 14.5px 'IBM Plex Sans', system-ui, sans-serif;
+}
+.rs-nivel-pill svg { width: 16px; height: 16px; fill: currentColor; stroke: none; }
+
+.rs-btn svg.rs-play { fill: currentColor; stroke: none; }
+
+.rs-barra--saida .rs-btn-icone { width: 34px; height: 34px; margin-left: 4px; }
+.rs-barra--saida .rs-status { margin-left: auto; }
+
+/* bordas menos redondas */
+.rs-enunciado { border-radius: 6px; }
+.rs-trabalho  { border-radius: 6px; }
+.rs-caixa     { border-radius: 6px; }
+.rs-io-caixa  { border-radius: 6px; }
+.rs-lang select { border-radius: 6px; }
+.rs-btn       { border-radius: 6px; }
+.rs-btn-icone { border-radius: 6px; }
+.rs-proximo   { border-radius: 6px; }
+.rs-nota, .rs-ajuda code { border-radius: 6px; }

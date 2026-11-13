@@ -92,12 +92,10 @@
 
   document.title = exercicio.titulo + ' — Exercícios — NívelDev';
   $('rs-titulo').textContent = exercicio.titulo;
-  // a dificuldade (1 a 10) aparece como número na frente do nome; a cor segue o nível
-  $('rs-nivel').textContent = exercicio.dificuldade;
-  $('rs-nivel').classList.add('nivel-' + nivel.c);
+  // pílula "Nível: N" abaixo do título
+  $('rs-nivel-txt').textContent = 'Nível: ' + exercicio.dificuldade;
   $('rs-nivel').title = 'Dificuldade ' + exercicio.dificuldade + ' de 10 (' + nivel.t + ')';
-  $('rs-nivel').setAttribute('aria-label', 'Dificuldade ' + exercicio.dificuldade + ' de 10, ' + nivel.t);
-  $('rs-voltar').href = 'categoria.html';
+  $('rs-nivel').setAttribute('aria-label', 'Nível ' + exercicio.dificuldade + ' de 10, ' + nivel.t);
 
   $('rs-enunciado').textContent = '';
   exercicio.enunciado.forEach((par) => {
@@ -383,5 +381,6 @@
   }
 
   btnEnviar.addEventListener('click', enviar);
+  $('rs-limpar').addEventListener('click', () => { if (!ocupado) aguardandoEnvio(); });
   aguardandoEnvio();
 })();

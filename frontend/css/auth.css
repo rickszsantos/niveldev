@@ -41,7 +41,7 @@
   --a-font-base: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --a-font-code: "IBM Plex Mono", ui-monospace, Consolas, monospace;
 
-  --a-radius: 10px;
+  --a-radius: 6px;
   --a-transition: .2s ease;
 }
 
@@ -155,7 +155,7 @@ body.auth-page {
   padding: 26px 30px 22px;
   background: var(--a-paper);
   border: 1px solid rgba(255, 255, 255, .12);
-  border-radius: 18px;
+  border-radius: 8px;
   box-shadow: 0 24px 60px rgba(3, 8, 28, .45), 0 2px 6px rgba(3, 8, 28, .2);
   animation: auth-subir .55s cubic-bezier(.2, .8, .2, 1) backwards;
 }
@@ -267,7 +267,7 @@ body.auth-page {
   min-height: 30px;
   padding: 0 10px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   background: transparent;
   color: var(--a-brand-text);
   font-size: .85rem;

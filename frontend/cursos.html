@@ -11,7 +11,7 @@
   <link rel="apple-touch-icon" href="img/favicon-192.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
 
   <script src="js/preferencias.js"></script>
   <link rel="stylesheet" href="css/style.css">
@@ -28,65 +28,38 @@
     <div class="app-main">
       <div data-layout="topo"></div>
 
-      <main class="app-content" id="app-content" tabindex="-1">
+      <main class="app-content cr-content" id="app-content" tabindex="-1">
 
-        <div class="app-hero">
-          <h1>Cursos</h1>
-          <p>Aprenda no seu ritmo e evolua na programação.</p>
-          <span class="app-hero-traco" aria-hidden="true"></span>
-        </div>
-
-        <!-- Banner -->
-        <section class="cr-banner" aria-labelledby="cr-banner-titulo">
-          <div class="cr-banner-texto">
-            <h2 id="cr-banner-titulo">Seu próximo nível<br>começa aqui!</h2>
-            <p>Explore nossos cursos e desenvolva suas habilidades em programação.</p>
-          </div>
-
-          <svg class="cr-banner-arte" viewBox="0 0 420 230" aria-hidden="true" focusable="false">
-            <path class="arte-morro" d="M20 214c46-58 126-40 196-66s96-36 170-6v88H20z"/>
-            <path class="arte-faisca" d="M338 22l8 22M360 34l16 14M370 62l24-6"/>
-            <g class="arte-livros">
-              <rect x="300" y="92" width="104" height="20" rx="5" class="l1"/><rect x="312" y="97" width="84" height="6" rx="2" class="pg"/>
-              <rect x="296" y="116" width="108" height="20" rx="5" class="l2"/><rect x="310" y="121" width="86" height="6" rx="2" class="pg"/>
-              <rect x="304" y="140" width="100" height="20" rx="5" class="l1"/><rect x="316" y="145" width="80" height="6" rx="2" class="pg"/>
-              <rect x="292" y="164" width="116" height="12" rx="4" class="l3"/>
-            </g>
-            <path class="arte-tela" d="M96 60L276 36l16 124-180 24z"/>
-            <path class="arte-base" d="M108 184l180-24 30 14-176 26z"/>
-            <path class="arte-codigo" d="M170 100l-20 18 20 18M224 92l20 18-20 18M206 86l-14 52" transform="rotate(-4 197 112)"/>
-          </svg>
-        </section>
-
-        <!-- Cursos em destaque -->
-        <section aria-labelledby="cr-dest-titulo">
-          <div class="cr-sec-topo">
-            <h2 class="cr-sec-titulo" id="cr-dest-titulo">
-              <svg class="cr-sec-estrela" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.8 6 6.5.8-4.8 4.5 1.3 6.5L12 17.4l-5.8 3.2 1.3-6.5L2.7 9.6l6.5-.8L12 2.8z"/></svg>
-              Cursos em Destaque
-            </h2>
-            <a href="#cr-mais-titulo" class="cr-ver-todos">
-              Ver todos
+        <!-- Banner (carrossel) -->
+        <section class="cr-hero" id="cr-hero" aria-roledescription="carrossel" aria-label="Destaques">
+          <div class="cr-hero-texto">
+            <h1 id="cr-hero-titulo">Aprenda, Pratique,<br><span>Evolua.</span></h1>
+            <p id="cr-hero-sub">Cursos completos para você dominar<br>a tecnologia e impulsionar sua carreira.</p>
+            <a href="#cr-destaque-titulo" class="cr-hero-btn" id="cr-hero-btn">
+              Explorar cursos
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
           </div>
-          <ul class="cr-grade" id="cr-destaque"></ul>
+
+          <svg class="cr-hero-arte" viewBox="0 0 460 280" aria-hidden="true" focusable="false">
+            <path class="arte-onda" d="M0 230c80-70 170-30 250-70s120-60 210-30v150H0z"/>
+            <path class="arte-faisca" d="M372 36l-8 24M396 52l-22 14M404 82l-28 2"/>
+            <g class="arte-livros">
+              <rect x="320" y="150" width="140" height="22" rx="4" class="l1"/><rect x="332" y="156" width="118" height="8" rx="2" class="pg"/>
+              <rect x="316" y="176" width="144" height="22" rx="4" class="l2"/><rect x="328" y="182" width="122" height="8" rx="2" class="pg"/>
+              <rect x="324" y="202" width="136" height="22" rx="4" class="l1"/><rect x="336" y="208" width="114" height="8" rx="2" class="pg"/>
+            </g>
+            <path class="arte-tela" d="M112 70L318 42l22 148-208 28z"/>
+            <path class="arte-tela-int" d="M124 78l186-25 18 128-186 25z"/>
+            <path class="arte-base" d="M122 214l208-28 26 16-204 30z"/>
+            <text class="arte-n" x="222" y="152" text-anchor="middle">N</text>
+          </svg>
+
+          <div class="cr-hero-pontos" id="cr-hero-pontos" role="group" aria-label="Escolher destaque"></div>
         </section>
 
-        <!-- Mais cursos -->
-        <section aria-labelledby="cr-mais-titulo">
-          <div class="cr-sec-topo">
-            <h2 class="cr-sec-titulo" id="cr-mais-titulo" tabindex="-1">
-              <svg class="cr-sec-grade" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7.5" height="7.5" rx="2.2"/><rect x="13" y="3.5" width="7.5" height="7.5" rx="2.2"/><rect x="3.5" y="13" width="7.5" height="7.5" rx="2.2"/><rect x="13" y="13" width="7.5" height="7.5" rx="2.2"/></svg>
-              Mais Cursos
-            </h2>
-            <label class="cr-ordem">
-              <select id="cr-ordem" aria-label="Ordenar cursos"></select>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-            </label>
-          </div>
-          <ul class="cr-grade" id="cr-mais" aria-live="polite"></ul>
-        </section>
+        <!-- Seções (cada uma é um carrossel horizontal) -->
+        <div id="cr-secoes"></div>
 
       </main>
     </div>

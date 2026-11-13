@@ -21,9 +21,9 @@
    os botões Blocos/Lista ficam EMBAIXO da pesquisa, também à direita */
 .ex-ferramentas {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: flex-start;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
   gap: 12px;
   flex: 1;
   min-width: 0;
@@ -79,7 +79,7 @@
   padding: 4px;
   gap: 4px;
   background: var(--surface);
-  border-radius: 12px;
+  border-radius: 6px;
 }
 
 .ex-visao-btn {
@@ -89,7 +89,7 @@
   height: 34px;
   padding: 0;
   border: 0;
-  border-radius: 9px;
+  border-radius: 5px;
   background: transparent;
   color: var(--ink-soft);
   font: 500 13.5px 'IBM Plex Sans', system-ui, sans-serif;
@@ -188,7 +188,7 @@
   width: 60px;
   height: 60px;
   flex: none;
-  border-radius: 14px;
+  border-radius: 8px;
   background: var(--brand);
   color: #fff;
   display: grid;
@@ -267,7 +267,7 @@
   width: 42px;
   height: 42px;
   border: 0;
-  border-radius: 50%;
+  border-radius: 6px;
   background: var(--brand-tint);
   color: var(--title);
   font: 600 15px 'Space Grotesk', system-ui, sans-serif;
@@ -323,13 +323,12 @@
 /* telas estreitas: o título fica em cima e as ferramentas descem */
 @media (max-width: 860px) {
   .ex-head { flex-wrap: wrap; }
-  .ex-ferramentas { flex-basis: 100%; align-items: flex-start; }
+  .ex-ferramentas { flex-basis: 100%; justify-content: flex-start; }
 }
 
 @media (max-width: 720px) {
-  .ex-ferramentas { align-items: stretch; }
-  .ex-search { width: 100%; }
-  .ex-visao { align-self: flex-start; }
+  .ex-ferramentas { flex-wrap: wrap; }
+  .ex-search { flex: 1; width: auto; min-width: 0; }
 
   .ex-rodape {
     justify-content: center;

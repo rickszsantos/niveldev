@@ -57,7 +57,7 @@ button.app-btn { border: 0; font-family: inherit; cursor: pointer; }
 .perfil-avatar--p { width: 72px; height: 72px; font-size: 24px; }
 
 /* alternador (público / privado) */
-.seg { display: inline-flex; padding: 3px; gap: 2px; border-radius: 10px; background: var(--surface); }
+.seg { display: inline-flex; padding: 3px; gap: 2px; border-radius: 6px; background: var(--surface); }
 .seg--largo { display: flex; width: 100%; max-width: 360px; }
 
 .seg-btn {
@@ -65,7 +65,7 @@ button.app-btn { border: 0; font-family: inherit; cursor: pointer; }
   min-height: 32px;
   padding: 0 14px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   background: transparent;
   color: var(--ink-soft);
   font: 500 13.5px 'IBM Plex Sans', system-ui, sans-serif;
@@ -318,7 +318,7 @@ button.app-btn { border: 0; font-family: inherit; cursor: pointer; }
   max-height: calc(100vh - 32px);
   padding: 0;
   border: 1px solid var(--line);
-  border-radius: 18px;
+  border-radius: 8px;
   background: var(--card);
   color: var(--ink);
   box-shadow: var(--shadow-pop);

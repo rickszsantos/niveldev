@@ -112,7 +112,7 @@
   top: 68px; /* altura do .app-topbar */
   z-index: 5;
   padding-block: 16px;
-  background: var(--surface-soft);
+  background: var(--surface);
   border-bottom: 1px solid var(--line);
   font: 600 14px 'Space Grotesk', system-ui, sans-serif;
   color: var(--title);
@@ -138,7 +138,7 @@
 }
 
 .cat-linha:hover {
-  background: var(--surface-soft);
+  background: var(--hover);
 }
 
 .cat-linha:focus-visible {

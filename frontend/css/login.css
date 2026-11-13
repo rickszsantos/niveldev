@@ -47,7 +47,7 @@
 .login-alert {
   margin-bottom: 18px;
   padding: 12px 14px;
-  border-radius: 10px;
+  border-radius: 6px;
   border: 1.5px solid;
   font-size: 0.95rem;
   font-weight: 500;
@@ -118,7 +118,7 @@ body.auth-page {
   justify-content: center;
   background: #ffffff;
   border: none;
-  border-radius: 20px;
+  border-radius: 10px;
   box-shadow:
     0 2px 4px rgba(6, 31, 94, 0.06),
     0 12px 24px rgba(6, 31, 94, 0.12),

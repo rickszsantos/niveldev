@@ -38,7 +38,7 @@
   --cd-font-base: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --cd-font-code: "IBM Plex Mono", ui-monospace, Consolas, monospace;
 
-  --cd-radius-sm: 10px;
+  --cd-radius-sm: 6px;
   --cd-radius-md: 14px;
   --cd-radius-lg: 20px;
   --cd-shadow-card: 0 20px 48px rgba(12, 28, 77, 0.10);
@@ -301,7 +301,7 @@ body.auth-page {
   min-height: 36px;
   padding: 0 12px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   background: transparent;
   color: var(--cd-brand);
   font-size: 0.85rem;
@@ -443,7 +443,7 @@ body.auth-page {
   .auth-mobile-logo img {
     width: 40px;
     height: 40px;
-    border-radius: 10px;
+    border-radius: 6px;
     object-fit: cover;
   }
 
